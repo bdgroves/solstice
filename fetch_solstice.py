@@ -59,14 +59,16 @@ def moon_phase_name(pct: float) -> str:
     return "New Moon"
 
 
-def fmt_event(ephem_date: "ephem.Date") -> dict:
+def fmt_event(ephem_date: "ephem.Date", now_naive: "datetime") -> dict:
     """Format an ephem date as a display-friendly dict."""
     dt = ephem_date.datetime()
-    now = datetime.utcnow()
-    days_away = max(0, (dt - now).days)
+    days_away = max(0, (dt - now_naive).days)
+    # Cross-platform day without leading zero
+    day = dt.day
+    display = f"{dt.strftime('%B')} {day}, {dt.year}"
     return {
         "iso":       dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "display":   dt.strftime("%B %-d, %Y"),
+        "display":   display,
         "days_away": days_away,
     }
 
@@ -85,7 +87,8 @@ def build_observer(date=None) -> "ephem.Observer":
 # ── Main computation ──────────────────────────────────────────────────────────
 
 def compute() -> dict:
-    now_utc = datetime.now(timezone.utc)
+    now_utc   = datetime.now(timezone.utc)
+    now_naive = datetime.now(timezone.utc).replace(tzinfo=None)   # ephem needs naive UTC
     obs = build_observer(now_utc)
 
     sun  = ephem.Sun(obs)
@@ -120,10 +123,10 @@ def compute() -> dict:
 
     # ── Upcoming solar events ─────────────────────────────────────────────────
     events = {
-        "vernal_equinox":   fmt_event(ephem.next_vernal_equinox(now_utc)),
-        "summer_solstice":  fmt_event(ephem.next_summer_solstice(now_utc)),
-        "autumnal_equinox": fmt_event(ephem.next_autumnal_equinox(now_utc)),
-        "winter_solstice":  fmt_event(ephem.next_winter_solstice(now_utc)),
+        "vernal_equinox":   fmt_event(ephem.next_vernal_equinox(now_utc),   now_naive),
+        "summer_solstice":  fmt_event(ephem.next_summer_solstice(now_utc),  now_naive),
+        "autumnal_equinox": fmt_event(ephem.next_autumnal_equinox(now_utc), now_naive),
+        "winter_solstice":  fmt_event(ephem.next_winter_solstice(now_utc),  now_naive),
     }
 
     return {
