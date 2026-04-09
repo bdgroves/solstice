@@ -2,9 +2,11 @@ name: Update SOLSTICE
 
 on:
   schedule:
-    # Twice daily: 06:00 UTC (midnight Mountain) and 18:00 UTC (noon Mountain)
     - cron: "0 6,18 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update:
