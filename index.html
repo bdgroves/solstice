@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOLSTICE — Chaco Canyon Archaeoastronomy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #1a1208;
+      --bg2:     #221609;
+      --bg3:     #2c1e0e;
+      --bg4:     #362510;
+      --border:  #4a3218;
+      --border2: #6b4a22;
+      --text:    #e8d4a0;
+      --text2:   #b89a6a;
+      --text3:   #7a6040;
+      --gold:    #c4892a;
+      --gold2:   #d4a843;
+      --sage:    #6a8a5a;
+      --rust:    #8b4020;
+      --fh:      'Cinzel', serif;
+      --fb:      'Crimson Text', serif;
+      --fm:      'Courier Prime', monospace;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--fb);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────────────────── */
+    header {
+      padding: 1.8rem 2.5rem 1.4rem;
+      background: linear-gradient(180deg, #0a0705 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left {}
+
+    .site-id {
+      font-family: var(--fm);
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--text3);
+      margin-bottom: 0.4rem;
+    }
+
+    h1 {
+      font-family: var(--fh);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      color: var(--gold2);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-family: var(--fb);
+      font-style: italic;
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 2rem;
+      font-family: var(--fm);
+      font-size: 0.65rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      align-items: flex-end;
+      padding-bottom: 0.15rem;
+    }
+
+    .meta-item span { color: var(--text2); }
+    #update-time   { color: var(--text3); }
+
+    /* ── TERRAIN HERO ─────────────────────────────────────────────────── */
+    .terrain-hero {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terrain-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      opacity: 0.75;
+      display: block;
+    }
+
+    .terrain-no-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #0a0705 0%, #2c1808 50%, #1a1208 100%);
+    }
+
+    .terrain-no-img-text {
+      font-family: var(--fm);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text3);
+      text-align: center;
+      line-height: 2;
+    }
+
+    .terrain-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2.5rem 0.8rem;
+      background: linear-gradient(0deg, rgba(10,7,5,0.95) 0%, transparent 100%);
+    }
+
+    .terrain-caption-text {
+      font-family: var(--fb);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text2);
+      max-width: 60ch;
+    }
+
+    .terrain-badge {
+      font-family: var(--fm);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text3);
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── MAIN LAYOUT ──────────────────────────────────────────────────── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      height: 520px;
+    }
+
+    /* ── MAP ──────────────────────────────────────────────────────────── */
+    #map {
+      height: 100%;
+      border-right: 1px solid var(--border);
+    }
+
+    .leaflet-container { background: #0d0906 !important; }
+
+    .leaflet-popup-content-wrapper {
+      background: var(--bg2) !important;
+      border: 1px solid var(--border2) !important;
+      border-radius: 3px !important;
+      box-shadow: none !important;
+      color: var(--text) !important;
+    }
+    .leaflet-popup-tip { background: var(--bg2) !important; }
+    .leaflet-popup-close-button { color: var(--text3) !important; }
+    .leaflet-popup-content { margin: 12px 14px !important; }
+
+    .popup-name  { font-family: 'Cinzel', serif; font-size: 0.9rem; color: #d4a843; margin-bottom: 0.25rem; }
+    .popup-type  { font-family: 'Courier Prime', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #7a6040; margin-bottom: 0.5rem; }
+    .popup-stat  { font-family: 'Crimson Text', serif; font-size: 0.85rem; color: #b89a6a; margin-bottom: 0.2rem; }
+    .popup-align { font-family: 'Crimson Text', serif; font-style: italic; font-size: 0.8rem; color: #c4892a; margin-top: 0.4rem; }
+    .popup-note  { font-family: 'Crimson Text', serif; font-size: 0.8rem; color: #7a6040; margin-top: 0.4rem; }
+
+    .leaflet-tooltip {
+      background: var(--bg2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 2px !important;
+      color: var(--text2) !important;
+      font-family: 'Courier Prime', monospace !important;
+      font-size: 0.7rem !important;
+      box-shadow: none !important;
+      padding: 3px 8px !important;
+    }
+    .leaflet-tooltip-left::before  { border-left-color:  var(--border) !important; }
+    .leaflet-tooltip-right::before { border-right-color: var(--border) !important; }
+
+    .leaflet-control-zoom a {
+      background: var(--bg2) !important;
+      color: var(--text2) !important;
+      border-color: var(--border) !important;
+    }
+    .leaflet-control-zoom a:hover { background: var(--bg3) !important; color: var(--gold) !important; }
+
+    .leaflet-control-attribution {
+      background: rgba(26,18,8,0.8) !important;
+      color: var(--text3) !important;
+      font-size: 0.55rem !important;
+    }
+    .leaflet-control-attribution a { color: var(--text3) !important; }
+
+    /* ── SIDE PANEL ───────────────────────────────────────────────────── */
+    .panel {
+      overflow-y: auto;
+      background: var(--bg2);
+      padding: 1.4rem 1.2rem;
+    }
+
+    .panel-section { margin-bottom: 1.6rem; }
+
+    .panel-label {
+      font-family: var(--fh);
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      color: var(--gold);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.9rem;
+    }
+
+    /* Sky body block */
+    .sky-body {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .sky-body-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .sky-body-name {
+      font-family: var(--fh);
+      font-size: 0.85rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+
+    .badge {
+      font-family: var(--fm);
+      font-size: 0.55rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 2px;
+      letter-spacing: 0.1em;
+    }
+    .badge-above { background: rgba(106,138,90,0.15); color: var(--sage); border: 1px solid var(--sage); }
+    .badge-below { background: rgba(122,96,64,0.15);  color: var(--text3); border: 1px solid var(--border2); }
+
+    .readout {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.22rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .readout:last-child { border-bottom: none; }
+    .rk { font-family: var(--fm); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.06em; }
+    .rv { font-family: var(--fm); font-size: 0.78rem; color: var(--gold2); }
+
+    /* Alignment block */
+    .align-box {
+      background: rgba(74,50,24,0.3);
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      text-align: center;
+      transition: background 0.5s, border-color 0.5s;
+    }
+    .align-box.active {
+      background: rgba(196,137,42,0.12);
+      border-color: var(--gold);
+    }
+
+    .align-status {
+      font-family: var(--fm);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text3);
+      margin-bottom: 0.3rem;
+      transition: color 0.5s;
+    }
+    .align-box.active .align-status { color: var(--gold); }
+
+    .align-desc {
+      font-family: var(--fb);
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+
+    /* Events */
+    .event-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .event-row:last-child { border-bottom: none; }
+    .ev-name { font-family: var(--fb); font-style: italic; color: var(--text2); font-size: 0.88rem; }
+    .ev-when { font-family: var(--fm); font-size: 0.65rem; color: var(--text3); text-align: right; }
+    .ev-when.soon { color: var(--gold); }
+
+    /* ── GREAT HOUSE STRIP ────────────────────────────────────────────── */
+    .strip {
+      border-top: 1px solid var(--border);
+      padding: 1.2rem 2rem 1.5rem;
+      background: var(--bg2);
+    }
+
+    .strip-label {
+      font-family: var(--fh);
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .cards-scroll {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .cards-scroll::-webkit-scrollbar { height: 3px; }
+    .cards-scroll::-webkit-scrollbar-track { background: var(--bg); }
+    .cards-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    .gh-card {
+      flex: 0 0 195px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .gh-card:hover { border-color: var(--gold); }
+    .gh-card.kiva   { border-left: 3px solid var(--gold); }
+    .gh-card.house  { border-left: 3px solid var(--rust); }
+
+    .card-name {
+      font-family: var(--fh);
+      font-size: 0.78rem;
+      color: var(--gold2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.15rem;
+    }
+
+    .card-type {
+      font-family: var(--fm);
+      font-size: 0.55rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      margin-bottom: 0.15rem;
+    }
+    .ck { color: var(--text3); font-family: var(--fm); font-size: 0.58rem; }
+    .cv { color: var(--text); }
+
+    .card-align {
+      margin-top: 0.45rem;
+      font-family: var(--fb);
+      font-style: italic;
+      font-size: 0.72rem;
+      color: var(--gold);
+      line-height: 1.3;
+      border-top: 1px solid var(--border);
+      padding-top: 0.4rem;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────────────────── */
+    footer {
+      padding: 0.65rem 2.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-family: var(--fm);
+      font-size: 0.58rem;
+      color: var(--text3);
+      letter-spacing: 0.06em;
+    }
+
+    footer a { color: var(--text3); text-decoration: none; }
+    footer a:hover { color: var(--text2); }
+
+    /* ── SCROLLBAR ────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="site-id">36.0608°N &nbsp;·&nbsp; 107.9631°W &nbsp;·&nbsp; CHACO CULTURE NHP &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; ELEV 1,920 M</div>
+      <h1>SOLSTICE</h1>
+      <div class="subtitle">Chaco Canyon — Archaeoastronomy &amp; Remote Sensing</div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-item">OPERATOR &nbsp;<span>BROOKSGROVES.COM</span></div>
+      <div class="meta-item">UPDATED &nbsp;<span id="update-time">—</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ── TERRAIN HERO ────────────────────────────────────────────────────────── -->
+<div class="terrain-hero">
+  <img id="terrain-img" src="assets/terrain.png" alt="LiDAR terrain render of Chaco Canyon"
+       onerror="this.style.display='none'; document.getElementById('terrain-fallback').style.display='flex';">
+  <div id="terrain-fallback" class="terrain-no-img" style="display:none;">
+    <div class="terrain-no-img-text">
+      TERRAIN RENDER NOT YET GENERATED<br>
+      RUN <code style="color:var(--gold);font-size:0.7rem;">pixi run render</code> TO GENERATE assets/terrain.png<br>
+      REQUIRES: <code style="color:var(--text3);font-size:0.7rem;">pip install forge3d</code> + GPU
+    </div>
+  </div>
+  <div class="terrain-caption">
+    <div class="terrain-badge">USGS 3DEP &nbsp;·&nbsp; 1/3 ARC-SECOND DEM &nbsp;·&nbsp; forge3d GPU RENDER</div>
+    <div class="terrain-caption-text">Chaco Canyon, San Juan Basin, New Mexico. The canyon is roughly 15 km long and 1–3 km wide, cut into the Cretaceous Mesa Verde sandstone. Fajada Butte rises 135 m above the canyon floor at the eastern entrance.</div>
+  </div>
+</div>
+
+<!-- ── MAIN GRID (MAP + PANEL) ────────────────────────────────────────────── -->
+<div class="main-grid">
+  <div id="map"></div>
+
+  <aside class="panel">
+
+    <!-- Sun -->
+    <div class="panel-section">
+      <div class="panel-label">Solar Position</div>
+      <div class="sky-body">
+        <div class="sky-body-header">
+          <span class="sky-body-name">☉ &nbsp;Sun</span>
+          <span class="badge badge-above" id="sun-badge">ABOVE</span>
+        </div>
+        <div class="readout"><span class="rk">AZIMUTH</span><span class="rv" id="sun-az">—</span></div>
+        <div class="readout"><span class="rk">ALTITUDE</span><span class="rv" id="sun-alt">—</span></div>
+        <div class="readout"><span class="rk">SUNRISE AZ</span><span class="rv" id="sunrise-az">—</span></div>
+        <div class="readout"><span class="rk">SUNSET AZ</span><span class="rv" id="sunset-az">—</span></div>
+      </div>
+    </div>
+
+    <!-- Moon -->
+    <div class="panel-section">
+      <div class="panel-label">Lunar Position</div>
+      <div class="sky-body">
+        <div class="sky-body-header">
+          <span class="sky-body-name">☽ &nbsp;Moon</span>
+          <span class="badge badge-above" id="moon-badge">ABOVE</span>
+        </div>
+        <div class="readout"><span class="rk">AZIMUTH</span><span class="rv" id="moon-az">—</span></div>
+        <div class="readout"><span class="rk">ALTITUDE</span><span class="rv" id="moon-alt">—</span></div>
+        <div class="readout"><span class="rk">PHASE</span><span class="rv" id="moon-phase">—</span></div>
+        <div class="readout"><span class="rk">ILLUMINATION</span><span class="rv" id="moon-pct">—</span></div>
+      </div>
+    </div>
+
+    <!-- Rinconada Alignment -->
+    <div class="panel-section">
+      <div class="panel-label">Casa Rinconada Alignment</div>
+      <div class="align-box" id="align-box">
+        <div class="align-status" id="align-status">○ &nbsp;ALIGNMENT INACTIVE</div>
+        <div class="align-desc" id="align-desc">Summer solstice sunrise aligns with the northeast doorway at 66.5°</div>
+      </div>
+      <div style="margin-top:0.7rem;">
+        <div class="readout"><span class="rk">CURRENT SUNRISE AZ</span><span class="rv" id="align-cur">—</span></div>
+        <div class="readout"><span class="rk">TARGET AZ</span><span class="rv">66.5°</span></div>
+        <div class="readout"><span class="rk">DEVIATION</span><span class="rv" id="align-delta">—</span></div>
+      </div>
+    </div>
+
+    <!-- Solar Events -->
+    <div class="panel-section">
+      <div class="panel-label">Upcoming Solar Events</div>
+      <div class="event-row"><span class="ev-name">Vernal Equinox</span><span class="ev-when" id="ev-vernal">—</span></div>
+      <div class="event-row"><span class="ev-name">Summer Solstice</span><span class="ev-when" id="ev-summer">—</span></div>
+      <div class="event-row"><span class="ev-name">Autumnal Equinox</span><span class="ev-when" id="ev-autumnal">—</span></div>
+      <div class="event-row"><span class="ev-name">Winter Solstice</span><span class="ev-when" id="ev-winter">—</span></div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ── GREAT HOUSE STRIP ───────────────────────────────────────────────────── -->
+<div class="strip">
+  <div class="strip-label">Great Houses of Chaco Canyon</div>
+  <div class="cards-scroll" id="cards-scroll"></div>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────────── -->
+<footer>
+  <div>SOLSTICE v1.0 &nbsp;·&nbsp; <a href="https://brooksgroves.com">BROOKSGROVES.COM</a> / ARCHAEOLOGY</div>
+  <div>DATA: USGS 3DEP &nbsp;·&nbsp; NPS / CHACO RESEARCH ARCHIVE &nbsp;·&nbsp; PYTHON EPHEM &nbsp;·&nbsp; <a href="https://doi.org/10.1016/j.jasrep.2017.04.001" target="_blank">SOFAER ET AL.</a></div>
+</footer>
+
+<!-- ── Leaflet ─────────────────────────────────────────────────────────────── -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+"use strict";
+
+// ── Great House Data ─────────────────────────────────────────────────────────
+const GREAT_HOUSES = [
+  {
+    name: "Pueblo Bonito",    lat: 36.0608, lon: -107.9631, type: "Great House",
+    rooms: 800, stories: 4, period: "850–1150 CE", shape: "D-shaped",
+    alignment: "Back wall faces true north within 0.1°; corner rooms mark solstice sunrise and sunset",
+    note: "Largest great house at Chaco. Construction spanned ~300 years.",
+  },
+  {
+    name: "Chetro Ketl",      lat: 36.0597, lon: -107.9550, type: "Great House",
+    rooms: 500, stories: 4, period: "1010–1110 CE", shape: "Rectangular",
+    alignment: "Partially aligned to cardinal directions",
+    note: "Features a colonnade unique in Chacoan architecture.",
+  },
+  {
+    name: "Pueblo del Arroyo", lat: 36.0617, lon: -107.9680, type: "Great House",
+    rooms: 280, stories: 3, period: "1075–1115 CE", shape: "L-shaped",
+    alignment: null,
+    note: "Adjoins a rare tri-walled circular structure.",
+  },
+  {
+    name: "Casa Rinconada",   lat: 36.0538, lon: -107.9623, type: "Great Kiva",
+    rooms: null, stories: 1, period: "1000–1100 CE", shape: "Circular (19.5 m)",
+    alignment: "NE doorway aligns to summer solstice sunrise at 66.5°",
+    note: "Largest isolated great kiva at Chaco. Community ceremonial space.",
+  },
+  {
+    name: "Hungo Pavi",       lat: 36.0520, lon: -107.9455, type: "Great House",
+    rooms: 150, stories: 2, period: "900–1100 CE", shape: "D-shaped",
+    alignment: null,
+    note: "One of the least excavated great houses.",
+  },
+  {
+    name: "Una Vida",         lat: 36.0540, lon: -107.9292, type: "Great House",
+    rooms: 160, stories: 2, period: "850–1000 CE", shape: "L-shaped",
+    alignment: null,
+    note: "One of the earliest great houses. Nearby petroglyph panels.",
+  },
+  {
+    name: "Penasco Blanco",   lat: 36.0812, lon: -108.0078, type: "Great House",
+    rooms: 150, stories: 3, period: "900–1125 CE", shape: "Arc-shaped",
+    alignment: null,
+    note: "Near a pictograph panel possibly depicting the 1054 CE supernova.",
+  },
+  {
+    name: "Pueblo Alto",      lat: 36.0736, lon: -107.9632, type: "Great House",
+    rooms: 90, stories: 1, period: "1020–1100 CE", shape: "Rectangular",
+    alignment: "Mesa-top terminus of the Great North Road; inter-site visibility hub",
+    note: "Junction of multiple Chacoan roads. Evidence of periodic mass gatherings.",
+  },
+  {
+    name: "Kin Kletso",       lat: 36.0633, lon: -107.9700, type: "Great House",
+    rooms: 55, stories: 2, period: "1125–1150 CE", shape: "Rectangular",
+    alignment: null,
+    note: "Later McElmo-tradition construction.",
+  },
+  {
+    name: "Wijiji",           lat: 36.0458, lon: -107.9073, type: "Great House",
+    rooms: 90, stories: 2, period: "1100–1150 CE", shape: "L-shaped",
+    alignment: null,
+    note: "Easternmost great house. Unusually symmetrical and compact.",
+  },
+];
+
+// Chacoan roads
+const ROADS = [
+  {
+    name: "Great North Road",
+    color: "#c4892a",
+    coords: [[36.0736,-107.9632],[36.15,-107.9400],[36.25,-107.9200],[36.40,-107.8800]],
+  },
+  { name: "South Road",  color: "#8b6020",
+    coords: [[36.0736,-107.9632],[36.00,-108.00],[35.98,-108.01]] },
+  { name: "East Road",   color: "#8b6020",
+    coords: [[36.0736,-107.9632],[36.08,-107.89],[36.09,-107.82]] },
+  { name: "West Road",   color: "#8b6020",
+    coords: [[36.0736,-107.9632],[36.09,-108.03],[36.10,-108.11]] },
+];
+
+// ── Map Init ─────────────────────────────────────────────────────────────────
+const map = L.map("map", { center: [36.063, -107.958], zoom: 13 });
+
+// ESRI Shaded Relief basemap
+L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}",
+  { attribution: "Tiles © Esri", maxZoom: 16, opacity: 0.65 }
+).addTo(map);
+
+// OpenTopoMap overlay for contour context
+L.tileLayer(
+  "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+  { attribution: "© OpenTopoMap", maxZoom: 16, opacity: 0.45 }
+).addTo(map);
+
+// ── Great House Markers ───────────────────────────────────────────────────────
+function makeIcon(isKiva) {
+  const c  = isKiva ? "#d4a843" : "#c4892a";
+  const r  = isKiva ? 7 : 8;
+  const sz = r * 2 + 8;
+  const mid = sz / 2;
+  const inner = isKiva
+    ? `<circle cx="${mid}" cy="${mid}" r="${r/2.5}" fill="none" stroke="#1a1208" stroke-width="1.3"/>`
+    : "";
+  return L.divIcon({
+    className: "",
+    html: `<svg xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
+      <circle cx="${mid}" cy="${mid}" r="${r}" fill="${c}" fill-opacity="0.88" stroke="${c}" stroke-width="1.5"/>
+      ${inner}
+    </svg>`,
+    iconSize:   [sz, sz],
+    iconAnchor: [mid, mid],
+  });
+}
+
+GREAT_HOUSES.forEach(gh => {
+  const isKiva = gh.type === "Great Kiva";
+  const popup = `
+    <div class="popup-name">${gh.name}</div>
+    <div class="popup-type">${gh.type.toUpperCase()} &nbsp;·&nbsp; ${gh.period}</div>
+    ${gh.rooms ? `<div class="popup-stat">~${gh.rooms} rooms &nbsp;·&nbsp; ${gh.stories} stories &nbsp;·&nbsp; ${gh.shape}</div>` : `<div class="popup-stat">${gh.shape}</div>`}
+    ${gh.alignment ? `<div class="popup-align">⊕ ${gh.alignment}</div>` : ""}
+    <div class="popup-note">${gh.note}</div>
+  `;
+  L.marker([gh.lat, gh.lon], { icon: makeIcon(isKiva) })
+    .addTo(map)
+    .bindPopup(popup, { maxWidth: 270 });
+});
+
+// ── Road Network ──────────────────────────────────────────────────────────────
+ROADS.forEach(rd => {
+  L.polyline(rd.coords, {
+    color: rd.color, weight: 2, opacity: 0.72, dashArray: "7 5",
+  }).addTo(map)
+    .bindTooltip(rd.name, { permanent: false, direction: "top" });
+});
+
+// ── Geometry helpers ──────────────────────────────────────────────────────────
+function toRad(d) { return d * Math.PI / 180; }
+
+function destPoint(lat, lon, azDeg, distKm) {
+  const R = 6371, d = distKm / R, az = toRad(azDeg);
+  const φ1 = toRad(lat), λ1 = toRad(lon);
+  const φ2 = Math.asin(Math.sin(φ1)*Math.cos(d) + Math.cos(φ1)*Math.sin(d)*Math.cos(az));
+  const λ2 = λ1 + Math.atan2(Math.sin(az)*Math.sin(d)*Math.cos(φ1), Math.cos(d) - Math.sin(φ1)*Math.sin(φ2));
+  return [φ2 * 180/Math.PI, λ2 * 180/Math.PI];
+}
+
+// Draw alignment lines from Casa Rinconada
+const RINCONADA = [36.0538, -107.9623];
+let riseLayer = null, solsticeLayer = null;
+
+function drawAlignments(sunriseAz) {
+  // Solstice alignment (gold, permanent)
+  const sEnd = destPoint(RINCONADA[0], RINCONADA[1], 66.5, 9);
+  if (solsticeLayer) map.removeLayer(solsticeLayer);
+  solsticeLayer = L.polyline([RINCONADA, sEnd], {
+    color: "#c4892a", weight: 2, opacity: 0.9, dashArray: "4 4",
+  }).addTo(map).bindTooltip("Summer solstice alignment: 66.5°", { direction: "top" });
+
+  // Today's sunrise azimuth (sage)
+  if (sunriseAz !== null) {
+    const rEnd = destPoint(RINCONADA[0], RINCONADA[1], sunriseAz, 9);
+    if (riseLayer) map.removeLayer(riseLayer);
+    riseLayer = L.polyline([RINCONADA, rEnd], {
+      color: "#6a8a5a", weight: 1.5, opacity: 0.85, dashArray: "9 5",
+    }).addTo(map).bindTooltip(`Today's sunrise: ${sunriseAz.toFixed(1)}°`, { direction: "top" });
+  }
+}
+
+// Draw static solstice line immediately; today's line added after data loads
+drawAlignments(null);
+
+// ── Load astronomy data ───────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch("data/solstice.json?_=" + Date.now());
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const d = await res.json();
+
+    // Header timestamp
+    const gen = new Date(d.generated);
+    document.getElementById("update-time").textContent =
+      gen.toUTCString().replace(" GMT", " UTC").slice(0, 26);
+
+    // Sun
+    const sun = d.sun;
+    document.getElementById("sun-az").textContent  = `${sun.azimuth}°  ${sun.compass}`;
+    document.getElementById("sun-alt").textContent = `${sun.altitude}°`;
+    document.getElementById("sunrise-az").textContent =
+      sun.sunrise_azimuth !== null ? `${sun.sunrise_azimuth}°` : "—";
+    document.getElementById("sunset-az").textContent  =
+      sun.sunset_azimuth  !== null ? `${sun.sunset_azimuth}°`  : "—";
+    if (!sun.above_horizon) {
+      const b = document.getElementById("sun-badge");
+      b.textContent = "BELOW"; b.className = "badge badge-below";
+    }
+
+    // Moon
+    const moon = d.moon;
+    document.getElementById("moon-az").textContent    = `${moon.azimuth}°  ${moon.compass}`;
+    document.getElementById("moon-alt").textContent   = `${moon.altitude}°`;
+    document.getElementById("moon-phase").textContent = moon.phase_name;
+    document.getElementById("moon-pct").textContent   = `${moon.phase_pct}%`;
+    if (!moon.above_horizon) {
+      const b = document.getElementById("moon-badge");
+      b.textContent = "BELOW"; b.className = "badge badge-below";
+    }
+
+    // Alignment
+    const al = d.alignments;
+    document.getElementById("align-cur").textContent  =
+      al.current_sunrise_az !== null ? `${al.current_sunrise_az}°` : "—";
+    document.getElementById("align-delta").textContent =
+      al.rinconada_delta_deg !== null ? `${al.rinconada_delta_deg > 0 ? "+" : ""}${al.rinconada_delta_deg}°` : "—";
+    if (al.rinconada_active) {
+      const box = document.getElementById("align-box");
+      box.classList.add("active");
+      document.getElementById("align-status").textContent = "⊕  ALIGNMENT ACTIVE";
+      document.getElementById("align-desc").textContent =
+        "Sunrise is striking the northeast doorway of Casa Rinconada within alignment tolerance. The light-dagger is live.";
+    }
+
+    // Events
+    function evLabel(evt) {
+      const d = evt.days_away;
+      if (d === 0)  return "TODAY";
+      if (d < 30)  return `${d}d`;
+      if (d < 365) return `${Math.round(d / 30.4)}mo`;
+      return `${Math.round(d / 365)}yr`;
+    }
+    function setEv(id, evt) {
+      const el = document.getElementById(id);
+      el.textContent = `${evt.display}  ·  ${evLabel(evt)}`;
+      if (evt.days_away < 30) el.classList.add("soon");
+    }
+    const ev = d.events;
+    setEv("ev-vernal",   ev.vernal_equinox);
+    setEv("ev-summer",   ev.summer_solstice);
+    setEv("ev-autumnal", ev.autumnal_equinox);
+    setEv("ev-winter",   ev.winter_solstice);
+
+    // Map: draw today's sunrise line
+    drawAlignments(sun.sunrise_azimuth);
+
+  } catch (e) {
+    console.warn("Could not load solstice.json:", e.message);
+    document.getElementById("update-time").textContent = "run fetch_solstice.py to generate data";
+  }
+}
+
+loadData();
+
+// ── Great House Cards ─────────────────────────────────────────────────────────
+const scroll = document.getElementById("cards-scroll");
+GREAT_HOUSES.forEach(gh => {
+  const isKiva = gh.type === "Great Kiva";
+  const card = document.createElement("div");
+  card.className = `gh-card ${isKiva ? "kiva" : "house"}`;
+  card.innerHTML = `
+    <div class="card-name">${gh.name}</div>
+    <div class="card-type">${gh.type.toUpperCase()}</div>
+    <div class="card-row"><span class="ck">PERIOD</span><span class="cv">${gh.period}</span></div>
+    ${gh.rooms ? `<div class="card-row"><span class="ck">ROOMS</span><span class="cv">~${gh.rooms}</span></div>` : ""}
+    <div class="card-row"><span class="ck">SHAPE</span><span class="cv">${gh.shape}</span></div>
+    ${gh.alignment ? `<div class="card-align">⊕ ${gh.alignment}</div>` : ""}
+  `;
+  card.addEventListener("click", () => {
+    map.flyTo([gh.lat, gh.lon], 15, { duration: 1.2 });
+  });
+  scroll.appendChild(card);
+});
+</script>
+</body>
+</html>

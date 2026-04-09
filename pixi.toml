@@ -1,0 +1,19 @@
+[project]
+name = "solstice"
+version = "1.0.0"
+description = "Chaco Canyon archaeoastronomy and remote sensing dashboard"
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-arm64", "osx-64"]
+
+[dependencies]
+python = ">=3.10,<3.13"
+
+[pypi-dependencies]
+requests  = ">=2.31"
+ephem     = ">=4.1"
+numpy     = ">=1.26"
+Pillow    = ">=10.0"
+
+[tasks]
+fetch  = "python fetch_solstice.py"
+render = "python render_terrain.py"
