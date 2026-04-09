@@ -13,11 +13,11 @@ Requirements (beyond pixi environment):
     pip install forge3d
 
 Usage:
-    pixi run render
     python render_terrain.py
 """
 
 import sys
+import time
 import requests
 from pathlib import Path
 
@@ -36,14 +36,12 @@ RENDER_PATH = Path("assets/terrain.png")
 # ── Download DEM from USGS National Map ───────────────────────────────────────
 
 def download_dem():
-    """Download 1/3 arc-second DEM from USGS 3DEP National Map API."""
     if DEM_PATH.exists():
         size_mb = DEM_PATH.stat().st_size / 1_048_576
         print(f"✓ DEM already exists: {DEM_PATH} ({size_mb:.1f} MB)")
         return
 
     DEM_PATH.parent.mkdir(exist_ok=True)
-
     api_url = "https://tnmaccess.nationalmap.gov/api/v1/products"
 
     for dataset in [
@@ -69,16 +67,11 @@ def download_dem():
             items = []
     else:
         print("\n✗ No DEM tiles found via USGS API.")
-        print("  Manual download: https://apps.nationalmap.gov/downloader/")
-        print(f"  Bounding box: {BBOX['west']},{BBOX['south']},{BBOX['east']},{BBOX['north']}")
-        print("  Save as: data/chaco_dem.tif")
         sys.exit(1)
 
-    tile = items[0]
-    title  = tile.get("title", "DEM tile")
+    tile   = items[0]
     dl_url = tile.get("downloadURL")
-    print(f"→ Downloading: {title}")
-    print(f"  URL: {dl_url}")
+    print(f"→ Downloading: {tile.get('title', 'DEM tile')}")
 
     with requests.get(dl_url, stream=True, timeout=300) as resp:
         resp.raise_for_status()
@@ -89,60 +82,51 @@ def download_dem():
                 fh.write(chunk)
                 downloaded += len(chunk)
                 if total:
-                    pct = downloaded / total * 100
-                    print(f"\r  {pct:5.1f}%  {downloaded // 1_048_576} / {total // 1_048_576} MB", end="", flush=True)
+                    print(f"\r  {downloaded/total*100:5.1f}%  {downloaded//1_048_576} / {total//1_048_576} MB",
+                          end="", flush=True)
         print()
-
-    size_mb = DEM_PATH.stat().st_size / 1_048_576
-    print(f"✓ DEM saved: {DEM_PATH} ({size_mb:.1f} MB)")
+    print(f"✓ DEM saved: {DEM_PATH} ({DEM_PATH.stat().st_size/1_048_576:.1f} MB)")
 
 
 # ── Render with forge3d ────────────────────────────────────────────────────────
 
 def render_terrain():
-    """Render Chaco Canyon terrain with forge3d GPU renderer."""
     try:
         import forge3d
     except ImportError:
-        print("\n✗ forge3d not installed.")
-        print("  pip install forge3d")
+        print("\n✗ forge3d not installed.  pip install forge3d")
         sys.exit(1)
 
     RENDER_PATH.parent.mkdir(exist_ok=True)
 
     print(f"\n→ Launching forge3d viewer for: {DEM_PATH}")
+    print("  (A viewer window will appear briefly — that's normal)")
 
     with forge3d.open_viewer_async(terrain_path=str(DEM_PATH)) as viewer:
-        # Camera: southeast of canyon, looking NW into the main corridor
-        # phi=210° = camera positioned to the SE, theta=28° = ~30° above horizon
-        viewer.set_orbit_camera(
-            phi_deg=210,
-            theta_deg=28,
-            radius=1.1,
-        )
+        viewer.set_orbit_camera(phi_deg=210, theta_deg=28, radius=1.1)
+        viewer.set_sun(azimuth_deg=240, elevation_deg=20)
 
-        # Late-afternoon sun from the WSW — creates long shadows across the canyon
-        # and brings out the mesa and arroyo topography beautifully
-        viewer.set_sun(
-            azimuth_deg=240,
-            elevation_deg=20,
-        )
+        # Give WebGPU + 366 MB DEM time to fully initialize
+        print("→ Waiting for terrain to load (5s) …")
+        time.sleep(5)
 
-        print(f"→ Rendering at 3840×2160 …")
-        viewer.snapshot(
-            str(RENDER_PATH),
-            width=3840,
-            height=2160,
-        )
+        # Try resolutions high → low; stop at first real result
+        for width, height, label in [(3840, 2160, "4K"), (2560, 1440, "1440p"), (1920, 1080, "1080p")]:
+            print(f"→ Snapping {label} ({width}×{height}) …")
+            viewer.snapshot(str(RENDER_PATH), width=width, height=height)
+            time.sleep(2)
+            size = RENDER_PATH.stat().st_size if RENDER_PATH.exists() else 0
+            if size > 50_000:
+                print(f"  ✓ {size // 1024} KB — success at {label}")
+                break
+            print(f"  ⚠ Got {size} bytes — retrying at lower resolution …")
+        else:
+            print("\n✗ All resolutions produced empty output.")
+            print("  Try updating GPU drivers or run: python render_terrain.py --debug")
+            sys.exit(1)
 
-    size_kb = RENDER_PATH.stat().st_size // 1024
-    print(f"✓ Terrain render saved: {RENDER_PATH} ({size_kb} KB)")
-    print(
-        "\nNext steps:\n"
-        "  git add assets/terrain.png\n"
-        "  git commit -m 'feat: add Chaco Canyon terrain render'\n"
-        "  git push\n"
-    )
+    print(f"\n✓ Saved: {RENDER_PATH} ({RENDER_PATH.stat().st_size // 1024} KB)")
+    print("\nNext steps:\n  git add assets/terrain.png\n  git commit -m 'feat: Chaco Canyon terrain render'\n  git push")
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────
@@ -150,13 +134,9 @@ def render_terrain():
 def main():
     print("SOLSTICE — Terrain Render Script (forge3d)")
     print("=" * 44)
-    print(f"Bounding box: {BBOX['west']}°W to {BBOX['east']}°W, "
-          f"{BBOX['south']}°N to {BBOX['north']}°N")
-    print()
     download_dem()
     print()
     render_terrain()
-
 
 if __name__ == "__main__":
     main()
