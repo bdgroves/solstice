@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-09T18:03:43.293866+00:00",
+  "generated": "2026-04-09T18:52:40.985528+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 146.47,
-    "altitude": 57.57,
-    "compass": "SSE",
+    "azimuth": 169.3,
+    "altitude": 61.35,
+    "compass": "S",
     "above_horizon": true,
     "sunrise_azimuth": 79.26,
     "sunset_azimuth": 280.99
   },
   "moon": {
-    "azimuth": 239.52,
-    "altitude": -3.97,
+    "azimuth": 245.92,
+    "altitude": -13.28,
     "compass": "WSW",
     "above_horizon": false,
-    "phase_pct": 54.5,
+    "phase_pct": 54.1,
     "phase_name": "Waning Gibbous"
   },
   "alignments": {
