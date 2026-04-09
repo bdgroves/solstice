@@ -1,0 +1,56 @@
+{
+  "generated": "2026-04-09T17:46:31.636694+00:00",
+  "location": {
+    "lat": "36.0608",
+    "lon": "-107.9631",
+    "elevation": 1920,
+    "name": "Chaco Culture National Historical Park",
+    "tz_offset": -6
+  },
+  "sun": {
+    "azimuth": 139.74,
+    "altitude": 55.48,
+    "compass": "SE",
+    "above_horizon": true,
+    "sunrise_azimuth": 79.26,
+    "sunset_azimuth": 280.99
+  },
+  "moon": {
+    "azimuth": 237.14,
+    "altitude": -1.12,
+    "compass": "WSW",
+    "above_horizon": false,
+    "phase_pct": 54.6,
+    "phase_name": "Waning Gibbous"
+  },
+  "alignments": {
+    "rinconada_active": false,
+    "rinconada_delta_deg": 12.76,
+    "rinconada_target_az": 66.5,
+    "tolerance_deg": 3.5,
+    "current_sunrise_az": 79.26,
+    "note": "Summer solstice sunrise aligns with Casa Rinconada's NE doorway when sunrise azimuth \u2248 66.5\u00b0 (Sofaer, Sinclair & Doggett 1982)."
+  },
+  "events": {
+    "vernal_equinox": {
+      "iso": "2027-03-20T20:24:32Z",
+      "display": "March 20, 2027",
+      "days_away": 345
+    },
+    "summer_solstice": {
+      "iso": "2026-06-21T08:24:31Z",
+      "display": "June 21, 2026",
+      "days_away": 72
+    },
+    "autumnal_equinox": {
+      "iso": "2026-09-23T00:05:09Z",
+      "display": "September 23, 2026",
+      "days_away": 166
+    },
+    "winter_solstice": {
+      "iso": "2026-12-21T20:49:59Z",
+      "display": "December 21, 2026",
+      "days_away": 256
+    }
+  }
+}

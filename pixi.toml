@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name = "solstice"
 version = "1.0.0"
 description = "Chaco Canyon archaeoastronomy and remote sensing dashboard"
