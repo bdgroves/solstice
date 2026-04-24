@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-24T07:49:54.496606+00:00",
+  "generated": "2026-04-24T18:38:38.102637+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,27 +8,27 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 12.76,
-    "altitude": -40.14,
-    "compass": "NNE",
-    "above_horizon": false,
-    "sunrise_azimuth": 73.07,
+    "azimuth": 161.02,
+    "altitude": 65.95,
+    "compass": "SSE",
+    "above_horizon": true,
+    "sunrise_azimuth": 72.65,
     "sunset_azimuth": 287.58
   },
   "moon": {
-    "azimuth": 288.25,
-    "altitude": 9.93,
-    "compass": "WNW",
-    "above_horizon": true,
-    "phase_pct": 52.6,
-    "phase_name": "Full Moon"
+    "azimuth": 61.98,
+    "altitude": -6.11,
+    "compass": "ENE",
+    "above_horizon": false,
+    "phase_pct": 57.5,
+    "phase_name": "Waning Gibbous"
   },
   "alignments": {
     "rinconada_active": false,
-    "rinconada_delta_deg": 6.57,
+    "rinconada_delta_deg": 6.15,
     "rinconada_target_az": 66.5,
     "tolerance_deg": 3.5,
-    "current_sunrise_az": 73.07,
+    "current_sunrise_az": 72.65,
     "note": "Summer solstice sunrise aligns with Casa Rinconada's NE doorway when sunrise azimuth \u2248 66.5\u00b0 (Sofaer, Sinclair & Doggett 1982)."
   },
   "events": {
@@ -40,7 +40,7 @@
     "summer_solstice": {
       "iso": "2026-06-21T08:24:31Z",
       "display": "June 21, 2026",
-      "days_away": 58
+      "days_away": 57
     },
     "autumnal_equinox": {
       "iso": "2026-09-23T00:05:09Z",
