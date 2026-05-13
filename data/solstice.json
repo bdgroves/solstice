@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-13T08:34:36.493145+00:00",
+  "generated": "2026-05-13T19:42:21.239490+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,27 +8,27 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 24.27,
-    "altitude": -31.81,
-    "compass": "NNE",
-    "above_horizon": false,
-    "sunrise_azimuth": 65.97,
+    "azimuth": 205.53,
+    "altitude": 70.93,
+    "compass": "SSW",
+    "above_horizon": true,
+    "sunrise_azimuth": 65.65,
     "sunset_azimuth": 294.54
   },
   "moon": {
-    "azimuth": 73.37,
-    "altitude": -15.73,
-    "compass": "ENE",
-    "above_horizon": false,
-    "phase_pct": 16.5,
+    "azimuth": 250.08,
+    "altitude": 35.46,
+    "compass": "WSW",
+    "above_horizon": true,
+    "phase_pct": 12.7,
     "phase_name": "Waxing Crescent"
   },
   "alignments": {
     "rinconada_active": true,
-    "rinconada_delta_deg": -0.53,
+    "rinconada_delta_deg": -0.85,
     "rinconada_target_az": 66.5,
     "tolerance_deg": 3.5,
-    "current_sunrise_az": 65.97,
+    "current_sunrise_az": 65.65,
     "note": "Summer solstice sunrise aligns with Casa Rinconada's NE doorway when sunrise azimuth \u2248 66.5\u00b0 (Sofaer, Sinclair & Doggett 1982)."
   },
   "events": {
