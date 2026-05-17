@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-16T18:52:00.545745+00:00",
+  "generated": "2026-05-17T08:10:53.233549+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 166.96,
-    "altitude": 72.8,
-    "compass": "SSE",
-    "above_horizon": true,
+    "azimuth": 17.61,
+    "altitude": -32.63,
+    "compass": "NNE",
+    "above_horizon": false,
     "sunrise_azimuth": 64.73,
-    "sunset_azimuth": 295.44
+    "sunset_azimuth": 295.73
   },
   "moon": {
-    "azimuth": 171.15,
-    "altitude": 77.45,
-    "compass": "S",
-    "above_horizon": true,
-    "phase_pct": 0.2,
+    "azimuth": 9.32,
+    "altitude": -28.43,
+    "compass": "N",
+    "above_horizon": false,
+    "phase_pct": 0.6,
     "phase_name": "New Moon"
   },
   "alignments": {
@@ -35,7 +35,7 @@
     "vernal_equinox": {
       "iso": "2027-03-20T20:24:32Z",
       "display": "March 20, 2027",
-      "days_away": 308
+      "days_away": 307
     },
     "summer_solstice": {
       "iso": "2026-06-21T08:24:31Z",
@@ -45,12 +45,12 @@
     "autumnal_equinox": {
       "iso": "2026-09-23T00:05:09Z",
       "display": "September 23, 2026",
-      "days_away": 129
+      "days_away": 128
     },
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
       "display": "December 21, 2026",
-      "days_away": 219
+      "days_away": 218
     }
   }
 }
