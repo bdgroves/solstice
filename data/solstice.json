@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-01T11:10:59.740550+00:00",
+  "generated": "2026-06-01T21:21:48.943540+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,34 +8,34 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 54.51,
-    "altitude": -8.6,
-    "compass": "NE",
-    "above_horizon": false,
-    "sunrise_azimuth": 61.11,
+    "azimuth": 253.19,
+    "altitude": 58.19,
+    "compass": "WSW",
+    "above_horizon": true,
+    "sunrise_azimuth": 60.93,
     "sunset_azimuth": 299.18
   },
   "moon": {
-    "azimuth": 221.82,
-    "altitude": 11.04,
-    "compass": "SW",
-    "above_horizon": true,
-    "phase_pct": 98.7,
+    "azimuth": 61.84,
+    "altitude": -75.13,
+    "compass": "ENE",
+    "above_horizon": false,
+    "phase_pct": 97.8,
     "phase_name": "New Moon"
   },
   "alignments": {
     "rinconada_active": false,
-    "rinconada_delta_deg": -5.39,
+    "rinconada_delta_deg": -5.57,
     "rinconada_target_az": 66.5,
     "tolerance_deg": 3.5,
-    "current_sunrise_az": 61.11,
+    "current_sunrise_az": 60.93,
     "note": "Summer solstice sunrise aligns with Casa Rinconada's NE doorway when sunrise azimuth \u2248 66.5\u00b0 (Sofaer, Sinclair & Doggett 1982)."
   },
   "events": {
     "vernal_equinox": {
       "iso": "2027-03-20T20:24:32Z",
       "display": "March 20, 2027",
-      "days_away": 292
+      "days_away": 291
     },
     "summer_solstice": {
       "iso": "2026-06-21T08:24:31Z",
@@ -50,7 +50,7 @@
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
       "display": "December 21, 2026",
-      "days_away": 203
+      "days_away": 202
     }
   }
 }
