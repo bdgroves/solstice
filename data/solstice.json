@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-19T18:52:35.335053+00:00",
+  "generated": "2026-07-20T08:41:51.484438+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 158.2,
-    "altitude": 73.68,
-    "compass": "SSE",
-    "above_horizon": true,
+    "azimuth": 22.67,
+    "altitude": -29.96,
+    "compass": "NNE",
+    "above_horizon": false,
     "sunrise_azimuth": 62.64,
-    "sunset_azimuth": 297.22
+    "sunset_azimuth": 296.97
   },
   "moon": {
-    "azimuth": 105.01,
-    "altitude": 9.27,
-    "compass": "ESE",
-    "above_horizon": true,
-    "phase_pct": 33.4,
+    "azimuth": 286.55,
+    "altitude": -36.88,
+    "compass": "WNW",
+    "above_horizon": false,
+    "phase_pct": 39.1,
     "phase_name": "Waxing Gibbous"
   },
   "alignments": {
@@ -35,7 +35,7 @@
     "vernal_equinox": {
       "iso": "2027-03-20T20:24:32Z",
       "display": "March 20, 2027",
-      "days_away": 244
+      "days_away": 243
     },
     "summer_solstice": {
       "iso": "2027-06-21T14:10:50Z",
@@ -45,12 +45,12 @@
     "autumnal_equinox": {
       "iso": "2026-09-23T00:05:09Z",
       "display": "September 23, 2026",
-      "days_away": 65
+      "days_away": 64
     },
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
       "display": "December 21, 2026",
-      "days_away": 155
+      "days_away": 154
     }
   }
 }
