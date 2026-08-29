@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-29T01:20:28.706661+00:00",
+  "generated": "2026-08-29T11:59:35.023473+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 278.72,
-    "altitude": 4.19,
-    "compass": "W",
-    "above_horizon": true,
+    "azimuth": 71.57,
+    "altitude": -8.98,
+    "compass": "ENE",
+    "above_horizon": false,
     "sunrise_azimuth": 76.9,
-    "sunset_azimuth": 282.86
+    "sunset_azimuth": 282.41
   },
   "moon": {
-    "azimuth": 89.02,
-    "altitude": -9.21,
-    "compass": "E",
-    "above_horizon": false,
-    "phase_pct": 99.2,
+    "azimuth": 248.54,
+    "altitude": 23.8,
+    "compass": "WSW",
+    "above_horizon": true,
+    "phase_pct": 98.1,
     "phase_name": "New Moon"
   },
   "alignments": {
