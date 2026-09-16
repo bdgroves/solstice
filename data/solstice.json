@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T20:40:14.610129+00:00",
+  "generated": "2026-09-16T10:31:12.993581+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 218.3,
-    "altitude": 50.36,
-    "compass": "SW",
-    "above_horizon": true,
+    "azimuth": 62.49,
+    "altitude": -28.74,
+    "compass": "ENE",
+    "above_horizon": false,
     "sunrise_azimuth": 85.24,
-    "sunset_azimuth": 274.51
+    "sunset_azimuth": 274.03
   },
   "moon": {
-    "azimuth": 150.42,
-    "altitude": 24.43,
-    "compass": "SSE",
-    "above_horizon": true,
-    "phase_pct": 22.8,
+    "azimuth": 326.86,
+    "altitude": -76.77,
+    "compass": "NNW",
+    "above_horizon": false,
+    "phase_pct": 27.7,
     "phase_name": "First Quarter"
   },
   "alignments": {
@@ -45,12 +45,12 @@
     "autumnal_equinox": {
       "iso": "2026-09-23T00:05:09Z",
       "display": "September 23, 2026",
-      "days_away": 7
+      "days_away": 6
     },
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
       "display": "December 21, 2026",
-      "days_away": 97
+      "days_away": 96
     }
   }
 }
