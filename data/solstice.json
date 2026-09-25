@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-24T20:57:25.517643+00:00",
+  "generated": "2026-09-25T10:51:47.151474+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,20 +8,20 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 222.03,
-    "altitude": 44.72,
-    "compass": "SW",
-    "above_horizon": true,
-    "sunrise_azimuth": 89.56,
-    "sunset_azimuth": 270.19
-  },
-  "moon": {
-    "azimuth": 69.77,
-    "altitude": -37.28,
+    "azimuth": 69.93,
+    "altitude": -26.7,
     "compass": "ENE",
     "above_horizon": false,
-    "phase_pct": 96.2,
-    "phase_name": "Waning Crescent"
+    "sunrise_azimuth": 89.56,
+    "sunset_azimuth": 269.71
+  },
+  "moon": {
+    "azimuth": 256.07,
+    "altitude": 11.44,
+    "compass": "WSW",
+    "above_horizon": true,
+    "phase_pct": 98.2,
+    "phase_name": "New Moon"
   },
   "alignments": {
     "rinconada_active": false,
@@ -45,7 +45,7 @@
     "autumnal_equinox": {
       "iso": "2027-09-23T06:01:32Z",
       "display": "September 23, 2027",
-      "days_away": 363
+      "days_away": 362
     },
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
