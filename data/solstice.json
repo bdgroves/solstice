@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T20:53:36.052844+00:00",
+  "generated": "2026-09-26T10:32:18.998595+00:00",
   "location": {
     "lat": "36.0608",
     "lon": "-107.9631",
@@ -8,19 +8,19 @@
     "tz_offset": -6
   },
   "sun": {
-    "azimuth": 220.71,
-    "altitude": 44.85,
-    "compass": "SW",
-    "above_horizon": true,
+    "azimuth": 66.66,
+    "altitude": -30.55,
+    "compass": "ENE",
+    "above_horizon": false,
     "sunrise_azimuth": 90.04,
-    "sunset_azimuth": 269.71
+    "sunset_azimuth": 269.23
   },
   "moon": {
-    "azimuth": 53.78,
-    "altitude": -41.25,
-    "compass": "NE",
-    "above_horizon": false,
-    "phase_pct": 99.2,
+    "azimuth": 250.7,
+    "altitude": 27.4,
+    "compass": "WSW",
+    "above_horizon": true,
+    "phase_pct": 99.9,
     "phase_name": "New Moon"
   },
   "alignments": {
@@ -45,7 +45,7 @@
     "autumnal_equinox": {
       "iso": "2027-09-23T06:01:32Z",
       "display": "September 23, 2027",
-      "days_away": 362
+      "days_away": 361
     },
     "winter_solstice": {
       "iso": "2026-12-21T20:49:59Z",
