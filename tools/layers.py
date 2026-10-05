@@ -139,30 +139,38 @@ def window_layer(scene, name: str, bounds, work: Path, source: str) -> Layer:
 
 def fetch_naip_utm(bounds, step, path, crs):
     """NAIP at `step` over a UTM window, reading only the blocks it needs."""
-    import planetary_computer
-    import pystac_client
+    import json
     from rasterio.vrt import WarpedVRT
+    from prep_data import http_get
+    pc = "https://planetarycomputer.microsoft.com/api"
     ll = transform_bounds(crs, "EPSG:4326", *bounds, densify_pts=21)
-    cat = pystac_client.Client.open("https://planetarycomputer.microsoft.com/api/stac/v1",
-                                    modifier=planetary_computer.sign_inplace)
-    items = list(cat.search(collections=["naip"], bbox=ll).items())
-    year = lambda i: i.datetime.year if i.datetime else int(i.properties["naip:year"])
-    best = max(year(i) for i in items)
-    items = [i for i in items if year(i) == best]
+    code, body = http_get(f"{pc}/stac/v1/search", data=json.dumps(
+        {"collections": ["naip"], "bbox": list(ll), "limit": 200}).encode())
+    if code != 200:
+        raise RuntimeError(f"NAIP search: HTTP {code} {body[:200]!r}")
+    feats = json.loads(body)["features"]
+    year = lambda f: int(f["properties"].get("naip:year") or f["properties"]["datetime"][:4])
+    best = max(year(f) for f in feats)
+    feats = [f for f in feats if year(f) == best]
+    code, body = http_get(f"{pc}/sas/v1/token/naip")
+    if code != 200:
+        raise RuntimeError(f"NAIP token: HTTP {code} {body[:200]!r}")
+    token = json.loads(body)["token"]
+    hrefs = [f["assets"]["image"]["href"] + "?" + token for f in feats]
     x0, y0, x1, y1 = bounds
     w, h = int(round((x1 - x0) / step)), int(round((y1 - y0) / step))
     t = from_origin(x0, y1, step, step)
     mosaic = np.zeros((3, h, w), dtype="uint8")
     filled = np.zeros((h, w), dtype=bool)
-    for it in items:
-        with rasterio.open(it.assets["image"].href) as src, \
+    for href in hrefs:
+        with rasterio.open(href) as src, \
                 WarpedVRT(src, crs=crs, transform=t, width=w, height=h,
                           resampling=Resampling.average, nodata=0) as vrt:
             part = vrt.read(indexes=[1, 2, 3])
         have = (part.sum(axis=0) > 0) & ~filled
         mosaic[:, have] = part[:, have]
         filled |= have
-    print(f"  NAIP {best}: {len(items)} quarter-quads, {filled.mean():.1%} filled", flush=True)
+    print(f"  NAIP {best}: {len(hrefs)} quarter-quads, {filled.mean():.1%} filled", flush=True)
     prof = dict(driver="GTiff", width=w, height=h, count=3, dtype="uint8", crs=crs, transform=t)
     with rasterio.open(path, "w", **prof) as d:
         d.write(mosaic)

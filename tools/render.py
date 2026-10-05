@@ -22,7 +22,7 @@ import shutil
 import subprocess
 import time
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone, tzinfo
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -35,7 +35,36 @@ Image.MAX_IMAGE_PIXELS = None
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 FONTS = HERE / "fonts"
-TZ = ZoneInfo("America/Denver")
+
+
+class _Mountain(tzinfo):
+    """US Mountain Time with daylight saving (2007 rules), for Pythons with no
+    time-zone database (Windows without the tzdata package)."""
+    def _dst(self, dt):
+        y = dt.year
+        mar = date(y, 3, 8) + timedelta(days=(6 - date(y, 3, 8).weekday()) % 7)    # 2nd Sunday
+        nov = date(y, 11, 1) + timedelta(days=(6 - date(y, 11, 1).weekday()) % 7)  # 1st Sunday
+        n = dt.replace(tzinfo=None)
+        return datetime(mar.year, mar.month, mar.day, 2) <= n < datetime(nov.year, nov.month, nov.day, 1)
+
+    def utcoffset(self, dt):
+        return timedelta(hours=-6 if self._dst(dt) else -7)
+
+    def dst(self, dt):
+        return timedelta(hours=1 if self._dst(dt) else 0)
+
+    def tzname(self, dt):
+        return "MDT" if self._dst(dt) else "MST"
+
+    def fromutc(self, dt):
+        st = dt + timedelta(hours=-7)
+        return (dt + timedelta(hours=-6) if self._dst(st) else st).replace(tzinfo=self)
+
+
+try:
+    TZ = ZoneInfo("America/Denver")
+except Exception:
+    TZ = _Mountain()
 LAT0, LON0 = 36.0606, -107.9616          # Pueblo Bonito: reference point for the Sun
 CRS = "EPSG:26913"
 
@@ -347,14 +376,46 @@ def caption(im: Image.Image, title, sub=None, alpha=1.0, where="bottom"):
 
 # ── stills ────────────────────────────────────────────────────────────────────
 def solstice_dates(year):
-    import ephem
+    try:
+        import ephem
+    except ImportError:
+        return _solstices_meeus(year)
     loc = lambda d: ephem.Date(d).datetime().replace(tzinfo=timezone.utc).astimezone(TZ).date()
     return loc(ephem.next_summer_solstice(f"{year}/1/1")), loc(ephem.next_winter_solstice(f"{year}/1/1"))
 
 
+def _solstices_meeus(year):
+    """Solstice dates from Meeus, Astronomical Algorithms, table 27.B (good to
+    well under an hour, plenty to name the local date)."""
+    Y = (year - 2000) / 1000
+    jun = 2451716.56767 + 365241.62603 * Y + 0.00325 * Y**2 + 0.00888 * Y**3 - 0.00030 * Y**4
+    dec = 2451900.05952 + 365242.74049 * Y - 0.06223 * Y**2 - 0.00823 * Y**3 + 0.00032 * Y**4
+    loc = lambda jd: (datetime(2000, 1, 1, 12, tzinfo=timezone.utc) + timedelta(days=jd - 2451545.0)).astimezone(TZ).date()
+    return loc(jun), loc(dec)
+
+
+def _sunrise_f3d(day: date):
+    """Flat-horizon sunrise (upper limb, standard refraction: -0.833 deg) from
+    forge3d's solar calculator, when PyEphem isn't installed."""
+    import forge3d as f3d
+    el = lambda t: float(f3d.sun_position_utc(LAT0, LON0, t.year, t.month, t.day, t.hour, t.minute, t.second).elevation)
+    lo = datetime(day.year, day.month, day.day, 3, tzinfo=TZ).astimezone(timezone.utc)
+    hi = datetime(day.year, day.month, day.day, 11, tzinfo=TZ).astimezone(timezone.utc)
+    for _ in range(40):
+        mid = lo + (hi - lo) / 2
+        if el(mid) < -0.833:
+            lo = mid
+        else:
+            hi = mid
+    return hi.replace(microsecond=0)
+
+
 def sunrise_plus(day: date, minutes: float, sc: Scene):
     """Local time when the Sun is `minutes` past sunrise on a flat horizon."""
-    import ephem
+    try:
+        import ephem
+    except ImportError:
+        return (_sunrise_f3d(day) + timedelta(minutes=minutes)).astimezone(TZ)
     o = ephem.Observer()
     o.lat, o.lon, o.elevation = str(LAT0), str(LON0), 1870
     o.date = ephem.Date(datetime(day.year, day.month, day.day, 3, tzinfo=TZ).astimezone(timezone.utc).replace(tzinfo=None))

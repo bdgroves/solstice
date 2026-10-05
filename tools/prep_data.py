@@ -20,7 +20,6 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
-import requests
 from rasterio.merge import merge
 from rasterio.transform import from_origin
 from rasterio.warp import Resampling, reproject, transform_bounds
@@ -34,6 +33,23 @@ IMAGESERVER = "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevat
 RENDER_LL = (-108.08, 35.99, -107.84, 36.16)
 # Horizon extent: ~60 km each way.
 HORIZON_LL = (-108.62, 35.58, -107.30, 36.55)
+
+
+def http_get(url, params=None, data=None, timeout=300):
+    """(status, body bytes). Standard library only, so the renders run in any
+    Python that has rasterio (no requests needed)."""
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+    if params:
+        url += ("&" if "?" in url else "?") + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, data=data, headers={"User-Agent": "solstice-render",
+                                 **({"Content-Type": "application/json"} if data else {})})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status, r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
 
 
 def utm_box(ll, step):
@@ -63,13 +79,16 @@ def fetch_dem_utm(bounds, step, path, tile=2000):
                           format="tiff", pixelType="F32", noData=-9999,
                           interpolation="RSP_BilinearInterpolation", f="image")
             for attempt in range(4):
-                r = requests.get(IMAGESERVER, params=params, timeout=300)
-                if r.ok and r.content[:2] in (b"II", b"MM"):
+                try:
+                    code, body = http_get(IMAGESERVER, params)
+                except OSError as e:
+                    code, body = 0, str(e).encode()
+                if code == 200 and body[:2] in (b"II", b"MM"):
                     break
-                print(f"  retry {name} tile {r0},{c0}: HTTP {r.status_code} {r.text[:120]!r}")
+                print(f"  retry {name} tile {r0},{c0}: HTTP {code} {body[:120]!r}")
             else:
                 raise RuntimeError(f"3DEP tile failed {r0},{c0}")
-            with rasterio.MemoryFile(r.content) as mf, mf.open() as src:
+            with rasterio.MemoryFile(body) as mf, mf.open() as src:
                 a = src.read(1).astype("float32")
                 a[a < -1000] = np.nan
                 out[r0:r0 + a.shape[0], c0:c0 + a.shape[1]] = a[:th, :tw]
