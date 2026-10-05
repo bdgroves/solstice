@@ -14,9 +14,9 @@ from rasterio.warp import transform
 OUT = Path("osm"); OUT.mkdir(exist_ok=True)
 BBOX = (35.99, -108.08, 36.16, -107.84)  # S, W, N, E
 q = f"""[out:json][timeout:120];
-(nwr["historic"="archaeological_site"]({BBOX[0]},{BBOX[1]},{BBOX[2]},{BBOX[3]});
+(nwr["historic"]({BBOX[0]},{BBOX[1]},{BBOX[2]},{BBOX[3]});
  nwr["natural"="peak"]({BBOX[0]},{BBOX[1]},{BBOX[2]},{BBOX[3]});
- nwr["tourism"="attraction"]({BBOX[0]},{BBOX[1]},{BBOX[2]},{BBOX[3]}););
+ nwr["tourism"]({BBOX[0]},{BBOX[1]},{BBOX[2]},{BBOX[3]}););
 out center tags;"""
 els = []
 for ep in ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]:
@@ -24,7 +24,7 @@ for ep in ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.sys
         r = requests.post(ep, data={"data": q}, timeout=180, headers={"User-Agent": "solstice (github.com/bdgroves/solstice)"})
         r.raise_for_status(); els = r.json()["elements"]; break
     except Exception as e:
-        print(ep, e)
+        print(ep, e); (OUT / "overpass_error.txt").write_text(f"{ep}: {e}\n{getattr(e, 'response', None) and e.response.text[:500]}")
 rows = []
 for e in els:
     lat = e.get("lat") or e.get("center", {}).get("lat"); lon = e.get("lon") or e.get("center", {}).get("lon")
@@ -36,16 +36,21 @@ print(len(rows), "features"); [print(r["name"], r["lat"], r["lon"]) for r in row
 cat = pystac_client.Client.open("https://planetarycomputer.microsoft.com/api/stac/v1", modifier=planetary_computer.sign_inplace)
 items = [i for i in cat.search(collections=["naip"], bbox=(-108.08, 35.99, -107.84, 36.16)).items() if i.datetime.year == 2022]
 want = [r for r in rows if r["name"] and r["tags"].get("historic")]
+# Also crop around the coordinates SOLSTICE currently uses (1 km squares)
+for s in json.loads(Path("data/sites.json").read_text())["sites"]:
+    want.append({"name": "SOL_" + s["id"], "lat": s["lat"], "lon": s["lon"], "id": 0, "half": 830})
 for r in want:
     for it in items:
         with rasterio.open(it.assets["image"].href) as src:
             (x,), (y,) = transform("EPSG:4326", src.crs, [r["lon"]], [r["lat"]])
             row, col = src.index(x, y)
             if 0 <= row < src.height and 0 <= col < src.width:
-                win = rasterio.windows.Window(col - 250, row - 250, 500, 500)  # 300 m
+                hw = r.get("half", 250)
+                win = rasterio.windows.Window(col - hw, row - hw, 2 * hw, 2 * hw)
                 a = src.read([1, 2, 3], window=win, boundless=True)
                 im = Image.fromarray(np.moveaxis(a, 0, -1)); d = ImageDraw.Draw(im)
-                d.line([(250, 235), (250, 265)], fill=(255, 0, 0)); d.line([(235, 250), (265, 250)], fill=(255, 0, 0))
+                c = hw; d.line([(c, c - 15), (c, c + 15)], fill=(255, 0, 0)); d.line([(c - 15, c), (c + 15, c)], fill=(255, 0, 0))
+                for k in range(0, 2 * hw, 167): d.line([(k, 0), (k, 12)], fill=(255, 255, 0)); d.line([(0, k), (12, k)], fill=(255, 255, 0))
                 fn = "".join(ch if ch.isalnum() else "_" for ch in r["name"])[:40]
                 im.save(OUT / f"{fn}_{r['id']}.jpg", quality=85)
                 break

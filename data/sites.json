@@ -1,0 +1,137 @@
+{
+ "note": "Coordinates from Wikipedia/NPS, each checked against the NAIP aerial photo. Room counts and dates are the commonly cited figures; sources in README.",
+ "sites": [
+  {
+   "id": "pueblo-bonito",
+   "name": "Pueblo Bonito",
+   "kind": "Great house",
+   "lat": 36.0607,
+   "lon": -107.9617,
+   "built": "c. 850–1130",
+   "rooms": "about 800",
+   "horizon": true,
+   "note": "The largest great house: a D-shaped building of four stories around two plazas, built in stages over almost three centuries.",
+   "sky": "A wall across the central plaza runs north–south almost exactly, so its shadow disappears at local noon, and the western half of the front wall runs east–west, toward the equinox sunrise and sunset."
+  },
+  {
+   "id": "chetro-ketl",
+   "name": "Chetro Ketl",
+   "kind": "Great house",
+   "lat": 36.06,
+   "lon": -107.955,
+   "built": "c. 990–1115",
+   "rooms": "about 400–500",
+   "horizon": true,
+   "note": "Second largest great house, with a great kiva in its plaza and a 13-column colonnade added after 1105, unlike anything else in Chaco.",
+   "sky": null
+  },
+  {
+   "id": "pueblo-del-arroyo",
+   "name": "Pueblo del Arroyo",
+   "kind": "Great house",
+   "lat": 36.0612,
+   "lon": -107.9657,
+   "built": "c. 1060–1105",
+   "rooms": "about 300",
+   "horizon": false,
+   "note": "Built beside Chaco Wash, with a rare tri-wall structure (three concentric walls) against its back.",
+   "sky": null
+  },
+  {
+   "id": "kin-kletso",
+   "name": "Kin Kletso",
+   "kind": "Great house",
+   "lat": 36.0652,
+   "lon": -107.97,
+   "built": "c. 1125–1130",
+   "rooms": "about 55",
+   "horizon": false,
+   "note": "A compact, late great house built in a few years, with a two-story round tower kiva.",
+   "sky": null
+  },
+  {
+   "id": "casa-rinconada",
+   "name": "Casa Rinconada",
+   "kind": "Great kiva",
+   "lat": 36.0548,
+   "lon": -107.9603,
+   "built": "1000s",
+   "rooms": "one 20 m (64 ft) round chamber",
+   "horizon": true,
+   "note": "The largest excavated great kiva at Chaco, on the south side of the canyon. Excavated by Gordon Vivian in 1930–31 and heavily rebuilt afterwards.",
+   "sky": "Shortly after summer solstice sunrise, light through a window in the northeast wall falls on one of the wall niches. It's a popular story, but the upper wall and window were rebuilt after excavation, and a roof post would have blocked the beam, so it may not be original."
+  },
+  {
+   "id": "pueblo-alto",
+   "name": "Pueblo Alto",
+   "kind": "Great house",
+   "lat": 36.0698,
+   "lon": -107.9574,
+   "built": "c. 1020–1100",
+   "rooms": "about 90 (one story)",
+   "horizon": true,
+   "note": "On the mesa top north of the canyon, where the Great North Road begins. Huge trash mounds suggest gatherings and feasts.",
+   "sky": "The Great North Road leaves here about 15° east of north, then runs close to due north much of the way to Kutz Canyon, about 50 km away."
+  },
+  {
+   "id": "penasco-blanco",
+   "name": "Peñasco Blanco",
+   "kind": "Great house",
+   "lat": 36.0814,
+   "lon": -108.0031,
+   "built": "c. 900–1125",
+   "rooms": "about 150",
+   "horizon": true,
+   "note": "The westernmost great house, on the mesa above where Chaco Wash meets the Escavada.",
+   "sky": "Below it, on an overhang near the canyon trail, a red pictograph of a star, a crescent moon and a hand may record the supernova of July 1054, which appeared next to the crescent moon."
+  },
+  {
+   "id": "una-vida",
+   "name": "Una Vida",
+   "kind": "Great house",
+   "lat": 36.0337,
+   "lon": -107.9124,
+   "built": "begun in the 800s",
+   "rooms": "about 160",
+   "horizon": true,
+   "note": "One of the three earliest great houses, with petroglyph panels on the cliff behind it.",
+   "sky": null
+  },
+  {
+   "id": "hungo-pavi",
+   "name": "Hungo Pavi",
+   "kind": "Great house",
+   "lat": 36.05,
+   "lon": -107.93,
+   "built": "not excavated, so undated",
+   "rooms": "72 ground-floor rooms",
+   "horizon": false,
+   "note": "A great house that has never been excavated; its outline still shows as a rubble mound.",
+   "sky": null
+  },
+  {
+   "id": "wijiji",
+   "name": "Wijiji",
+   "kind": "Great house",
+   "lat": 36.0262,
+   "lon": -107.8693,
+   "built": "c. 1110–1115",
+   "rooms": "just over 100",
+   "horizon": true,
+   "note": "The last Chacoan great house built in the canyon: small, symmetrical and finished in a few years.",
+   "sky": null
+  },
+  {
+   "id": "fajada-butte",
+   "name": "Fajada Butte",
+   "kind": "Sun Dagger",
+   "lat": 36.0189,
+   "lon": -107.9098,
+   "built": "petroglyphs c. 950–1150",
+   "rooms": null,
+   "horizon": true,
+   "note": "A 135 m butte at the south entrance to the canyon. Closed to visitors to protect the site.",
+   "sky": "Near the top, three leaning slabs throw daggers of light across two spiral petroglyphs: one pierces the large spiral at the summer solstice, two frame it at the winter solstice, and one crosses the small spiral at the equinoxes. Shadows from the rising Moon reach the spiral's edge at the major lunar standstill and its center at the minor one. Found by Anna Sofaer in 1977; one slab shifted in 1989 and the markings are no longer exact."
+  }
+ ]
+}
