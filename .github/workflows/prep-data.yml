@@ -1,0 +1,33 @@
+name: Prep render data
+
+# Fetches the DEM and aerial imagery used for forge3d renders and the horizon
+# calendar, and publishes them on the single-commit `prep-data` branch (kept
+# off main so the repo stays small). Run by hand when the data needs a refresh.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q rasterio numpy requests pystac-client planetary-computer
+      - run: python tools/prep_data.py
+      - name: Publish to prep-data branch
+        run: |
+          cd prep
+          git init -q -b prep-data
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "prep data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" prep-data
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
