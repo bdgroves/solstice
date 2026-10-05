@@ -499,6 +499,10 @@ def flyover(sc: Scene, out: Path, chunk: int, chunks: int, size=(1920, 1080), fo
     lo, hi = chunk * n // chunks, (chunk + 1) * n // chunks
     when0 = sunrise_plus(FLY_DAY, FLY_MINUTES, sc)
     out.mkdir(parents=True, exist_ok=True)
+    todo = [f for f in range(lo, hi) if not (out / f"frame_{f:05d}.jpg").exists()]
+    if not todo:
+        print(f"chunk {chunk}: all {hi - lo} frames already rendered", flush=True)
+        return
     t0 = time.time()
     # One sun for the whole flight: moving it re-runs the shadow and
     # occlusion passes every frame, and over a minute it barely moves.
@@ -508,7 +512,7 @@ def flyover(sc: Scene, out: Path, chunk: int, chunks: int, size=(1920, 1080), fo
     print(f"layers ready {time.time() - t0:.0f}s", flush=True)
     v.sun(*sun)
     try:
-        for f in range(lo, hi):
+        for f in todo:
             t = f / FPS
             eye, aim = path[f]
             raw = out / f"raw_{f:05d}.png"
@@ -578,6 +582,8 @@ def main():
     ap.add_argument("--frames", default="frames")
     ap.add_argument("--chunk", type=int, default=0)
     ap.add_argument("--chunks", type=int, default=1)
+    ap.add_argument("--all", action="store_true",
+                    help="flyover: render every chunk in turn (on one machine); finished frames are skipped")
     ap.add_argument("--width", type=int, default=1920)
     ap.add_argument("--source", choices=["usgs", "prep"], default="usgs",
                     help="where fine terrain windows come from: 1 m 3DEP + NAIP (usgs) or the 5 m prep data")
@@ -593,7 +599,8 @@ def main():
     if a.mode == "stills":
         stills(sc, out, work, size, a.only)
     elif a.mode == "flyover":
-        flyover(sc, Path(a.frames), a.chunk, a.chunks, size)
+        for c in (range(a.chunks) if a.all else [a.chunk]):
+            flyover(sc, Path(a.frames), c, a.chunks, size)
     elif a.mode == "today":
         today(sc, out, work)
     elif a.mode == "path":

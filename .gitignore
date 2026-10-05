@@ -3,3 +3,7 @@ prep/
 *.tif
 .pixi/
 __pycache__/
+work/
+frames/
+renders/
+prep.tar

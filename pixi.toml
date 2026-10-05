@@ -7,13 +7,26 @@ platforms = ["win-64", "linux-64", "osx-arm64", "osx-64"]
 
 [dependencies]
 python = ">=3.10,<3.13"
+rasterio = "*"
+scipy = "*"
+ffmpeg = "*"
 
 [pypi-dependencies]
 requests  = ">=2.31"
 ephem     = ">=4.1"
 numpy     = ">=1.26"
 Pillow    = ">=10.0"
+forge3d   = "==1.40.1"
+pystac-client      = "*"
+planetary-computer = "*"
 
 [tasks]
 fetch   = "python fetch_solstice.py"
 horizon = "python tools/horizon.py --prep prep --sites data/sites.json --out data/horizons.json"
+
+# Renders on your own machine (the same thing the "Render with forge3d" Action does).
+# Fine terrain windows (1 m 3DEP lidar, 0.6 m NAIP) are fetched as needed into work/.
+prep    = "git fetch origin prep-data && mkdir -p prep && git archive FETCH_HEAD -o prep.tar && tar -xf prep.tar -C prep && rm prep.tar"
+stills  = "python tools/render.py stills --prep prep --out assets"
+flyover = "python tools/render.py flyover --prep prep --frames frames --all --chunks 30"
+encode  = "python tools/render.py encode --frames frames --out assets"
