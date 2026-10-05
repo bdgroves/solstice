@@ -51,8 +51,17 @@ jobs:
         env:
           XDG_RUNTIME_DIR: /tmp
         run: |
+          set -o pipefail
           xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py flyover \
-            --prep prep --frames frames --chunk ${{ matrix.chunk }} --chunks ${{ inputs.chunks }} --width ${{ inputs.width }}
+            --prep prep --frames frames --chunk ${{ matrix.chunk }} --chunks ${{ inputs.chunks }} --width ${{ inputs.width }} 2>&1 | tee render.log
+      - name: Keep the log when a render fails
+        if: failure() && matrix.chunk == 0
+        run: |
+          mkdir -p /tmp/l && cp render.log /tmp/l/ 2>/dev/null; cd /tmp/l && git init -q -b render-logs
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -q -m log && git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" render-logs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: frames-${{ matrix.chunk }}
