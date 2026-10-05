@@ -1,0 +1,114 @@
+name: Render with forge3d
+
+# Renders the Chaco Canyon stills and the summer-solstice flyover with forge3d
+# on GitHub's CPUs (Mesa's llvmpipe Vulkan driver under a virtual display).
+# The flyover is split across parallel jobs, then stitched with ffmpeg and
+# committed to assets/. Run by hand from the Actions tab.
+on:
+  workflow_dispatch:
+    inputs:
+      chunks:
+        description: "Parallel render jobs for the flyover"
+        default: "30"
+      width:
+        description: "Frame width (16:9)"
+        default: "1920"
+
+permissions:
+  contents: write
+
+env:
+  FORGE3D: "forge3d==1.40.1"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      chunks: ${{ steps.c.outputs.list }}
+    steps:
+      - id: c
+        run: echo "list=$(python3 -c "import json;print(json.dumps(list(range(int('${{ inputs.chunks }}')))))")" >> "$GITHUB_OUTPUT"
+
+  frames:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ${{ fromJSON(needs.plan.outputs.chunks) }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Render data (prep-data branch)
+        run: git fetch -q --depth 1 origin prep-data && mkdir -p prep && git archive FETCH_HEAD | tar -x -C prep
+      - name: Software Vulkan + virtual display
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers xvfb >/dev/null
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem
+      - name: Render frames
+        env:
+          XDG_RUNTIME_DIR: /tmp
+        run: |
+          xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py flyover \
+            --prep prep --frames frames --chunk ${{ matrix.chunk }} --chunks ${{ inputs.chunks }} --width ${{ inputs.width }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frames-${{ matrix.chunk }}
+          path: frames/frame_*.jpg
+          retention-days: 3
+
+  stills:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - run: git fetch -q --depth 1 origin prep-data && mkdir -p prep && git archive FETCH_HEAD | tar -x -C prep
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers xvfb >/dev/null
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem
+      - env:
+          XDG_RUNTIME_DIR: /tmp
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py stills --prep prep --out stills --width ${{ inputs.width }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stills
+          path: stills/
+          retention-days: 3
+
+  publish:
+    needs: [frames, stills]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: frames-*
+          path: frames
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: stills
+          path: stills
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q pillow numpy rasterio
+      - run: ls frames | wc -l && python tools/render.py encode --frames frames --out assets
+      - name: Commit renders
+        run: |
+          cp stills/*.jpg stills/stills.json assets/
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/chaco-flyover.mp4 assets/chaco-flyover-poster.jpg assets/*.jpg assets/stills.json
+          git commit -q -m "renders: forge3d stills and solstice flyover [skip ci]"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q && exit 0; sleep 5; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flyover-1080p
+          path: assets/chaco-flyover-1080.mp4
+          retention-days: 30

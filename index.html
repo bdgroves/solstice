@@ -1,816 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOLSTICE — Chaco Canyon Archaeoastronomy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLSTICE — The Sky Over Chaco Canyon</title>
+<meta name="description" content="The sky over Chaco Canyon, computed against the real skyline: where the Sun rises today at each great house, how far it has to go to the solstice, the Moon's 18.6-year cycle, and a forge3d flight down the canyon at summer solstice sunrise.">
+<meta property="og:title" content="SOLSTICE — The Sky Over Chaco Canyon">
+<meta property="og:image" content="https://brooksgroves.com/solstice/assets/summer-dawn.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --bg:#17100a; --bg2:#20160c; --bg3:#2a1d10; --line:#45301a; --line2:#6b4a22;
+  --text:#ecdcb4; --text2:#bea374; --text3:#8a6d48;
+  --gold:#d9a441; --gold2:#f0c46a; --dawn:#f3a35c; --winter:#8fb4d9; --moon:#c9c6d8; --sage:#8fae7c;
+  --fh:'Cinzel',serif; --fb:'Crimson Text',Georgia,serif; --fm:'Courier Prime',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:17px;line-height:1.6;overflow-x:hidden}
+a{color:var(--gold2)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.mono{font-family:var(--fm)}
+.kicker{font-family:var(--fm);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+h1{font-family:var(--fh);font-weight:400;letter-spacing:.42em;color:var(--gold2);font-size:clamp(2rem,6vw,3.4rem);line-height:1}
+h2{font-family:var(--fh);font-weight:400;letter-spacing:.12em;color:var(--gold2);font-size:clamp(1.3rem,3vw,1.8rem);margin-bottom:.4rem}
+h3{font-family:var(--fh);font-weight:600;letter-spacing:.06em;color:var(--text);font-size:1.05rem;margin-bottom:.3rem}
+p{margin-bottom:.9rem}
+.lede{font-size:1.15rem;color:var(--text2);font-style:italic;max-width:62ch}
 
-    :root {
-      --bg:      #1a1208;
-      --bg2:     #221609;
-      --bg3:     #2c1e0e;
-      --bg4:     #362510;
-      --border:  #4a3218;
-      --border2: #6b4a22;
-      --text:    #e8d4a0;
-      --text2:   #b89a6a;
-      --text3:   #7a6040;
-      --gold:    #c4892a;
-      --gold2:   #d4a843;
-      --sage:    #6a8a5a;
-      --rust:    #8b4020;
-      --fh:      'Cinzel', serif;
-      --fb:      'Crimson Text', serif;
-      --fm:      'Courier Prime', monospace;
-    }
+/* header */
+header{padding:22px 0 18px;border-bottom:1px solid var(--line);background:linear-gradient(#0b0705,var(--bg))}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.hdr .sub{font-style:italic;color:var(--text2);margin-top:6px}
+.clock{font-family:var(--fm);font-size:.78rem;color:var(--text3);text-align:right;line-height:1.8}
+.clock b{color:var(--text);font-weight:400}
 
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--fb);
-      font-size: 16px;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+/* hero */
+.hero{position:relative;background:#000;border-bottom:1px solid var(--line)}
+.hero video,.hero img{width:100%;display:block;max-height:78vh;object-fit:cover}
+.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:40px clamp(16px,4vw,40px) 16px;background:linear-gradient(transparent,rgba(8,5,3,.85))}
+.hero .cap p{margin:0;color:var(--text2);font-size:.95rem;max-width:80ch}
+.hero .hd{font-family:var(--fm);font-size:.7rem;letter-spacing:.12em;color:var(--gold);text-decoration:none;margin-left:.6rem}
 
-    /* ── HEADER ───────────────────────────────────────────────────────── */
-    header {
-      padding: 1.8rem 2.5rem 1.4rem;
-      background: linear-gradient(180deg, #0a0705 0%, var(--bg) 100%);
-      border-bottom: 1px solid var(--border);
-      position: relative;
-    }
+section{padding:46px 0;border-bottom:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
 
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+/* now panel */
+.now{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+@media(max-width:860px){.now{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.card .k{font-family:var(--fm);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3)}
+.card .v{font-family:var(--fh);font-size:1.45rem;color:var(--text);margin-top:2px;line-height:1.2}
+.card .s{font-size:.9rem;color:var(--text2);margin-top:2px}
+.pill{display:inline-block;font-family:var(--fm);font-size:.66rem;letter-spacing:.1em;padding:2px 8px;border-radius:3px;border:1px solid var(--line2);color:var(--text2);margin-top:6px}
+.pill.lit{border-color:var(--gold);color:var(--gold2)}
 
-    .header-left {}
+/* horizon calendar */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 10px}
+.tab{font-family:var(--fm);font-size:.72rem;letter-spacing:.06em;background:var(--bg2);color:var(--text2);border:1px solid var(--line);border-radius:3px;padding:5px 10px;cursor:pointer}
+.tab[aria-pressed=true]{border-color:var(--gold);color:var(--gold2);background:var(--bg3)}
+.horizon{background:#0d0907;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.horizon svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--fm);font-size:.7rem;color:var(--text3);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+@media(max-width:860px){.facts{grid-template-columns:1fr}}
 
-    .site-id {
-      font-family: var(--fm);
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      color: var(--text3);
-      margin-bottom: 0.4rem;
-    }
+/* two dawns */
+.dawns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+@media(max-width:760px){.dawns{grid-template-columns:1fr}}
+figure img{width:100%;display:block;border:1px solid var(--line);border-radius:4px}
+figcaption{font-size:.88rem;color:var(--text2);margin-top:6px;font-style:italic}
 
-    h1 {
-      font-family: var(--fh);
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 400;
-      letter-spacing: 0.45em;
-      color: var(--gold2);
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
+/* moon cycle */
+.gauge{position:relative;height:56px;margin:26px 0 8px}
+.gauge .bar{position:absolute;left:0;right:0;top:26px;height:4px;background:linear-gradient(90deg,var(--moon),#3b3550 50%,var(--moon));border-radius:2px}
+.gauge .tick{position:absolute;top:14px;width:2px;height:28px;margin-left:-1px;background:var(--line2)}
+.gauge .tl{position:absolute;top:44px;transform:translateX(-50%);font-family:var(--fm);font-size:.66rem;color:var(--text3);white-space:nowrap}
+.gauge .tt{position:absolute;top:-2px;transform:translateX(-50%);font-family:var(--fm);font-size:.66rem;color:var(--text3);white-space:nowrap}
+.gauge .me{position:absolute;top:18px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--moon);box-shadow:0 0 12px var(--moon)}
 
-    .subtitle {
-      font-family: var(--fb);
-      font-style: italic;
-      color: var(--text2);
-      font-size: 1rem;
-    }
+/* map */
+#map{height:520px;border:1px solid var(--line);border-radius:4px;background:#0d0907}
+@media(max-width:760px){#map{height:380px}}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--bg2);color:var(--text);border:1px solid var(--line2)}
+.leaflet-popup-content{font-family:var(--fb);font-size:.95rem;margin:10px 12px}
+.leaflet-tooltip{background:var(--bg2);color:var(--text2);border:1px solid var(--line);font-family:var(--fm);font-size:.7rem;box-shadow:none}
+.pin{width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid #1b120a;box-shadow:0 0 0 1px var(--gold)}
+.pin.kiva{background:var(--gold2)} .pin.butte{background:var(--dawn)}
 
-    .header-meta {
-      display: flex;
-      gap: 2rem;
-      font-family: var(--fm);
-      font-size: 0.65rem;
-      color: var(--text3);
-      letter-spacing: 0.1em;
-      align-items: flex-end;
-      padding-bottom: 0.15rem;
-    }
+/* sites */
+.sites{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-top:16px}
+.site h3{margin-bottom:2px}
+.site .meta{font-family:var(--fm);font-size:.68rem;letter-spacing:.06em;color:var(--text3);margin-bottom:8px}
+.site p{font-size:.95rem;margin-bottom:.5rem}
+.site .sky{border-top:1px solid var(--line);padding-top:8px;color:var(--gold2);font-style:italic;font-size:.93rem}
+.site button{font-family:var(--fm);font-size:.66rem;letter-spacing:.08em;background:none;border:1px solid var(--line2);color:var(--text2);border-radius:3px;padding:3px 8px;cursor:pointer}
 
-    .meta-item span { color: var(--text2); }
-    #update-time   { color: var(--text3); }
-
-    /* ── TERRAIN HERO ─────────────────────────────────────────────────── */
-    .terrain-hero {
-      position: relative;
-      height: 220px;
-      overflow: hidden;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .terrain-hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 40%;
-      opacity: 0.75;
-      display: block;
-    }
-
-    .terrain-no-img {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(180deg, #0a0705 0%, #2c1808 50%, #1a1208 100%);
-    }
-
-    .terrain-no-img-text {
-      font-family: var(--fm);
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: var(--text3);
-      text-align: center;
-      line-height: 2;
-    }
-
-    .terrain-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 1.5rem 2.5rem 0.8rem;
-      background: linear-gradient(0deg, rgba(10,7,5,0.95) 0%, transparent 100%);
-    }
-
-    .terrain-caption-text {
-      font-family: var(--fb);
-      font-style: italic;
-      font-size: 0.9rem;
-      color: var(--text2);
-      max-width: 60ch;
-    }
-
-    .terrain-badge {
-      font-family: var(--fm);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      color: var(--text3);
-      margin-bottom: 0.3rem;
-    }
-
-    /* ── MAIN LAYOUT ──────────────────────────────────────────────────── */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      height: 520px;
-    }
-
-    /* ── MAP ──────────────────────────────────────────────────────────── */
-    #map {
-      height: 100%;
-      border-right: 1px solid var(--border);
-    }
-
-    .leaflet-container { background: #0d0906 !important; }
-
-    .leaflet-popup-content-wrapper {
-      background: var(--bg2) !important;
-      border: 1px solid var(--border2) !important;
-      border-radius: 3px !important;
-      box-shadow: none !important;
-      color: var(--text) !important;
-    }
-    .leaflet-popup-tip { background: var(--bg2) !important; }
-    .leaflet-popup-close-button { color: var(--text3) !important; }
-    .leaflet-popup-content { margin: 12px 14px !important; }
-
-    .popup-name  { font-family: 'Cinzel', serif; font-size: 0.9rem; color: #d4a843; margin-bottom: 0.25rem; }
-    .popup-type  { font-family: 'Courier Prime', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #7a6040; margin-bottom: 0.5rem; }
-    .popup-stat  { font-family: 'Crimson Text', serif; font-size: 0.85rem; color: #b89a6a; margin-bottom: 0.2rem; }
-    .popup-align { font-family: 'Crimson Text', serif; font-style: italic; font-size: 0.8rem; color: #c4892a; margin-top: 0.4rem; }
-    .popup-note  { font-family: 'Crimson Text', serif; font-size: 0.8rem; color: #7a6040; margin-top: 0.4rem; }
-
-    .leaflet-tooltip {
-      background: var(--bg2) !important;
-      border: 1px solid var(--border) !important;
-      border-radius: 2px !important;
-      color: var(--text2) !important;
-      font-family: 'Courier Prime', monospace !important;
-      font-size: 0.7rem !important;
-      box-shadow: none !important;
-      padding: 3px 8px !important;
-    }
-    .leaflet-tooltip-left::before  { border-left-color:  var(--border) !important; }
-    .leaflet-tooltip-right::before { border-right-color: var(--border) !important; }
-
-    .leaflet-control-zoom a {
-      background: var(--bg2) !important;
-      color: var(--text2) !important;
-      border-color: var(--border) !important;
-    }
-    .leaflet-control-zoom a:hover { background: var(--bg3) !important; color: var(--gold) !important; }
-
-    .leaflet-control-attribution {
-      background: rgba(26,18,8,0.8) !important;
-      color: var(--text3) !important;
-      font-size: 0.55rem !important;
-    }
-    .leaflet-control-attribution a { color: var(--text3) !important; }
-
-    /* ── SIDE PANEL ───────────────────────────────────────────────────── */
-    .panel {
-      overflow-y: auto;
-      background: var(--bg2);
-      padding: 1.4rem 1.2rem;
-    }
-
-    .panel-section { margin-bottom: 1.6rem; }
-
-    .panel-label {
-      font-family: var(--fh);
-      font-size: 0.6rem;
-      letter-spacing: 0.28em;
-      color: var(--gold);
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.3rem;
-      margin-bottom: 0.9rem;
-    }
-
-    /* Sky body block */
-    .sky-body {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 0.7rem 0.9rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .sky-body-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .sky-body-name {
-      font-family: var(--fh);
-      font-size: 0.85rem;
-      color: var(--text);
-      letter-spacing: 0.05em;
-    }
-
-    .badge {
-      font-family: var(--fm);
-      font-size: 0.55rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 2px;
-      letter-spacing: 0.1em;
-    }
-    .badge-above { background: rgba(106,138,90,0.15); color: var(--sage); border: 1px solid var(--sage); }
-    .badge-below { background: rgba(122,96,64,0.15);  color: var(--text3); border: 1px solid var(--border2); }
-
-    .readout {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 0.22rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .readout:last-child { border-bottom: none; }
-    .rk { font-family: var(--fm); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.06em; }
-    .rv { font-family: var(--fm); font-size: 0.78rem; color: var(--gold2); }
-
-    /* Alignment block */
-    .align-box {
-      background: rgba(74,50,24,0.3);
-      border: 1px solid var(--border2);
-      border-radius: 3px;
-      padding: 0.7rem 0.9rem;
-      text-align: center;
-      transition: background 0.5s, border-color 0.5s;
-    }
-    .align-box.active {
-      background: rgba(196,137,42,0.12);
-      border-color: var(--gold);
-    }
-
-    .align-status {
-      font-family: var(--fm);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--text3);
-      margin-bottom: 0.3rem;
-      transition: color 0.5s;
-    }
-    .align-box.active .align-status { color: var(--gold); }
-
-    .align-desc {
-      font-family: var(--fb);
-      font-style: italic;
-      font-size: 0.82rem;
-      color: var(--text2);
-      line-height: 1.4;
-    }
-
-    /* Events */
-    .event-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.35rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .event-row:last-child { border-bottom: none; }
-    .ev-name { font-family: var(--fb); font-style: italic; color: var(--text2); font-size: 0.88rem; }
-    .ev-when { font-family: var(--fm); font-size: 0.65rem; color: var(--text3); text-align: right; }
-    .ev-when.soon { color: var(--gold); }
-
-    /* ── GREAT HOUSE STRIP ────────────────────────────────────────────── */
-    .strip {
-      border-top: 1px solid var(--border);
-      padding: 1.2rem 2rem 1.5rem;
-      background: var(--bg2);
-    }
-
-    .strip-label {
-      font-family: var(--fh);
-      font-size: 0.6rem;
-      letter-spacing: 0.28em;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    .cards-scroll {
-      display: flex;
-      gap: 0.8rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-    }
-
-    .cards-scroll::-webkit-scrollbar { height: 3px; }
-    .cards-scroll::-webkit-scrollbar-track { background: var(--bg); }
-    .cards-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-    .gh-card {
-      flex: 0 0 195px;
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 0.9rem 1rem;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .gh-card:hover { border-color: var(--gold); }
-    .gh-card.kiva   { border-left: 3px solid var(--gold); }
-    .gh-card.house  { border-left: 3px solid var(--rust); }
-
-    .card-name {
-      font-family: var(--fh);
-      font-size: 0.78rem;
-      color: var(--gold2);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 0.15rem;
-    }
-
-    .card-type {
-      font-family: var(--fm);
-      font-size: 0.55rem;
-      color: var(--text3);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-
-    .card-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      margin-bottom: 0.15rem;
-    }
-    .ck { color: var(--text3); font-family: var(--fm); font-size: 0.58rem; }
-    .cv { color: var(--text); }
-
-    .card-align {
-      margin-top: 0.45rem;
-      font-family: var(--fb);
-      font-style: italic;
-      font-size: 0.72rem;
-      color: var(--gold);
-      line-height: 1.3;
-      border-top: 1px solid var(--border);
-      padding-top: 0.4rem;
-    }
-
-    /* ── FOOTER ───────────────────────────────────────────────────────── */
-    footer {
-      padding: 0.65rem 2.5rem;
-      border-top: 1px solid var(--border);
-      background: var(--bg);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      font-family: var(--fm);
-      font-size: 0.58rem;
-      color: var(--text3);
-      letter-spacing: 0.06em;
-    }
-
-    footer a { color: var(--text3); text-decoration: none; }
-    footer a:hover { color: var(--text2); }
-
-    /* ── SCROLLBAR ────────────────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-  </style>
+.note{background:var(--bg2);border-left:3px solid var(--gold);padding:12px 16px;margin:16px 0;font-size:.95rem;color:var(--text2)}
+footer{padding:30px 0 50px;font-size:.9rem;color:var(--text3)}
+footer li{margin-bottom:.35rem}
+footer ol{padding-left:1.2rem}
+.small{font-size:.85rem;color:var(--text3)}
+</style>
 </head>
 <body>
 
-<!-- ── HEADER ─────────────────────────────────────────────────────────────── -->
 <header>
-  <div class="header-inner">
-    <div class="header-left">
-      <div class="site-id">36.0608°N &nbsp;·&nbsp; 107.9631°W &nbsp;·&nbsp; CHACO CULTURE NHP &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; ELEV 1,920 M</div>
+  <div class="wrap hdr">
+    <div>
+      <div class="kicker">36.061°N · 107.962°W · Chaco Culture National Historical Park · New Mexico</div>
       <h1>SOLSTICE</h1>
-      <div class="subtitle">Chaco Canyon — Archaeoastronomy &amp; Remote Sensing</div>
+      <div class="sub">The sky over Chaco Canyon, computed against the real skyline</div>
     </div>
-    <div class="header-meta">
-      <div class="meta-item">OPERATOR &nbsp;<span>BROOKSGROVES.COM</span></div>
-      <div class="meta-item">UPDATED &nbsp;<span id="update-time">—</span></div>
+    <div class="clock">
+      <div>AT CHACO NOW &nbsp;<b id="localtime">—</b></div>
+      <div>SKY DATA &nbsp;<b id="skydate">—</b></div>
+      <div><a href="https://brooksgroves.com" style="color:var(--text3)">BROOKSGROVES.COM</a> / <a href="https://brooksgroves.com/archaeology.html" style="color:var(--text3)">ARCHAEOLOGY</a></div>
     </div>
   </div>
 </header>
 
-<!-- ── TERRAIN HERO ────────────────────────────────────────────────────────── -->
-<div class="terrain-hero">
-  <img id="terrain-img" src="assets/terrain.png" alt="LiDAR terrain render of Chaco Canyon"
-       onerror="this.style.display='none'; document.getElementById('terrain-fallback').style.display='flex';">
-  <div id="terrain-fallback" class="terrain-no-img" style="display:none;">
-    <div class="terrain-no-img-text">
-      TERRAIN RENDER NOT YET GENERATED<br>
-      RUN <code style="color:var(--gold);font-size:0.7rem;">pixi run render</code> TO GENERATE assets/terrain.png<br>
-      REQUIRES: <code style="color:var(--text3);font-size:0.7rem;">pip install forge3d</code> + GPU
+<div class="hero">
+  <video id="flyover" autoplay muted loop playsinline preload="metadata" poster="assets/chaco-flyover-poster.jpg">
+    <source src="assets/chaco-flyover.mp4" type="video/mp4">
+  </video>
+  <div class="cap"><div class="wrap">
+    <p>Summer solstice sunrise over Chaco Canyon: Fajada Butte, down the canyon past Una Vida, Hungo Pavi, Chetro Ketl and Pueblo Bonito, up to Pueblo Alto and west to Peñasco Blanco. USGS lidar, NAIP aerial photography, the Sun where it really is, rendered with forge3d.</p>
+  </div></div>
+</div>
+
+<!-- NOW -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Right now</div>
+    <h2>The sky over the canyon</h2>
+    <p class="lede">Chaco's builders watched this sky. The canyon walls decide when the Sun actually reaches each great house, so everything here is measured against the skyline each site really sees, not a flat horizon.</p>
+    <div class="now">
+      <div class="card"><div class="k">Sun</div><div class="v" id="sunpos">—</div><div class="s" id="sunsub">&nbsp;</div><span class="pill" id="sunlit">—</span></div>
+      <div class="card"><div class="k">Moon</div><div class="v" id="moonname">—</div><div class="s" id="moonsub">&nbsp;</div></div>
+      <div class="card"><div class="k">Sunrise at Pueblo Bonito</div><div class="v" id="bonrise">—</div><div class="s" id="bonrisesub">&nbsp;</div></div>
+      <div class="card"><div class="k">Next turning point</div><div class="v" id="nextevent">—</div><div class="s" id="nexteventsub">&nbsp;</div></div>
     </div>
   </div>
-  <div class="terrain-caption">
-    <div class="terrain-badge">USGS 3DEP &nbsp;·&nbsp; 1/3 ARC-SECOND DEM &nbsp;·&nbsp; forge3d GPU RENDER</div>
-    <div class="terrain-caption-text">Chaco Canyon, San Juan Basin, New Mexico. The canyon is roughly 15 km long and 1–3 km wide, cut into the Cretaceous Mesa Verde sandstone. Fajada Butte rises 135 m above the canyon floor at the eastern entrance.</div>
+</section>
+
+<!-- HORIZON CALENDAR -->
+<section id="calendar">
+  <div class="wrap">
+    <div class="kicker">The horizon calendar</div>
+    <h2>Where the Sun comes up</h2>
+    <p>Through the year the sunrise walks along the horizon: north to the summer solstice, where it seems to stand still for a few days, then south to the winter solstice and back. In historic times Pueblo sun watchers tracked those positions against notches and peaks on the skyline to set the ceremonial calendar. Here is the actual skyline from each site, from USGS elevation data, with every sunrise of the year on it.</p>
+    <div class="tabs" id="sitetabs" role="group" aria-label="Site"></div>
+    <div class="tabs" id="dirtabs" role="group" aria-label="Sunrise or sunset">
+      <button class="tab" data-dir="rise" aria-pressed="true">Sunrise · east</button>
+      <button class="tab" data-dir="set" aria-pressed="false">Sunset · west</button>
+    </div>
+    <div class="horizon"><svg id="hsvg" viewBox="0 0 1000 340" role="img" aria-label="Skyline with sunrise positions through the year"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--dawn)"></i>sunrise, every third day</span>
+      <span><i style="background:var(--gold2);box-shadow:0 0 6px var(--gold2)"></i>today</span>
+      <span><i style="background:var(--moon)"></i>moonrise limits, major standstill</span>
+      <span><i style="background:#6d6a86"></i>minor standstill</span>
+      <span>skyline heights exaggerated so they show</span>
+    </div>
+    <div class="facts">
+      <div class="card"><div class="k">Summer solstice</div><div class="v" id="f-summer">—</div><div class="s" id="f-summer-s"></div></div>
+      <div class="card"><div class="k">Winter solstice</div><div class="v" id="f-winter">—</div><div class="s" id="f-winter-s"></div></div>
+      <div class="card"><div class="k">Today</div><div class="v" id="f-today">—</div><div class="s" id="f-today-s"></div></div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- ── MAIN GRID (MAP + PANEL) ────────────────────────────────────────────── -->
-<div class="main-grid">
-  <div id="map"></div>
-
-  <aside class="panel">
-
-    <!-- Sun -->
-    <div class="panel-section">
-      <div class="panel-label">Solar Position</div>
-      <div class="sky-body">
-        <div class="sky-body-header">
-          <span class="sky-body-name">☉ &nbsp;Sun</span>
-          <span class="badge badge-above" id="sun-badge">ABOVE</span>
-        </div>
-        <div class="readout"><span class="rk">AZIMUTH</span><span class="rv" id="sun-az">—</span></div>
-        <div class="readout"><span class="rk">ALTITUDE</span><span class="rv" id="sun-alt">—</span></div>
-        <div class="readout"><span class="rk">SUNRISE AZ</span><span class="rv" id="sunrise-az">—</span></div>
-        <div class="readout"><span class="rk">SUNSET AZ</span><span class="rv" id="sunset-az">—</span></div>
-      </div>
+<!-- TWO DAWNS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Rendered with forge3d</div>
+    <h2>Two dawns, one camera</h2>
+    <p>The same view up the canyon past Fajada Butte, a few minutes after sunrise on the two solstices. In June the Sun comes up at about 63°, north of east, and throws Fajada's shadow west-southwest; in December it rises at about 123°, far to the south, and the shadow swings round to the west-northwest.</p>
+    <div class="dawns">
+      <figure><img src="assets/summer-dawn.jpg" alt="Chaco Canyon from above Chacra Mesa at summer solstice sunrise, Fajada Butte casting a long shadow"><figcaption id="cap-summer">Summer solstice</figcaption></figure>
+      <figure><img src="assets/winter-dawn.jpg" alt="The same view at winter solstice sunrise, shadows pointing the other way"><figcaption id="cap-winter">Winter solstice</figcaption></figure>
     </div>
+    <figure style="margin-top:14px"><img src="assets/bonito-dawn.jpg" alt="Looking south from the north rim over Pueblo Bonito and Chetro Ketl to Casa Rinconada at summer solstice sunrise" loading="lazy"><figcaption id="cap-bonito">From the north rim near Pueblo Alto, over Pueblo Bonito and Chetro Ketl to Casa Rinconada.</figcaption></figure>
+    <p class="small" style="margin-top:10px">Terrain: USGS 3DEP elevation (lidar), 5 m. Colour: USGS NAIP aerial photography, 2022. The Sun is placed for the date and time shown with forge3d's solar calculator.</p>
+  </div>
+</section>
 
-    <!-- Moon -->
-    <div class="panel-section">
-      <div class="panel-label">Lunar Position</div>
-      <div class="sky-body">
-        <div class="sky-body-header">
-          <span class="sky-body-name">☽ &nbsp;Moon</span>
-          <span class="badge badge-above" id="moon-badge">ABOVE</span>
-        </div>
-        <div class="readout"><span class="rk">AZIMUTH</span><span class="rv" id="moon-az">—</span></div>
-        <div class="readout"><span class="rk">ALTITUDE</span><span class="rv" id="moon-alt">—</span></div>
-        <div class="readout"><span class="rk">PHASE</span><span class="rv" id="moon-phase">—</span></div>
-        <div class="readout"><span class="rk">ILLUMINATION</span><span class="rv" id="moon-pct">—</span></div>
-      </div>
+<!-- SUN DAGGER + MOON -->
+<section>
+  <div class="wrap grid2">
+    <div>
+      <div class="kicker">Fajada Butte</div>
+      <h2>The Sun Dagger</h2>
+      <p>Near the top of Fajada Butte three sandstone slabs lean against the cliff. Behind them, two spirals are pecked into the rock. Around midday the gaps between the slabs let through narrow blades of light: at the summer solstice one passes through the center of the large spiral, at the winter solstice two frame it on either side, and at the equinoxes a smaller one crosses the small spiral.</p>
+      <p>The artist Anna Sofaer found it in 1977 while recording rock art. One of the slabs shifted in 1989, probably from erosion made worse by visitors, so the markings are no longer exact, and the butte is closed to protect what's left.</p>
+      <div class="card" style="margin-top:12px"><div class="k">Next dagger day</div><div class="v" id="dagger">—</div><div class="s" id="daggersub"></div></div>
     </div>
-
-    <!-- Rinconada Alignment -->
-    <div class="panel-section">
-      <div class="panel-label">Casa Rinconada Alignment</div>
-      <div class="align-box" id="align-box">
-        <div class="align-status" id="align-status">○ &nbsp;ALIGNMENT INACTIVE</div>
-        <div class="align-desc" id="align-desc">Summer solstice sunrise aligns with the northeast doorway at 66.5°</div>
-      </div>
-      <div style="margin-top:0.7rem;">
-        <div class="readout"><span class="rk">CURRENT SUNRISE AZ</span><span class="rv" id="align-cur">—</span></div>
-        <div class="readout"><span class="rk">TARGET AZ</span><span class="rv">66.5°</span></div>
-        <div class="readout"><span class="rk">DEVIATION</span><span class="rv" id="align-delta">—</span></div>
-      </div>
+    <div>
+      <div class="kicker">The 18.6-year cycle</div>
+      <h2>The Moon's long swing</h2>
+      <p>The Sun's rising point swings between the two solstices every year. The Moon's swings between its own limits every month, and those limits widen and narrow over 18.6 years. At a <em>major standstill</em> the Moon rises far north and far south of anywhere the Sun ever reaches; at a <em>minor standstill</em>, nine years later, it stays well inside them.</p>
+      <p>The same Fajada spiral is thought to mark this too, with shadows from the rising Moon reaching its edge at the major standstill and its center at the minor one. At Chimney Rock, a Chacoan great house 150 km to the northeast, the Moon rises between two stone pillars only around a major standstill.</p>
+      <div class="gauge" id="gauge"></div>
+      <p class="small" id="moonnote">—</p>
     </div>
+  </div>
+</section>
 
-    <!-- Solar Events -->
-    <div class="panel-section">
-      <div class="panel-label">Upcoming Solar Events</div>
-      <div class="event-row"><span class="ev-name">Vernal Equinox</span><span class="ev-when" id="ev-vernal">—</span></div>
-      <div class="event-row"><span class="ev-name">Summer Solstice</span><span class="ev-when" id="ev-summer">—</span></div>
-      <div class="event-row"><span class="ev-name">Autumnal Equinox</span><span class="ev-when" id="ev-autumnal">—</span></div>
-      <div class="event-row"><span class="ev-name">Winter Solstice</span><span class="ev-when" id="ev-winter">—</span></div>
+<!-- MAP -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Lines on the land</div>
+    <h2>Sight lines from <span id="mapsite">Pueblo Bonito</span></h2>
+    <p>From the selected site: where the Sun rises today, where it rises at each solstice, and the farthest the Moon reaches at a major standstill, all over that site's real skyline. Click any site to move the lines.</p>
+    <div id="map"></div>
+    <div class="legend">
+      <span><i style="background:var(--gold2)"></i>sunrise today</span>
+      <span><i style="background:var(--dawn)"></i>summer solstice sunrise</span>
+      <span><i style="background:var(--winter)"></i>winter solstice sunrise</span>
+      <span><i style="background:var(--moon)"></i>moonrise, major standstill</span>
     </div>
+  </div>
+</section>
 
-  </aside>
-</div>
+<!-- SITES -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The places</div>
+    <h2>Great houses, a great kiva and a butte</h2>
+    <div class="sites" id="sites"></div>
+    <div class="note">A few of Chaco's sky stories are better known than they are proven. The solstice light in Casa Rinconada falls through a window that was rebuilt in the 1930s, and the 1054 supernova reading of the Peñasco Blanco pictograph is a strong case, not a certainty. They're marked as such here.</div>
+  </div>
+</section>
 
-<!-- ── GREAT HOUSE STRIP ───────────────────────────────────────────────────── -->
-<div class="strip">
-  <div class="strip-label">Great Houses of Chaco Canyon</div>
-  <div class="cards-scroll" id="cards-scroll"></div>
-</div>
-
-<!-- ── FOOTER ──────────────────────────────────────────────────────────────── -->
 <footer>
-  <div>SOLSTICE v1.0 &nbsp;·&nbsp; <a href="https://brooksgroves.com">BROOKSGROVES.COM</a> / ARCHAEOLOGY</div>
-  <div>DATA: USGS 3DEP &nbsp;·&nbsp; NPS / CHACO RESEARCH ARCHIVE &nbsp;·&nbsp; PYTHON EPHEM &nbsp;·&nbsp; <a href="https://doi.org/10.1016/j.jasrep.2017.04.001" target="_blank">SOFAER ET AL.</a></div>
+  <div class="wrap">
+    <h3>How it's made</h3>
+    <p>Once a day a GitHub Action recomputes the sky for each site against its skyline (<span class="mono">fetch_solstice.py</span>); the skylines come from USGS 3DEP elevation data, 5 m in the canyon and 30 m out to 80 km, with Earth's curvature and refraction (<span class="mono">tools/horizon.py</span>). The live Sun and Moon on this page are computed in your browser with astronomy-engine. The renders are forge3d 1.40.1 on GitHub's CPUs (<span class="mono">tools/render.py</span>). Code: <a href="https://github.com/bdgroves/solstice">github.com/bdgroves/solstice</a>.</p>
+    <h3 style="margin-top:16px">Sources</h3>
+    <ol>
+      <li>Sofaer, Zinser &amp; Sinclair (1979), <a href="https://doi.org/10.1126/science.206.4416.283">A unique solar marking construct</a>, <i>Science</i> 206: the Sun Dagger.</li>
+      <li>Sofaer, Sinclair &amp; Doggett (1982), <a href="https://solsticeproject.org/wp-content/uploads/2021/12/20-lunarfajada2028198229.pdf">Lunar markings on Fajada Butte</a>, in <i>Archaeoastronomy in the New World</i>.</li>
+      <li>High Altitude Observatory, <a href="https://www2.hao.ucar.edu/education/prehistoric-southwest/casa-rinconada">Casa Rinconada</a> and <a href="https://www2.hao.ucar.edu/education/prehistoric-southwest/supernova-pictograph">the supernova pictograph</a>.</li>
+      <li>Exploratorium, <a href="https://annex.exploratorium.edu/chaco/HTML/bonito.html">Pueblo Bonito</a>: the north–south wall.</li>
+      <li>Phillips, <a href="https://www.unm.edu/~dap/meridian/meridian-text.html">The Chaco Meridian: a skeptical analysis</a>: the North Road's course.</li>
+      <li><a href="https://en.wikipedia.org/wiki/Lunar_standstill">Lunar standstill</a> (major standstill late 2024–early 2025; next minor 2034); USDA Forest Service, <a href="https://fs.usda.gov/r02/sanjuan/recreation/discover-history/northern-major-lunar-standstill">Chimney Rock and the northern major lunar standstill</a>.</li>
+      <li>Site details: Wikipedia articles for each great house, Fajada Butte and Casa Rinconada; coordinates from OpenStreetMap, checked against NAIP imagery.</li>
+      <li>Data: <a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP</a>, <a href="https://naip-usdaonline.hub.arcgis.com/">USDA NAIP</a> via Microsoft Planetary Computer, <a href="https://github.com/cosinekitty/astronomy">astronomy-engine</a>, <a href="https://rhodesmill.org/pyephem/">PyEphem</a>, <a href="https://github.com/milos-agathon/forge3d">forge3d</a> by Milos Popovic.</li>
+    </ol>
+    <p style="margin-top:16px">Chaco Canyon is the ancestral homeland of the Pueblo peoples and the Diné, and a sacred place to them today. The great houses are fragile: if you visit, stay on the trails and leave everything where it is.</p>
+    <p>SOLSTICE v2 · October 2026 · <a href="https://brooksgroves.com/blog/">Brooks Groves</a></p>
+  </div>
 </footer>
 
-<!-- ── Leaflet ─────────────────────────────────────────────────────────────── -->
+<script src="vendor/astronomy.browser.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 "use strict";
+const TZ = "America/Denver";
+const BONITO = {lat: 36.06064, lon: -107.96160, elev: 1872};
+const $ = id => document.getElementById(id);
+const fmtTime = (d, opts={}) => d.toLocaleTimeString("en-US", {timeZone: TZ, hour: "numeric", minute: "2-digit", ...opts});
+const fmtDate = (d, opts={}) => d.toLocaleDateString("en-US", {timeZone: TZ, month: "long", day: "numeric", ...opts});
+const tzAbbr = d => d.toLocaleTimeString("en-US", {timeZone: TZ, timeZoneName: "short"}).split(" ").pop();
+const compass = a => ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"][Math.round(a / 22.5) % 16];
 
-// ── Great House Data ─────────────────────────────────────────────────────────
-const GREAT_HOUSES = [
-  {
-    name: "Pueblo Bonito",    lat: 36.0608, lon: -107.9631, type: "Great House",
-    rooms: 800, stories: 4, period: "850–1150 CE", shape: "D-shaped",
-    alignment: "Back wall faces true north within 0.1°; corner rooms mark solstice sunrise and sunset",
-    note: "Largest great house at Chaco. Construction spanned ~300 years.",
-  },
-  {
-    name: "Chetro Ketl",      lat: 36.0597, lon: -107.9550, type: "Great House",
-    rooms: 500, stories: 4, period: "1010–1110 CE", shape: "Rectangular",
-    alignment: "Partially aligned to cardinal directions",
-    note: "Features a colonnade unique in Chacoan architecture.",
-  },
-  {
-    name: "Pueblo del Arroyo", lat: 36.0617, lon: -107.9680, type: "Great House",
-    rooms: 280, stories: 3, period: "1075–1115 CE", shape: "L-shaped",
-    alignment: null,
-    note: "Adjoins a rare tri-walled circular structure.",
-  },
-  {
-    name: "Casa Rinconada",   lat: 36.0538, lon: -107.9623, type: "Great Kiva",
-    rooms: null, stories: 1, period: "1000–1100 CE", shape: "Circular (19.5 m)",
-    alignment: "NE doorway aligns to summer solstice sunrise at 66.5°",
-    note: "Largest isolated great kiva at Chaco. Community ceremonial space.",
-  },
-  {
-    name: "Hungo Pavi",       lat: 36.0520, lon: -107.9455, type: "Great House",
-    rooms: 150, stories: 2, period: "900–1100 CE", shape: "D-shaped",
-    alignment: null,
-    note: "One of the least excavated great houses.",
-  },
-  {
-    name: "Una Vida",         lat: 36.0540, lon: -107.9292, type: "Great House",
-    rooms: 160, stories: 2, period: "850–1000 CE", shape: "L-shaped",
-    alignment: null,
-    note: "One of the earliest great houses. Nearby petroglyph panels.",
-  },
-  {
-    name: "Penasco Blanco",   lat: 36.0812, lon: -108.0078, type: "Great House",
-    rooms: 150, stories: 3, period: "900–1125 CE", shape: "Arc-shaped",
-    alignment: null,
-    note: "Near a pictograph panel possibly depicting the 1054 CE supernova.",
-  },
-  {
-    name: "Pueblo Alto",      lat: 36.0736, lon: -107.9632, type: "Great House",
-    rooms: 90, stories: 1, period: "1020–1100 CE", shape: "Rectangular",
-    alignment: "Mesa-top terminus of the Great North Road; inter-site visibility hub",
-    note: "Junction of multiple Chacoan roads. Evidence of periodic mass gatherings.",
-  },
-  {
-    name: "Kin Kletso",       lat: 36.0633, lon: -107.9700, type: "Great House",
-    rooms: 55, stories: 2, period: "1125–1150 CE", shape: "Rectangular",
-    alignment: null,
-    note: "Later McElmo-tradition construction.",
-  },
-  {
-    name: "Wijiji",           lat: 36.0458, lon: -107.9073, type: "Great House",
-    rooms: 90, stories: 2, period: "1100–1150 CE", shape: "L-shaped",
-    alignment: null,
-    note: "Easternmost great house. Unusually symmetrical and compact.",
-  },
-];
+let SKY, HZ, SITES, current = "pueblo-bonito", dir = "rise", map, lines = [];
 
-// Chacoan roads
-const ROADS = [
-  {
-    name: "Great North Road",
-    color: "#c4892a",
-    coords: [[36.0736,-107.9632],[36.15,-107.9400],[36.25,-107.9200],[36.40,-107.8800]],
-  },
-  { name: "South Road",  color: "#8b6020",
-    coords: [[36.0736,-107.9632],[36.00,-108.00],[35.98,-108.01]] },
-  { name: "East Road",   color: "#8b6020",
-    coords: [[36.0736,-107.9632],[36.08,-107.89],[36.09,-107.82]] },
-  { name: "West Road",   color: "#8b6020",
-    coords: [[36.0736,-107.9632],[36.09,-108.03],[36.10,-108.11]] },
-];
-
-// ── Map Init ─────────────────────────────────────────────────────────────────
-const map = L.map("map", { center: [36.063, -107.958], zoom: 13 });
-
-// ESRI Shaded Relief basemap
-L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}",
-  { attribution: "Tiles © Esri", maxZoom: 16, opacity: 0.65 }
-).addTo(map);
-
-// OpenTopoMap overlay for contour context
-L.tileLayer(
-  "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-  { attribution: "© OpenTopoMap", maxZoom: 16, opacity: 0.45 }
-).addTo(map);
-
-// ── Great House Markers ───────────────────────────────────────────────────────
-function makeIcon(isKiva) {
-  const c  = isKiva ? "#d4a843" : "#c4892a";
-  const r  = isKiva ? 7 : 8;
-  const sz = r * 2 + 8;
-  const mid = sz / 2;
-  const inner = isKiva
-    ? `<circle cx="${mid}" cy="${mid}" r="${r/2.5}" fill="none" stroke="#1a1208" stroke-width="1.3"/>`
-    : "";
-  return L.divIcon({
-    className: "",
-    html: `<svg xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
-      <circle cx="${mid}" cy="${mid}" r="${r}" fill="${c}" fill-opacity="0.88" stroke="${c}" stroke-width="1.5"/>
-      ${inner}
-    </svg>`,
-    iconSize:   [sz, sz],
-    iconAnchor: [mid, mid],
-  });
+function skylineAt(site, az) {
+  const h = HZ.sites.find(s => s.id === site); if (!h) return 0;
+  const n = h.alt_cdeg.length, x = ((az % 360) + 360) % 360 / HZ.step_deg, i = Math.floor(x), w = x - i;
+  return (h.alt_cdeg[i % n] * (1 - w) + h.alt_cdeg[(i + 1) % n] * w) / 100;
 }
 
-GREAT_HOUSES.forEach(gh => {
-  const isKiva = gh.type === "Great Kiva";
-  const popup = `
-    <div class="popup-name">${gh.name}</div>
-    <div class="popup-type">${gh.type.toUpperCase()} &nbsp;·&nbsp; ${gh.period}</div>
-    ${gh.rooms ? `<div class="popup-stat">~${gh.rooms} rooms &nbsp;·&nbsp; ${gh.stories} stories &nbsp;·&nbsp; ${gh.shape}</div>` : `<div class="popup-stat">${gh.shape}</div>`}
-    ${gh.alignment ? `<div class="popup-align">⊕ ${gh.alignment}</div>` : ""}
-    <div class="popup-note">${gh.note}</div>
-  `;
-  L.marker([gh.lat, gh.lon], { icon: makeIcon(isKiva) })
-    .addTo(map)
-    .bindPopup(popup, { maxWidth: 270 });
-});
-
-// ── Road Network ──────────────────────────────────────────────────────────────
-ROADS.forEach(rd => {
-  L.polyline(rd.coords, {
-    color: rd.color, weight: 2, opacity: 0.72, dashArray: "7 5",
-  }).addTo(map)
-    .bindTooltip(rd.name, { permanent: false, direction: "top" });
-});
-
-// ── Geometry helpers ──────────────────────────────────────────────────────────
-function toRad(d) { return d * Math.PI / 180; }
-
-function destPoint(lat, lon, azDeg, distKm) {
-  const R = 6371, d = distKm / R, az = toRad(azDeg);
-  const φ1 = toRad(lat), λ1 = toRad(lon);
-  const φ2 = Math.asin(Math.sin(φ1)*Math.cos(d) + Math.cos(φ1)*Math.sin(d)*Math.cos(az));
-  const λ2 = λ1 + Math.atan2(Math.sin(az)*Math.sin(d)*Math.cos(φ1), Math.cos(d) - Math.sin(φ1)*Math.sin(φ2));
-  return [φ2 * 180/Math.PI, λ2 * 180/Math.PI];
+// ── live sky ────────────────────────────────────────────────────────────────
+function moonName(phaseAngle, illum) {
+  if (illum < 0.02) return "New Moon";
+  if (illum > 0.98) return "Full Moon";
+  const waxing = phaseAngle < 180;
+  if (Math.abs(illum - 0.5) <= 0.06) return waxing ? "First Quarter" : "Last Quarter";
+  if (illum < 0.5) return waxing ? "Waxing Crescent" : "Waning Crescent";
+  return waxing ? "Waxing Gibbous" : "Waning Gibbous";
+}
+function live() {
+  const now = new Date();
+  $("localtime").textContent = `${fmtTime(now)} ${tzAbbr(now)}`;
+  const o = new Astronomy.Observer(BONITO.lat, BONITO.lon, BONITO.elev);
+  const se = Astronomy.Equator(Astronomy.Body.Sun, now, o, true, true);
+  const sh = Astronomy.Horizon(now, o, se.ra, se.dec, "normal");
+  $("sunpos").textContent = `${sh.altitude.toFixed(1)}° up`;
+  $("sunsub").textContent = sh.altitude > -0.8 ? `in the ${compass(sh.azimuth)}, azimuth ${sh.azimuth.toFixed(0)}°` : `below the horizon, azimuth ${sh.azimuth.toFixed(0)}°`;
+  const sky = HZ ? skylineAt("pueblo-bonito", sh.azimuth) : 0;
+  const lit = $("sunlit");
+  if (sh.altitude > sky + 0.27) { lit.textContent = "PUEBLO BONITO IS IN SUNLIGHT"; lit.className = "pill lit"; }
+  else if (sh.altitude > -0.8) { lit.textContent = "BEHIND THE CANYON WALL"; lit.className = "pill"; }
+  else { lit.textContent = "NIGHT AT CHACO"; lit.className = "pill"; }
+  const me = Astronomy.Equator(Astronomy.Body.Moon, now, o, true, true);
+  const mh = Astronomy.Horizon(now, o, me.ra, me.dec, "normal");
+  const ill = Astronomy.Illumination(Astronomy.Body.Moon, now).phase_fraction;
+  const pa = Astronomy.MoonPhase(now);
+  $("moonname").textContent = moonName(pa, ill);
+  $("moonsub").textContent = `${Math.round(ill * 100)}% lit · ${mh.altitude > 0 ? `${mh.altitude.toFixed(0)}° up in the ${compass(mh.azimuth)}` : "below the horizon"}`;
 }
 
-// Draw alignment lines from Casa Rinconada
-const RINCONADA = [36.0538, -107.9623];
-let riseLayer = null, solsticeLayer = null;
+// ── daily data ──────────────────────────────────────────────────────────────
+function hhmm(s) { // "07:24" -> "7:24 AM"
+  if (!s) return "—"; const [h, m] = s.split(":").map(Number);
+  return `${(h % 12) || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}
+function fillDaily() {
+  const d = new Date(SKY.date + "T12:00:00");
+  $("skydate").textContent = d.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"});
+  const b = SKY.sites.find(s => s.id === "pueblo-bonito").today;
+  $("bonrise").textContent = hhmm(b.sunrise);
+  $("bonrisesub").textContent = `over the canyon wall; ${hhmm(b.flat_sunrise)} on a flat horizon. Sunset ${hhmm(b.sunset)}: the walls take ${b.minutes_lost_to_skyline} minutes off the day.`;
+  const nx = SKY.seasons[0];
+  const nd = new Date(nx.local);
+  $("nextevent").textContent = nx.name;
+  $("nexteventsub").textContent = `${fmtDate(nd, {year: "numeric"})}, ${fmtTime(nd)} · ${nx.days === 0 ? "today" : nx.days === 1 ? "tomorrow" : nx.days + " days"}`;
+  // dagger: next solstice or equinox
+  $("dagger").textContent = nx.name;
+  $("daggersub").textContent = `${fmtDate(nd, {year: "numeric"})} · ${nx.name.includes("winter") || nx.name.includes("Winter") ? "two daggers frame the large spiral" : nx.name.includes("ummer") ? "one dagger through the heart of the large spiral" : "a small dagger across the small spiral"}`;
+  // moon cycle gauge
+  const st = SKY.standstill, g = $("gauge");
+  const marks = [[0, "major", st.last_major], [0.5, "minor", st.next_minor], [1, "major", st.next_major]];
+  const pos = f => f === 0 ? "left:0;transform:none" : f === 1 ? "left:auto;right:0;transform:none" : `left:${f * 100}%`;
+  g.innerHTML = `<div class="bar"></div>` + marks.map(([f, k, when]) =>
+      `<div class="tick" style="left:${f * 100}%"></div><div class="tt" style="${pos(f)}">${k} standstill</div><div class="tl" style="${pos(f)}">${when}</div>`).join("")
+    + `<div class="me" style="left:${st.cycle_fraction * 100}%" title="now"></div>`;
+  $("moonnote").textContent = `This month the Moon reaches about ${st.max_declination_deg.toFixed(1)}° north and south of the celestial equator, against ${st.major_max_deg.toFixed(1)}° at a major standstill and ${st.minor_max_deg.toFixed(1)}° at a minor one. We're just past the major standstill of 2024–25; the next minor standstill is around ${st.next_minor}. (Dates from the mean lunar node; the true extremes come within a few months of them.)`;
+}
 
-function drawAlignments(sunriseAz) {
-  // Solstice alignment (gold, permanent)
-  const sEnd = destPoint(RINCONADA[0], RINCONADA[1], 66.5, 9);
-  if (solsticeLayer) map.removeLayer(solsticeLayer);
-  solsticeLayer = L.polyline([RINCONADA, sEnd], {
-    color: "#c4892a", weight: 2, opacity: 0.9, dashArray: "4 4",
-  }).addTo(map).bindTooltip("Summer solstice alignment: 66.5°", { direction: "top" });
-
-  // Today's sunrise azimuth (sage)
-  if (sunriseAz !== null) {
-    const rEnd = destPoint(RINCONADA[0], RINCONADA[1], sunriseAz, 9);
-    if (riseLayer) map.removeLayer(riseLayer);
-    riseLayer = L.polyline([RINCONADA, rEnd], {
-      color: "#6a8a5a", weight: 1.5, opacity: 0.85, dashArray: "9 5",
-    }).addTo(map).bindTooltip(`Today's sunrise: ${sunriseAz.toFixed(1)}°`, { direction: "top" });
+// ── horizon calendar ────────────────────────────────────────────────────────
+function drawHorizon() {
+  const svg = $("hsvg"), site = SKY.sites.find(s => s.id === current);
+  const W = 1000, H = 340, base = 270;
+  const [a0, a1] = dir === "rise" ? [40, 140] : [220, 320];
+  const X = az => (az - a0) / (a1 - a0) * W;
+  // fit the tallest skyline in view: at most 4x exaggeration, always under the labels
+  let top = 1;
+  for (let az = a0; az <= a1; az += 1) top = Math.max(top, skylineAt(current, az));
+  const k = Math.min(24, (base - 70) / top);
+  const EXAG = k / 6;
+  const Y = alt => base - alt * k;
+  let sky = `<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2a4a"/><stop offset="1" stop-color="#7a5a48"/></linearGradient></defs>`;
+  sky += `<rect width="${W}" height="${H}" fill="url(#sk)"/>`;
+  // grid
+  for (let az = Math.ceil(a0 / 10) * 10; az <= a1; az += 10) {
+    sky += `<line x1="${X(az)}" x2="${X(az)}" y1="20" y2="${H}" stroke="#ffffff" stroke-opacity=".06"/>`;
+    sky += `<text x="${X(az)}" y="${H - 8}" fill="#c9b48a" fill-opacity=".55" font-family="Courier Prime" font-size="12" text-anchor="middle">${az}° ${compass(az)}</text>`;
   }
-}
-
-// Draw static solstice line immediately; today's line added after data loads
-drawAlignments(null);
-
-// ── Load astronomy data ───────────────────────────────────────────────────────
-async function loadData() {
-  try {
-    const res = await fetch("data/solstice.json?_=" + Date.now());
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const d = await res.json();
-
-    // Header timestamp
-    const gen = new Date(d.generated);
-    document.getElementById("update-time").textContent =
-      gen.toUTCString().replace(" GMT", " UTC").slice(0, 26);
-
-    // Sun
-    const sun = d.sun;
-    document.getElementById("sun-az").textContent  = `${sun.azimuth}°  ${sun.compass}`;
-    document.getElementById("sun-alt").textContent = `${sun.altitude}°`;
-    document.getElementById("sunrise-az").textContent =
-      sun.sunrise_azimuth !== null ? `${sun.sunrise_azimuth}°` : "—";
-    document.getElementById("sunset-az").textContent  =
-      sun.sunset_azimuth  !== null ? `${sun.sunset_azimuth}°`  : "—";
-    if (!sun.above_horizon) {
-      const b = document.getElementById("sun-badge");
-      b.textContent = "BELOW"; b.className = "badge badge-below";
-    }
-
-    // Moon
-    const moon = d.moon;
-    document.getElementById("moon-az").textContent    = `${moon.azimuth}°  ${moon.compass}`;
-    document.getElementById("moon-alt").textContent   = `${moon.altitude}°`;
-    document.getElementById("moon-phase").textContent = moon.phase_name;
-    document.getElementById("moon-pct").textContent   = `${moon.phase_pct}%`;
-    if (!moon.above_horizon) {
-      const b = document.getElementById("moon-badge");
-      b.textContent = "BELOW"; b.className = "badge badge-below";
-    }
-
-    // Alignment
-    const al = d.alignments;
-    document.getElementById("align-cur").textContent  =
-      al.current_sunrise_az !== null ? `${al.current_sunrise_az}°` : "—";
-    document.getElementById("align-delta").textContent =
-      al.rinconada_delta_deg !== null ? `${al.rinconada_delta_deg > 0 ? "+" : ""}${al.rinconada_delta_deg}°` : "—";
-    if (al.rinconada_active) {
-      const box = document.getElementById("align-box");
-      box.classList.add("active");
-      document.getElementById("align-status").textContent = "⊕  ALIGNMENT ACTIVE";
-      document.getElementById("align-desc").textContent =
-        "Sunrise is striking the northeast doorway of Casa Rinconada within alignment tolerance. The light-dagger is live.";
-    }
-
-    // Events
-    function evLabel(evt) {
-      const d = evt.days_away;
-      if (d === 0)  return "TODAY";
-      if (d < 30)  return `${d}d`;
-      if (d < 365) return `${Math.round(d / 30.4)}mo`;
-      return `${Math.round(d / 365)}yr`;
-    }
-    function setEv(id, evt) {
-      const el = document.getElementById(id);
-      el.textContent = `${evt.display}  ·  ${evLabel(evt)}`;
-      if (evt.days_away < 30) el.classList.add("soon");
-    }
-    const ev = d.events;
-    setEv("ev-vernal",   ev.vernal_equinox);
-    setEv("ev-summer",   ev.summer_solstice);
-    setEv("ev-autumnal", ev.autumnal_equinox);
-    setEv("ev-winter",   ev.winter_solstice);
-
-    // Map: draw today's sunrise line
-    drawAlignments(sun.sunrise_azimuth);
-
-  } catch (e) {
-    console.warn("Could not load solstice.json:", e.message);
-    document.getElementById("update-time").textContent = "run fetch_solstice.py to generate data";
+  for (let alt = 2; alt <= 10; alt += 2) sky += `<line x1="0" x2="${W}" y1="${Y(alt)}" y2="${Y(alt)}" stroke="#ffffff" stroke-opacity=".04"/>`;
+  // moon limits
+  const ml = site.moonrise_limits_az;
+  const mlines = dir === "rise"
+    ? [["major_north", ml.major_north, "#c9c6d8"], ["minor_north", ml.minor_north, "#6d6a86"], ["minor_south", ml.minor_south, "#6d6a86"], ["major_south", ml.major_south, "#c9c6d8"]]
+    : [["major_north", 360 - ml.major_north, "#c9c6d8"], ["minor_north", 360 - ml.minor_north, "#6d6a86"], ["minor_south", 360 - ml.minor_south, "#6d6a86"], ["major_south", 360 - ml.major_south, "#c9c6d8"]];
+  for (const [k, az, c] of mlines) {
+    if (az < a0 || az > a1) continue;
+    sky += `<line x1="${X(az)}" x2="${X(az)}" y1="34" y2="${Y(skylineAt(current, az))}" stroke="${c}" stroke-dasharray="3 5" stroke-width="1.3"/>`;
+    sky += `<text x="${X(az)}" y="28" fill="${c}" font-family="Courier Prime" font-size="11" text-anchor="middle">${k.startsWith("major") ? "Moon, major" : "Moon, minor"}</text>`;
   }
+  // skyline
+  let pts = [];
+  for (let az = a0; az <= a1; az += 0.25) pts.push(`${X(az).toFixed(1)},${Y(skylineAt(current, az)).toFixed(1)}`);
+  sky += `<polygon points="0,${H} ${pts.join(" ")} ${W},${H}" fill="#120c08" stroke="#6b4a22" stroke-width="1.2"/>`;
+  // sunrise/sunset dots through the year
+  const cal = site.calendar;
+  const ai = dir === "rise" ? 1 : 3, hi = dir === "rise" ? 2 : 4;
+  for (const row of cal) {
+    const az = row[ai], h = row[hi]; if (az == null) continue;
+    const f = Math.cos((row[0] - 172) / 365.25 * 2 * Math.PI); // 1 = June, -1 = December
+    const c = f > 0 ? `rgba(243,163,92,${0.35 + 0.5 * f})` : `rgba(143,180,217,${0.35 - 0.5 * f})`;
+    sky += `<circle cx="${X(az).toFixed(1)}" cy="${(Y(h) - 4).toFixed(1)}" r="3" fill="${c}"/>`;
+  }
+  // solstices
+  for (const [k, col, lab] of [["summer", "#f3a35c", "June solstice"], ["winter", "#8fb4d9", "December solstice"]]) {
+    const s = site.solstices[k];
+    const az = dir === "rise" ? s.sunrise_az : s.sunset_az;
+    if (az == null || az < a0 || az > a1) continue;
+    const y = Y(skylineAt(current, az)) - 4;
+    sky += `<circle cx="${X(az)}" cy="${y}" r="7" fill="none" stroke="${col}" stroke-width="2"/>`;
+    sky += `<text x="${X(az)}" y="${y - 16}" fill="${col}" font-family="Cinzel" font-size="14" text-anchor="middle">${lab}</text>`;
+  }
+  // today
+  const t = site.today, taz = dir === "rise" ? t.sunrise_az : t.sunset_az;
+  if (taz != null && taz >= a0 && taz <= a1) {
+    const y = Y(skylineAt(current, taz)) - 4;
+    sky += `<circle cx="${X(taz)}" cy="${y}" r="11" fill="#f0c46a" opacity=".25"/><circle cx="${X(taz)}" cy="${y}" r="6" fill="#f0c46a"/>`;
+    sky += `<text x="${X(taz)}" y="${y + 26}" fill="#f0c46a" font-family="Courier Prime" font-size="12" text-anchor="middle">today ${hhmm(dir === "rise" ? t.sunrise : t.sunset)}</text>`;
+  }
+  sky += `<text x="12" y="20" fill="#c9b48a" fill-opacity=".7" font-family="Cinzel" font-size="14">${site.name} · looking ${dir === "rise" ? "east" : "west"}</text>`;
+  sky += `<text x="${W - 12}" y="20" fill="#c9b48a" fill-opacity=".5" font-family="Courier Prime" font-size="11" text-anchor="end">heights ×${EXAG.toFixed(1)}</text>`;
+  svg.innerHTML = sky;
+  // facts
+  const ss = site.solstices.summer, ws = site.solstices.winter;
+  if (dir === "rise") {
+    $("f-summer").textContent = `${ss.sunrise_az.toFixed(1)}° · ${hhmm(ss.sunrise_time)}`;
+    $("f-summer-s").textContent = `June 21 sunrise over this skyline (${ss.flat_sunrise_az.toFixed(1)}° on a flat horizon)`;
+    $("f-winter").textContent = `${ws.sunrise_az.toFixed(1)}° · ${hhmm(ws.sunrise_time)}`;
+    $("f-winter-s").textContent = `December sunrise, ${(ws.sunrise_az - ss.sunrise_az).toFixed(0)}° of horizon from the summer one`;
+    $("f-today").textContent = `${t.sunrise_az.toFixed(1)}° · ${hhmm(t.sunrise)}`;
+  } else {
+    $("f-summer").textContent = `${ss.sunset_az.toFixed(1)}° · ${hhmm(ss.sunset_time)}`;
+    $("f-summer-s").textContent = "June 21 sunset over this skyline";
+    $("f-winter").textContent = `${ws.sunset_az.toFixed(1)}° · ${hhmm(ws.sunset_time)}`;
+    $("f-winter-s").textContent = "December sunset over this skyline";
+    $("f-today").textContent = `${t.sunset_az.toFixed(1)}° · ${hhmm(t.sunset)}`;
+  }
+  const j = SKY.sun_journey;
+  $("f-today-s").textContent = `${t.sunrise_skyline_alt > 1 ? `the Sun clears a ${t.sunrise_skyline_alt.toFixed(1)}° skyline` : "a nearly flat skyline"}; sunrise is heading ${j.heading} along the horizon`;
+}
+function buildTabs() {
+  const box = $("sitetabs");
+  box.innerHTML = SKY.sites.map(s => `<button class="tab" data-site="${s.id}" aria-pressed="${s.id === current}">${s.name}</button>`).join("");
+  box.onclick = e => { const b = e.target.closest("button"); if (!b) return; select(b.dataset.site); };
+  $("dirtabs").onclick = e => {
+    const b = e.target.closest("button"); if (!b) return; dir = b.dataset.dir;
+    [...$("dirtabs").children].forEach(x => x.setAttribute("aria-pressed", x === b)); drawHorizon();
+  };
+}
+function select(id) {
+  if (!SKY.sites.find(s => s.id === id)) return;
+  current = id;
+  [...$("sitetabs").children].forEach(x => x.setAttribute("aria-pressed", x.dataset.site === id));
+  drawHorizon(); drawLines();
 }
 
-loadData();
+// ── map ─────────────────────────────────────────────────────────────────────
+function dest(lat, lon, az, km) {
+  const R = 6371, d = km / R, a = az * Math.PI / 180, p1 = lat * Math.PI / 180, l1 = lon * Math.PI / 180;
+  const p2 = Math.asin(Math.sin(p1) * Math.cos(d) + Math.cos(p1) * Math.sin(d) * Math.cos(a));
+  const l2 = l1 + Math.atan2(Math.sin(a) * Math.sin(d) * Math.cos(p1), Math.cos(d) - Math.sin(p1) * Math.sin(p2));
+  return [p2 * 180 / Math.PI, l2 * 180 / Math.PI];
+}
+function buildMap() {
+  map = L.map("map", {scrollWheelZoom: false}).setView([36.052, -107.94], 13);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom: 18, attribution: "Imagery © Esri, Maxar, Earthstar Geographics"}).addTo(map);
+  for (const s of SITES) {
+    const cls = s.kind === "Great kiva" ? "pin kiva" : s.kind === "Sun Dagger" ? "pin butte" : "pin";
+    L.marker([s.lat, s.lon], {icon: L.divIcon({className: "", html: `<div class="${cls}"></div>`, iconSize: [14, 14], iconAnchor: [7, 7]})})
+      .addTo(map)
+      .bindTooltip(s.name, {direction: "top", offset: [0, -6]})
+      .bindPopup(`<b style="font-family:Cinzel">${s.name}</b><br><span class="mono" style="font-size:.7rem;color:#8a6d48">${s.kind.toUpperCase()} · ${s.built}</span><br>${s.note}`)
+      .on("click", () => select(s.id));
+  }
+  drawLines();
+}
+function drawLines() {
+  if (!map) return;
+  lines.forEach(l => map.removeLayer(l)); lines = [];
+  const site = SKY.sites.find(s => s.id === current), s0 = SITES.find(s => s.id === current);
+  if (!site || !s0) { $("mapsite").textContent = s0 ? s0.name : "—"; return; }
+  $("mapsite").textContent = site.name;
+  const km = 6, add = (az, color, dash, label) => {
+    if (az == null) return;
+    const l = L.polyline([[s0.lat, s0.lon], dest(s0.lat, s0.lon, az, km)], {color, weight: 2.5, opacity: .95, dashArray: dash})
+      .bindTooltip(`${label}: ${az.toFixed(1)}°`, {sticky: true}).addTo(map);
+    lines.push(l);
+  };
+  add(site.solstices.summer.sunrise_az, "#f3a35c", "8 6", "Summer solstice sunrise");
+  add(site.solstices.winter.sunrise_az, "#8fb4d9", "8 6", "Winter solstice sunrise");
+  add(site.moonrise_limits_az.major_north, "#c9c6d8", "2 6", "Moonrise, major standstill (north)");
+  add(site.moonrise_limits_az.major_south, "#c9c6d8", "2 6", "Moonrise, major standstill (south)");
+  add(site.today.sunrise_az, "#f0c46a", null, "Sunrise today");
+}
 
-// ── Great House Cards ─────────────────────────────────────────────────────────
-const scroll = document.getElementById("cards-scroll");
-GREAT_HOUSES.forEach(gh => {
-  const isKiva = gh.type === "Great Kiva";
-  const card = document.createElement("div");
-  card.className = `gh-card ${isKiva ? "kiva" : "house"}`;
-  card.innerHTML = `
-    <div class="card-name">${gh.name}</div>
-    <div class="card-type">${gh.type.toUpperCase()}</div>
-    <div class="card-row"><span class="ck">PERIOD</span><span class="cv">${gh.period}</span></div>
-    ${gh.rooms ? `<div class="card-row"><span class="ck">ROOMS</span><span class="cv">~${gh.rooms}</span></div>` : ""}
-    <div class="card-row"><span class="ck">SHAPE</span><span class="cv">${gh.shape}</span></div>
-    ${gh.alignment ? `<div class="card-align">⊕ ${gh.alignment}</div>` : ""}
-  `;
-  card.addEventListener("click", () => {
-    map.flyTo([gh.lat, gh.lon], 15, { duration: 1.2 });
-  });
-  scroll.appendChild(card);
-});
+// ── sites ───────────────────────────────────────────────────────────────────
+function buildSites() {
+  $("sites").innerHTML = SITES.map(s => `
+    <div class="card site">
+      <h3>${s.name}</h3>
+      <div class="meta">${s.kind.toUpperCase()} · ${s.built}${s.rooms ? " · " + s.rooms + (/room|chamber/.test(s.rooms) ? "" : " rooms") : ""}</div>
+      <p>${s.note}</p>
+      ${s.sky ? `<div class="sky">${s.sky}</div>` : ""}
+      ${SKY.sites.find(x => x.id === s.id) ? `<button data-site="${s.id}" style="margin-top:8px">Show its skyline</button>` : ""}
+    </div>`).join("");
+  $("sites").onclick = e => {
+    const b = e.target.closest("button[data-site]"); if (!b) return;
+    select(b.dataset.site); document.getElementById("calendar").scrollIntoView({behavior: "smooth"});
+  };
+}
+
+async function main() {
+  live(); setInterval(live, 30000);
+  const [sky, hz, sites, stills] = await Promise.all([
+    fetch("data/sky.json").then(r => r.json()), fetch("data/horizons.json").then(r => r.json()),
+    fetch("data/sites.json").then(r => r.json()), fetch("assets/stills.json").then(r => r.ok ? r.json() : []).catch(() => [])]);
+  SKY = sky; HZ = hz; SITES = sites.sites;
+  for (const st of stills) {
+    const id = {"summer-dawn.jpg": "cap-summer", "winter-dawn.jpg": "cap-winter", "bonito-dawn.jpg": "cap-bonito"}[st.file];
+    if (!id) continue;
+    const d = new Date(st.local_time);
+    const pre = id === "cap-bonito" ? $(id).textContent + " " : "";
+    $(id).textContent = `${pre}${fmtDate(d)}, ${fmtTime(d)} ${tzAbbr(d)}: the Sun ${st.sun_elevation.toFixed(0)}° up at azimuth ${st.sun_azimuth.toFixed(0)}°.`;
+  }
+  live(); fillDaily(); buildTabs(); drawHorizon(); buildSites();
+  try { buildMap(); } catch (e) { console.warn("map unavailable", e); }
+}
+main();
 </script>
 </body>
 </html>

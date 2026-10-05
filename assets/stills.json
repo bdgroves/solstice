@@ -1,0 +1,20 @@
+[
+ {
+  "file": "summer-dawn.jpg",
+  "local_time": "2027-06-21T06:18-06:00",
+  "sun_azimuth": 63.3,
+  "sun_elevation": 3.4
+ },
+ {
+  "file": "winter-dawn.jpg",
+  "local_time": "2027-12-21T07:48-07:00",
+  "sun_azimuth": 123.2,
+  "sun_elevation": 4.3
+ },
+ {
+  "file": "bonito-dawn.jpg",
+  "local_time": "2027-06-21T06:20-06:00",
+  "sun_azimuth": 63.5,
+  "sun_elevation": 3.7
+ }
+]
