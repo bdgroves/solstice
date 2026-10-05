@@ -1,0 +1,50 @@
+{
+ "fetched": "2026-10-05T14:42:13+00:00",
+ "dem": {
+  "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage",
+  "note": "USGS 3DEP best-available (lidar-derived where available)",
+  "files": [
+   "chaco_dem_5m.tif",
+   "horizon_dem_30m.tif"
+  ]
+ },
+ "naip": {
+  "collection": "naip (Microsoft Planetary Computer)",
+  "year": 2022,
+  "items": [
+   "nm_m_3610864_sw_12_060_20220525",
+   "nm_m_3610864_se_12_060_20220525",
+   "nm_m_3610864_nw_12_060_20220525",
+   "nm_m_3610864_ne_12_060_20220525",
+   "nm_m_3610856_sw_12_060_20220525",
+   "nm_m_3610856_se_12_060_20220525",
+   "nm_m_3610758_sw_13_060_20220525",
+   "nm_m_3610758_nw_13_060_20220525",
+   "nm_m_3610757_sw_13_060_20220525",
+   "nm_m_3610757_se_13_060_20220525",
+   "nm_m_3610757_nw_13_060_20220525",
+   "nm_m_3610757_ne_13_060_20220525",
+   "nm_m_3610750_sw_13_060_20220525",
+   "nm_m_3610749_sw_13_060_20220525",
+   "nm_m_3610749_se_13_060_20220525",
+   "nm_m_3510808_nw_12_060_20220525",
+   "nm_m_3510808_ne_12_060_20220525",
+   "nm_m_3510702_nw_13_060_20220525",
+   "nm_m_3510701_nw_13_060_20220525",
+   "nm_m_3510701_ne_13_060_20220525"
+  ]
+ },
+ "crs": "EPSG:26913",
+ "render_extent_lonlat": [
+  -108.08,
+  35.99,
+  -107.84,
+  36.16
+ ],
+ "horizon_extent_lonlat": [
+  -108.62,
+  35.58,
+  -107.3,
+  36.55
+ ]
+}
