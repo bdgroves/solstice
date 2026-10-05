@@ -42,7 +42,7 @@ jobs:
       - name: Render data (prep-data branch)
         run: git fetch -q --depth 1 origin prep-data && mkdir -p prep && git archive FETCH_HEAD | tar -x -C prep
       - name: Software Vulkan + virtual display
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers xvfb >/dev/null
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb libx11-xcb1 libxkbcommon-x11-0 libxkbcommon0 libxcursor1 libxi6 libxrandr2 libxcb-xkb1 libxcb-randr0 libxcb-shape0 libxcb-xfixes0 libwayland-client0 libegl1 >/dev/null
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -74,7 +74,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - run: git fetch -q --depth 1 origin prep-data && mkdir -p prep && git archive FETCH_HEAD | tar -x -C prep
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers xvfb >/dev/null
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb libx11-xcb1 libxkbcommon-x11-0 libxkbcommon0 libxcursor1 libxi6 libxrandr2 libxcb-xkb1 libxcb-randr0 libxcb-shape0 libxcb-xfixes0 libwayland-client0 libegl1 >/dev/null
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
