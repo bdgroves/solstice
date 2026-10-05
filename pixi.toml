@@ -1,7 +1,7 @@
 [workspace]
 name = "solstice"
 version = "1.0.0"
-description = "Chaco Canyon archaeoastronomy and remote sensing dashboard"
+description = "The sky over Chaco Canyon, computed against the real skyline"
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-arm64", "osx-64"]
 
@@ -15,5 +15,5 @@ numpy     = ">=1.26"
 Pillow    = ">=10.0"
 
 [tasks]
-fetch  = "python fetch_solstice.py"
-render = "python render_terrain.py"
+fetch   = "python fetch_solstice.py"
+horizon = "python tools/horizon.py --prep prep --sites data/sites.json --out data/horizons.json"

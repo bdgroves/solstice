@@ -1,8 +1,11 @@
 name: Update SOLSTICE
 
+# Once a day, just after dawn at Chaco: today's sunrise and sunset over the real
+# skyline at each site, the Moon, the 18.6-year standstill cycle and the next
+# solstice or equinox. The page computes the live sun and moon itself.
 on:
   schedule:
-    - cron: "0 6,18 * * *"
+    - cron: "41 12 * * *"
   workflow_dispatch:
 
 permissions:
@@ -11,25 +14,19 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up pixi
-        uses: prefix-dev/setup-pixi@v0.8.0
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.6
         with:
-          pixi-version: latest
+          pixi-version: v0.41.4
           cache: true
-
-      - name: Compute astronomy
+      - name: Compute the sky
         run: pixi run fetch
-
-      - name: Commit updated data
+      - name: Commit
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/solstice.json
-          git diff --staged --quiet \
-            || git commit -m "chore(data): solstice update [$(date -u +'%Y-%m-%d %H:%M UTC')]"
-          git push
+          git add data/sky.json
+          git diff --staged --quiet && exit 0
+          git commit -q -m "chore(data): sky for $(date -u +%Y-%m-%d) [skip ci]"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q && exit 0; sleep 5; done
