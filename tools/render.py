@@ -262,6 +262,11 @@ def label(im: Image.Image, xy, text, sub=None, alpha=1.0, scale=1.0, stem_px=46)
     if not (0 < x < W and 0 < y < H):
         return
     s = scale * W / 1920
+    # Fade pins that are sliding off the frame instead of cutting them in half.
+    edge = min(x, W - x) / (0.05 * W), (H - y) / (0.07 * H)
+    alpha *= max(0.0, min(1.0, *edge))
+    if alpha <= 0.01:
+        return
     layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
     a = int(255 * alpha)
@@ -270,11 +275,14 @@ def label(im: Image.Image, xy, text, sub=None, alpha=1.0, scale=1.0, stem_px=46)
     d.ellipse([x - 4 * s, y - 4 * s, x + 4 * s, y + 4 * s], fill=(255, 220, 160, a))
     f1 = font("cinzel-latin-600-normal.woff", int(30 * s))
     tx, ty = x + 10 * s, y - stem - 30 * s
+    f2 = font("crimson-text-latin-400-italic.woff", int(22 * s))
+    tw = max(d.textlength(text, font=f1), d.textlength(sub, font=f2) if sub else 0)
+    if tx + tw > W - 12 * s:            # near the right edge: put the text left of the pin
+        tx = x - 10 * s - tw
     for dx, dy in ((-2, 0), (2, 0), (0, -2), (0, 2)):
         d.text((tx + dx * s, ty + dy * s), text, font=f1, fill=(20, 14, 8, int(a * 0.55)))
     d.text((tx, ty), text, font=f1, fill=(255, 246, 228, a))
     if sub:
-        f2 = font("crimson-text-latin-400-italic.woff", int(22 * s))
         d.text((tx + 1, ty + 34 * s), sub, font=f2, fill=(20, 14, 8, int(a * 0.5)))
         d.text((tx, ty + 33 * s), sub, font=f2, fill=(250, 232, 200, a))
     im.paste(Image.alpha_composite(im.convert("RGBA"), layer).convert("RGB"))
