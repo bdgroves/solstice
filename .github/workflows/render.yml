@@ -46,7 +46,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem
+      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem requests pystac-client planetary-computer
       - name: Render frames
         env:
           XDG_RUNTIME_DIR: /tmp
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem
+      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem requests pystac-client planetary-computer
       - env:
           XDG_RUNTIME_DIR: /tmp
         run: xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py stills --prep prep --out stills --width ${{ inputs.width }}

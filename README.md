@@ -14,7 +14,7 @@ The people who built Chaco's great houses watched where the Sun came up along th
 
 | Section | What it shows |
 |---|---|
-| **The flyover** | A forge3d flight down the canyon at summer solstice sunrise: Fajada Butte, Una Vida, Hungo Pavi, Chetro Ketl, Pueblo Bonito, Kin Kletso, Peñasco Blanco. USGS lidar terrain, NAIP aerial photography, the Sun where it really is. |
+| **The flyover** | A forge3d flight down the canyon at summer solstice sunrise: Fajada Butte, Una Vida, Hungo Pavi, Chetro Ketl, Pueblo Bonito, Kin Kletso, Peñasco Blanco. USGS 1 m lidar terrain, NAIP aerial photography at 0.6 m, the Sun where it really is. |
 | **Right now** | The live Sun and Moon over Chaco (computed in the browser), whether Pueblo Bonito is in sunlight or still behind the canyon wall, today's sunrise over the real skyline, and the next solstice or equinox. |
 | **The horizon calendar** | The actual skyline from each of eight sites, with every sunrise (or sunset) of the year on it, the two solstices, today, and the Moon's rising limits at major and minor standstills. |
 | **Two dawns, one camera** | The same forge3d view at the summer and winter solstice sunrises. |
@@ -53,6 +53,7 @@ solstice/
 │   ├── prep_data.py         # fetch 3DEP terrain + NAIP imagery (runs on Actions)
 │   ├── horizon.py           # skylines from the terrain
 │   ├── render.py            # forge3d stills and the flyover
+│   ├── layers.py            # near/mid/far terrain layers under the viewer's 2048-vertex cap
 │   ├── osm_sites.py         # coordinate checks against aerial photos
 │   └── fonts/               # Cinzel, Crimson Text, Courier Prime (OFL)
 ├── assets/                  # renders: stills, flyover video
@@ -63,11 +64,11 @@ solstice/
     └── render.yml           # forge3d renders on GitHub's CPUs
 ```
 
-**Skylines.** For each site, `tools/horizon.py` marches outward along every azimuth (0.25° steps) over USGS 3DEP elevation: 5 m in the canyon, 30 m out to 80 km. It keeps the highest elevation angle, allowing for Earth's curvature and standard refraction (k = 0.13). As a check, Fajada Butte's summit comes out at 2,018 m; the published figure is 2,019 m.
+**Skylines.** For each site, `tools/horizon.py` marches outward along every azimuth (0.25° steps) over USGS 3DEP elevation: 5 m in the canyon (resampled from the 1 m lidar), 30 m out to 80 km. It keeps the highest elevation angle, allowing for Earth's curvature and standard refraction (k = 0.13). As a check, Fajada Butte's summit comes out at 2,018 m; the published figure is 2,019 m.
 
 **The daily sky.** `fetch_solstice.py` (PyEphem) finds the moment the Sun's upper limb clears each site's skyline: today, every third day of the year for the calendar, and on the solstices. It also computes the Moon's phase and the position of the Moon's node, which sets the 18.6-year standstill cycle. Its flat-horizon sunrise agrees with PyEphem's standard sunrise and with astronomy-engine to the minute. GitHub Actions runs it once a day at 12:41 UTC.
 
-**The renders.** `tools/render.py` drives forge3d 1.40.1's terrain viewer headless: Mesa's llvmpipe Vulkan driver under Xvfb, so it runs on GitHub's CPUs with no GPU. The terrain is the 5 m lidar DEM, lightly smoothed because the viewer meshes at most 2048 vertices across. The colour is NAIP 2022, graded after the forge3d Bryce Canyon example. The Sun comes from forge3d's solar calculator for the date and minute named on each image. The flyover is split across parallel Actions jobs and stitched with ffmpeg. Two viewer behaviours worth knowing:
+**The renders.** `tools/render.py` drives forge3d 1.40.1's terrain viewer headless: Mesa's llvmpipe Vulkan driver under Xvfb, so it runs on GitHub's CPUs with no GPU. The viewer meshes at most 2048 vertices across a terrain and point-samples anything bigger to fit, so over the whole 22 km canyon even perfect lidar renders at about 11 m. `tools/layers.py` gets around that by drawing every frame in three layers with the same camera and Sun: the whole canyon at 11 m for the horizon, what the camera sees within 5 km at 3–4.5 m, and what it sees within 1.5 km at 1.5–2.75 m, cut from USGS 3DEP 1 m lidar (NM_NorthWest_2018) with NAIP at its native 0.6 m. The finer layer wins wherever it has terrain. Each window reaches toward the Sun far enough to keep the long dawn shadows that fall into it. The windows are fetched on Actions for each still and each stretch of the flight. The Sun comes from forge3d's solar calculator for the date and minute named on each image. The flyover is split across parallel Actions jobs and stitched with ffmpeg. Two viewer behaviours worth knowing:
 - The viewer won't tilt the camera flatter than 5° below horizontal. It raises the camera instead, and `effective_eye()` copies that so labels land where the terrain is.
 - With lighting off, the viewer uses a simpler shader that flattens heights.
 

@@ -26,7 +26,6 @@ from rasterio.transform import from_origin
 from rasterio.warp import Resampling, reproject, transform_bounds
 
 OUT = Path("prep")
-OUT.mkdir(exist_ok=True)
 UTM = "EPSG:26913"   # NAD83 / UTM 13N
 IMAGESERVER = "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage"
 
@@ -45,8 +44,14 @@ def utm_box(ll, step):
 
 
 def fetch_dem(ll, step, name, tile=2000):
-    x0, y0, x1, y1 = utm_box(ll, step)
-    w, h = int((x1 - x0) / step), int((y1 - y0) / step)
+    return fetch_dem_utm(utm_box(ll, step), step, OUT / name, tile)
+
+
+def fetch_dem_utm(bounds, step, path, tile=2000):
+    """3DEP best-available elevation over a UTM 13N box at `step` metres."""
+    name = Path(path).name
+    x0, y0, x1, y1 = bounds
+    w, h = int(round((x1 - x0) / step)), int(round((y1 - y0) / step))
     out = np.full((h, w), np.nan, dtype="float32")
     for r0 in range(0, h, tile):
         for c0 in range(0, w, tile):
@@ -72,7 +77,6 @@ def fetch_dem(ll, step, name, tile=2000):
     prof = dict(driver="GTiff", width=w, height=h, count=1, dtype="float32", crs=UTM,
                 transform=from_origin(x0, y1, step, step), nodata=np.nan,
                 compress="deflate", predictor=3, tiled=True)
-    path = OUT / name
     with rasterio.open(path, "w", **prof) as dst:
         dst.write(out, 1)
     print(f"wrote {path} {w}x{h} min {np.nanmin(out):.1f} max {np.nanmax(out):.1f} nan {np.isnan(out).mean():.4f}")
@@ -118,6 +122,7 @@ def fetch_naip(ll, step, name):
 
 
 def main():
+    OUT.mkdir(exist_ok=True)
     dem = fetch_dem(RENDER_LL, 5.0, "chaco_dem_5m.tif")
     hor = fetch_dem(HORIZON_LL, 30.0, "horizon_dem_30m.tif")
     naip, year, ids = fetch_naip(RENDER_LL, 2.5, "chaco_naip_2p5m.tif")

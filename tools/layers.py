@@ -1,0 +1,242 @@
+"""
+Nested terrain layers, so the renders can use the full 1 m lidar.
+
+forge3d's viewer meshes at most 2048 vertices across a terrain and point-samples
+anything bigger down to fit (tools/README note; measured with synthetic DEMs).
+Over the whole 22 km render extent that is ~11 m a vertex, whatever the source
+resolution. So each frame is drawn in layers, each one under the cap:
+
+  far   the whole extent, averaged down to ~11 m       (the horizon)
+  mid   what the camera sees within MID_M,  a few m     (the canyon ahead)
+  near  what the camera sees within NEAR_M, 1-2 m       (the foreground)
+
+Every layer is rendered with the same camera and Sun; the finer layer wins
+wherever it has terrain, and the coarser one shows through beyond its edge.
+Each fine window reaches toward the Sun far enough to keep the long dawn
+shadows that fall into it.
+
+Windows are cut from USGS 3DEP (1 m lidar here: NM_NorthWest_2018_D19) and
+NAIP at its native 0.6 m, fetched for each window on GitHub Actions
+(source="usgs"). source="prep" cuts them from the 5 m prep data instead, for
+testing where the data services can't be reached.
+"""
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass
+from pathlib import Path
+
+import numpy as np
+import rasterio
+from rasterio.transform import from_origin
+from rasterio.warp import Resampling, reproject, transform_bounds
+
+MAX_VERTS = 2048          # the viewer's cap on vertices across
+NEAR_M, MID_M = 1500.0, 5000.0
+LIDAR_M = 1.0             # finest DEM step worth asking for
+NAIP_M = 0.6              # NAIP's native ground sample
+TEX_MAX = 8192            # overlay texture side
+
+
+@dataclass
+class Layer:
+    name: str
+    dem: Path
+    texture: Path
+    ext: tuple            # overlay extent as fractions of the DEM
+    min_h: float          # the viewer puts y = 0 at the DEM minimum
+    step: float
+    bounds: tuple         # UTM x0, y0, x1, y1
+
+
+def snap(bounds, step):
+    x0, y0, x1, y1 = bounds
+    return (math.floor(x0 / step) * step, math.floor(y0 / step) * step,
+            math.ceil(x1 / step) * step, math.ceil(y1 / step) * step)
+
+
+def step_for(bounds, finest):
+    x0, y0, x1, y1 = bounds
+    s = max(x1 - x0, y1 - y0) / (MAX_VERTS - 2)
+    return max(finest, math.ceil(s * 4) / 4)          # quarter-metre steps
+
+
+def write_dem(path, a, x0, y1, step, crs):
+    prof = dict(driver="GTiff", width=a.shape[1], height=a.shape[0], count=1, dtype="float32",
+                crs=crs, transform=from_origin(x0, y1, step, step), compress="deflate",
+                predictor=3, tiled=True)
+    with rasterio.open(path, "w", **prof) as d:
+        d.write(a.astype("float32"), 1)
+
+
+def resample(src_path, bounds, step, out, crs, bands=1, how=Resampling.average):
+    x0, y0, x1, y1 = bounds
+    w, h = int(round((x1 - x0) / step)), int(round((y1 - y0) / step))
+    t = from_origin(x0, y1, step, step)
+    with rasterio.open(src_path) as s:
+        dst = np.zeros((bands, h, w), dtype="float32" if bands == 1 else "uint8")
+        for b in range(bands):
+            reproject(rasterio.band(s, b + 1), dst[b], src_transform=s.transform, src_crs=s.crs,
+                      dst_transform=t, dst_crs=crs, resampling=how)
+    return dst, t
+
+
+# ── layers ────────────────────────────────────────────────────────────────────
+def far_layer(scene, work: Path) -> Layer:
+    """The whole extent, averaged (not point-sampled) to fit the cap."""
+    B = scene.B
+    step = step_for((B.left, B.bottom, B.right, B.top), 5.0)
+    bounds = snap((B.left, B.bottom, B.right, B.top), step)
+    path = work / f"far_dem_{step:g}m.tif"
+    if not path.exists():
+        a, _ = resample(scene.dem_src, bounds, step, None, scene.crs)
+        write_dem(path, a[0], bounds[0], bounds[3], step, scene.crs)
+    with rasterio.open(path) as s:
+        mn = float(np.nanmin(s.read(1)))
+    # the existing 8K texture covers the prep extent; express it in this grid
+    nb = scene.naip_bounds
+    W, H = bounds[2] - bounds[0], bounds[3] - bounds[1]
+    ext = ((nb.left - bounds[0]) / W, (bounds[3] - nb.top) / H,
+           (nb.right - bounds[0]) / W, (bounds[3] - nb.bottom) / H)
+    return Layer("far", path, scene.texture, ext, mn, step, bounds)
+
+
+def window_layer(scene, name: str, bounds, work: Path, source: str) -> Layer:
+    from render import grade_texture
+    step = step_for(bounds, LIDAR_M if source == "usgs" else 5.0)
+    bounds = snap(bounds, step)
+    key = f"{name}_{int(bounds[0])}_{int(bounds[1])}_{int(bounds[2])}_{int(bounds[3])}_{step:g}"
+    dem = work / f"{key}_dem.tif"
+    tif = work / f"{key}_naip.tif"
+    tex = work / f"{key}_tex.png"
+    tstep = max(NAIP_M if source == "usgs" else 2.5, max(bounds[2] - bounds[0], bounds[3] - bounds[1]) / TEX_MAX)
+    if not dem.exists():
+        if source == "usgs":
+            from prep_data import fetch_dem_utm
+            fetch_dem_utm(bounds, step, dem)
+        else:
+            a, _ = resample(scene.dem_src, bounds, step, None, scene.crs, how=Resampling.bilinear)
+            write_dem(dem, a[0], bounds[0], bounds[3], step, scene.crs)
+    if not tex.exists():
+        if source == "usgs":
+            fetch_naip_utm(bounds, tstep, tif, scene.crs)
+        else:
+            a, t = resample(scene.naip_src, bounds, tstep, None, scene.crs, bands=3, how=Resampling.bilinear)
+            prof = dict(driver="GTiff", width=a.shape[2], height=a.shape[1], count=3, dtype="uint8",
+                        crs=scene.crs, transform=t)
+            with rasterio.open(tif, "w", **prof) as d:
+                d.write(a)
+        grade_texture(tif, tex)
+    with rasterio.open(dem) as s:
+        a = s.read(1)
+        mn = float(np.nanmin(a))
+        if np.isnan(a).any():
+            print(f"  {name}: {np.isnan(a).mean():.3%} of the window has no data", flush=True)
+    print(f"  {name} layer: {bounds[2] - bounds[0]:.0f} x {bounds[3] - bounds[1]:.0f} m at {step:g} m"
+          f" (texture {tstep:.2f} m)", flush=True)
+    return Layer(name, dem, tex, (0.0, 0.0, 1.0, 1.0), mn, step, bounds)
+
+
+def fetch_naip_utm(bounds, step, path, crs):
+    """NAIP at `step` over a UTM window, reading only the blocks it needs."""
+    import planetary_computer
+    import pystac_client
+    from rasterio.vrt import WarpedVRT
+    ll = transform_bounds(crs, "EPSG:4326", *bounds, densify_pts=21)
+    cat = pystac_client.Client.open("https://planetarycomputer.microsoft.com/api/stac/v1",
+                                    modifier=planetary_computer.sign_inplace)
+    items = list(cat.search(collections=["naip"], bbox=ll).items())
+    year = lambda i: i.datetime.year if i.datetime else int(i.properties["naip:year"])
+    best = max(year(i) for i in items)
+    items = [i for i in items if year(i) == best]
+    x0, y0, x1, y1 = bounds
+    w, h = int(round((x1 - x0) / step)), int(round((y1 - y0) / step))
+    t = from_origin(x0, y1, step, step)
+    mosaic = np.zeros((3, h, w), dtype="uint8")
+    filled = np.zeros((h, w), dtype=bool)
+    for it in items:
+        with rasterio.open(it.assets["image"].href) as src, \
+                WarpedVRT(src, crs=crs, transform=t, width=w, height=h,
+                          resampling=Resampling.average, nodata=0) as vrt:
+            part = vrt.read(indexes=[1, 2, 3])
+        have = (part.sum(axis=0) > 0) & ~filled
+        mosaic[:, have] = part[:, have]
+        filled |= have
+    print(f"  NAIP {best}: {len(items)} quarter-quads, {filled.mean():.1%} filled", flush=True)
+    prof = dict(driver="GTiff", width=w, height=h, count=3, dtype="uint8", crs=crs, transform=t)
+    with rasterio.open(path, "w", **prof) as d:
+        d.write(mosaic)
+
+
+# ── what the camera sees ──────────────────────────────────────────────────────
+def footprint(scene, cams, fov, aspect, dmax, nx=41, ny=23):
+    """Ground points (UTM x, y) visible within `dmax` of the camera, for each
+    (eye, aim) in `cams` (viewer world coordinates)."""
+    from render import effective_eye
+    dem, T = scene.dem, scene.T
+    inv = ~T
+    th = math.tan(math.radians(fov) / 2)
+    sx, sy = np.meshgrid(np.linspace(-1, 1, nx), np.linspace(-1, 1, ny))
+    d = np.arange(10.0, dmax + 1, 10.0)
+    pts = []
+    for eye, aim in cams:
+        eye = effective_eye(np.asarray(eye, float), np.asarray(aim, float))
+        f = aim - eye
+        f = f / np.linalg.norm(f)
+        r = np.cross(f, [0.0, 1.0, 0.0])
+        r /= np.linalg.norm(r)
+        u = np.cross(r, f)
+        dirs = f + (sx.ravel()[:, None] * th * aspect) * r + (sy.ravel()[:, None] * th) * u
+        dirs /= np.linalg.norm(dirs, axis=1, keepdims=True)
+        P = eye[None, None, :] + dirs[:, None, :] * d[None, :, None]       # rays x steps x 3
+        X, N, Hh = P[..., 0], -P[..., 2], P[..., 1] + scene.min_h
+        c, rr = inv * (X, N)
+        rr, c = np.floor(rr).astype(int), np.floor(c).astype(int)
+        ok = (rr >= 0) & (rr < dem.shape[0]) & (c >= 0) & (c < dem.shape[1])
+        g = np.full(X.shape, np.inf)
+        g[ok] = dem[rr[ok], c[ok]]
+        hit = Hh <= g
+        first = hit.argmax(axis=1)
+        anyhit = hit.any(axis=1) & ok[np.arange(len(first)), first]
+        idx = np.flatnonzero(anyhit)
+        pts.append(np.c_[X[idx, first[idx]], N[idx, first[idx]]])
+        pts.append(np.array([[eye[0], -eye[2]]]))           # and under the camera
+    return np.vstack(pts)
+
+
+def window(scene, pts, sun_az, sun_el, margin=300.0, shadow_max=3000.0):
+    """Bounding box of `pts`, padded, and stretched toward the Sun far enough to
+    catch the shadows cast into it (~120 m of relief), clipped to the extent."""
+    x0, y0 = pts.min(axis=0) - margin
+    x1, y1 = pts.max(axis=0) + margin
+    reach = min(shadow_max, 120.0 / math.tan(math.radians(max(sun_el, 1.0))))
+    dx, dy = reach * math.sin(math.radians(sun_az)), reach * math.cos(math.radians(sun_az))
+    x0, x1 = min(x0, x0 + dx), max(x1, x1 + dx)
+    y0, y1 = min(y0, y0 + dy), max(y1, y1 + dy)
+    B = scene.B
+    return (max(x0, B.left), max(y0, B.bottom), min(x1, B.right), min(y1, B.top))
+
+
+def layers_for(scene, cams, fov, aspect, sun, work, source, tag=""):
+    """far + mid + near layers for a set of cameras (one shot or one chunk)."""
+    out = [scene.far]
+    for name, dmax in (("mid", MID_M), ("near", NEAR_M)):
+        pts = footprint(scene, cams, fov, aspect, dmax)
+        b = window(scene, pts, *sun)
+        step = step_for(b, LIDAR_M if source == "usgs" else 5.0)
+        if step >= out[-1].step * 0.8:      # no finer than the layer below: skip
+            continue
+        out.append(window_layer(scene, name + tag, b, work, source))
+    return out
+
+
+def composite(raws):
+    """Coarse to fine: each finer render replaces the one below wherever it has terrain."""
+    from PIL import Image
+    from render import sky_mask
+    base = np.asarray(Image.open(raws[0]).convert("RGB")).astype(np.float32) / 255
+    for p in raws[1:]:
+        img = np.asarray(Image.open(p).convert("RGB")).astype(np.float32) / 255
+        ter = ~sky_mask(img)
+        base = np.where(ter[..., None], img, base)
+    return base

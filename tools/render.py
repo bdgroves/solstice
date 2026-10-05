@@ -6,7 +6,7 @@ SOLSTICE renders: Chaco Canyon in forge3d, lit by the real Sun.
     python tools/render.py encode  --frames frames --out renders/chaco-flyover.mp4
     python tools/render.py today   --prep prep --out renders     # today's sunrise
 
-Terrain: USGS 3DEP 5 m (lidar). Colour: USGS NAIP 2022 aerial photography.
+Terrain: USGS 3DEP lidar, 1 m near the camera (nested layers, see layers.py). Colour: USGS NAIP 2022 aerial photography.
 The Sun is placed with forge3d's solar calculator for the date and time named
 in each shot. Runs headless on a CPU (Mesa llvmpipe + Xvfb) or on a GPU.
 
@@ -42,32 +42,25 @@ CRS = "EPSG:26913"
 
 # ── scene ─────────────────────────────────────────────────────────────────────
 class Scene:
-    def __init__(self, prep: Path, work: Path):
-        src_dem = prep / "chaco_dem_5m.tif"
-        with rasterio.open(src_dem) as s:
-            self.dem = s.read(1)
+    def __init__(self, prep: Path, work: Path, source: str = "prep"):
+        self.crs = CRS
+        self.source = source
+        self.work = work
+        self.dem_src = prep / "chaco_dem_5m.tif"
+        with rasterio.open(self.dem_src) as s:
+            self.dem = s.read(1)          # 5 m: ground heights, camera floors
             self.T = s.transform
             self.B = s.bounds
-            prof = s.profile
-        # The viewer meshes at most 2048 vertices across (~11 m here) but shades
-        # from the full 5 m grid, which stair-steps up close. A 1.5-pixel
-        # Gaussian keeps the cliffs and loses the steps.
-        self.dem_path = work / "chaco_dem_render.tif"
-        if not self.dem_path.exists():
-            from scipy.ndimage import gaussian_filter
-            with rasterio.open(self.dem_path, "w", **prof) as d:
-                d.write(gaussian_filter(self.dem.astype("float32"), 1.5), 1)
         self.min_h = float(np.nanmin(self.dem))
-        naip = prep / "chaco_naip_2p5m.tif"
-        with rasterio.open(naip) as s:
-            nb = s.bounds
-        W, H = self.B.right - self.B.left, self.B.top - self.B.bottom
-        self.ext = ((nb.left - self.B.left) / W, (self.B.top - nb.top) / H,
-                    (nb.right - self.B.left) / W, (self.B.top - nb.bottom) / H)
+        self.naip_src = prep / "chaco_naip_2p5m.tif"
+        with rasterio.open(self.naip_src) as s:
+            self.naip_bounds = s.bounds
         self.texture = work / "naip_8k_graded.png"
         if not self.texture.exists():
-            grade_texture(naip, self.texture)
+            grade_texture(self.naip_src, self.texture)
         self.sites = {s["id"]: s for s in json.loads((ROOT / "data/sites.json").read_text())["sites"]}
+        from layers import far_layer
+        self.far = far_layer(self, work)
 
     def utm(self, lon, lat):
         (x,), (y,) = transform("EPSG:4326", CRS, [lon], [lat])
@@ -166,12 +159,15 @@ def project(p, eye, aim, fov, size):
 
 
 class Viewer:
-    def __init__(self, scene: Scene, size, fov):
+    """One forge3d viewer holding one terrain layer (see layers.py)."""
+    def __init__(self, scene: Scene, layer, size, fov):
         from forge3d.viewer import open_viewer_async
         self.size = size
-        self.v = open_viewer_async(width=size[0], height=size[1], terrain_path=str(scene.dem_path),
+        # the viewer puts y = 0 at its own DEM's minimum; cameras are in the scene's frame
+        self.dy = layer.min_h - scene.min_h
+        self.v = open_viewer_async(width=size[0], height=size[1], terrain_path=str(layer.dem),
                                    fov_deg=fov, timeout=600)
-        self.v.load_overlay("naip", str(scene.texture), extent=scene.ext, z_order=0)
+        self.v.load_overlay("naip", str(layer.texture), extent=layer.ext, z_order=0)
         self.v.send_ipc({"cmd": "set_terrain_pbr", "enabled": True, "exposure": 0.42, "shadow_map_res": 4096,
                          "height_ao": {"enabled": True, "strength": 0.8, "max_distance": 150.0},
                          "sun_visibility": {"enabled": True, "mode": "soft", "max_distance": 4000.0}})
@@ -181,11 +177,51 @@ class Viewer:
         self.v.send_ipc({"cmd": "set_terrain_sun", "azimuth_deg": az, "elevation_deg": el, "intensity": 1.0})
 
     def shot(self, eye, aim, fov, path):
-        self.v.send_ipc(camera_cmd(eye, aim, fov))
+        d = np.array([0.0, self.dy, 0.0])
+        self.v.send_ipc(camera_cmd(eye - d, aim - d, fov))
         self.v.snapshot(str(path), *self.size)
 
     def close(self):
         self.v.close()
+
+
+class Stack:
+    """Viewers for a far/mid/near layer stack, rendered and composited together."""
+    def __init__(self, scene: Scene, layers, size, fov):
+        self.layers = layers
+        self.vs = []
+        try:
+            for L in layers:
+                self.vs.append(Viewer(scene, L, size, fov))
+        except Exception:
+            self.close()
+            raise
+
+    def sun(self, az, el):
+        for v in self.vs:
+            v.sun(az, el)
+
+    def shot(self, eye, aim, fov, path: Path):
+        from layers import composite
+        raws = []
+        for L, v in zip(self.layers, self.vs):
+            p = path.with_name(f"{path.stem}.{L.name}.png")
+            v.shot(eye, aim, fov, p)
+            raws.append(p)
+        img = composite(raws)
+        Image.fromarray((np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)).save(path)
+        for p in raws:
+            p.unlink()
+
+    def close(self):
+        for v in self.vs:
+            v.close()
+
+
+def stack_for(scene: Scene, cams, fov, size, sun, tag=""):
+    from layers import layers_for
+    return Stack(scene, layers_for(scene, cams, fov, size[0] / size[1], sun, scene.work, scene.source, tag),
+                 size, fov)
 
 
 # ── look ──────────────────────────────────────────────────────────────────────
@@ -326,7 +362,7 @@ def sunrise_plus(day: date, minutes: float, sc: Scene):
     return (r + timedelta(minutes=minutes)).astimezone(TZ)
 
 
-def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080)):
+def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080), only=None):
     year = 2027
     ss, ws = solstice_dates(year)
     fx, fy = sc.utm(sc.sites["fajada-butte"]["lon"], sc.sites["fajada-butte"]["lat"])
@@ -346,32 +382,34 @@ def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080)):
     shots.append(("bonito-dawn", ss, 26, bon_eye, bon_aim, 38, DAWN,
                   ["pueblo-bonito", "chetro-ketl", "casa-rinconada", "pueblo-alto"]))
     meta = []
-    v = Viewer(sc, size, 46)
-    try:
-        for name, day, mins, eye, aim, fov, sky, labels in shots:
-            when = sunrise_plus(day, mins, sc)
-            az, el = sun_at(when)
+    if only:
+        shots = [s for s in shots if s[0] in only]
+    for name, day, mins, eye, aim, fov, sky, labels in shots:
+        when = sunrise_plus(day, mins, sc)
+        az, el = sun_at(when)
+        raw = work / f"{name}.png"
+        t = time.time()
+        v = stack_for(sc, [(eye, aim)], fov, size, (az, el), tag=f"-{name}")
+        try:
             v.sun(az, el)
-            raw = work / f"{name}.png"
-            t = time.time()
             v.shot(eye, aim, fov, raw)
-            im = finish(raw, sky)
-            items = []
-            for sid in labels:
-                p = project(sc.site_world(sid), eye, aim, fov, size)
-                if p:
-                    items.append((p[0], p[1], sc.sites[sid]["name"], None, 1.0))
-            for x, y, text, sub, a, stem in place_labels(items, size):
-                label(im, (x, y), text, sub, a, stem_px=stem)
-            caption(im, f"Chaco Canyon · {'summer' if day == ss else 'winter'} solstice sunrise",
-                    f"{when.strftime('%B')} {when.day}, {when.strftime('%I:%M %p').lstrip('0')} MST · sun {el:.0f}° above the horizon at {az:.0f}°"
-                    .replace(" MST", " MDT" if when.dst() else " MST"))
-            im.save(out / f"{name}.jpg", quality=88)
-            meta.append({"file": f"{name}.jpg", "local_time": when.isoformat(timespec="minutes"),
-                         "sun_azimuth": round(az, 1), "sun_elevation": round(el, 1)})
-            print(f"{name}: {time.time() - t:.0f}s  sun {az:.1f}/{el:.1f}", flush=True)
-    finally:
-        v.close()
+        finally:
+            v.close()
+        im = finish(raw, sky)
+        items = []
+        for sid in labels:
+            p = project(sc.site_world(sid), eye, aim, fov, size)
+            if p:
+                items.append((p[0], p[1], sc.sites[sid]["name"], None, 1.0))
+        for x, y, text, sub, a, stem in place_labels(items, size):
+            label(im, (x, y), text, sub, a, stem_px=stem)
+        caption(im, f"Chaco Canyon · {'summer' if day == ss else 'winter'} solstice sunrise",
+                f"{when.strftime('%B')} {when.day}, {when.strftime('%I:%M %p').lstrip('0')} MST · sun {el:.0f}° above the horizon at {az:.0f}°"
+                .replace(" MST", " MDT" if when.dst() else " MST"))
+        im.save(out / f"{name}.jpg", quality=88)
+        meta.append({"file": f"{name}.jpg", "local_time": when.isoformat(timespec="minutes"),
+                     "sun_azimuth": round(az, 1), "sun_elevation": round(el, 1)})
+        print(f"{name}: {time.time() - t:.0f}s  sun {az:.1f}/{el:.1f}", flush=True)
     (out / "stills.json").write_text(json.dumps(meta, indent=1))
 
 
@@ -461,11 +499,14 @@ def flyover(sc: Scene, out: Path, chunk: int, chunks: int, size=(1920, 1080), fo
     lo, hi = chunk * n // chunks, (chunk + 1) * n // chunks
     when0 = sunrise_plus(FLY_DAY, FLY_MINUTES, sc)
     out.mkdir(parents=True, exist_ok=True)
-    v = Viewer(sc, size, fov)
     t0 = time.time()
     # One sun for the whole flight: moving it re-runs the shadow and
     # occlusion passes every frame, and over a minute it barely moves.
-    v.sun(*sun_at(when0))
+    sun = sun_at(when0)
+    # One layer stack per chunk, sized to what this stretch of the flight sees.
+    v = stack_for(sc, path[lo:hi:4] + [path[hi - 1]], fov, size, sun, tag=f"-c{chunk:02d}")
+    print(f"layers ready {time.time() - t0:.0f}s", flush=True)
+    v.sun(*sun)
     try:
         for f in range(lo, hi):
             t = f / FPS
@@ -514,7 +555,7 @@ def today(sc: Scene, out: Path, work: Path, size=(1600, 900)):
     fx, fy = sc.utm(sc.sites["fajada-butte"]["lon"], sc.sites["fajada-butte"]["lat"])
     bx, by = sc.utm(sc.sites["pueblo-bonito"]["lon"], sc.sites["pueblo-bonito"]["lat"])
     eye, aim = sc.world(fx + 2600, fy - 2300, 2330), sc.world(bx + 1200, by - 600, 1900)
-    v = Viewer(sc, size, 46)
+    v = stack_for(sc, [(eye, aim)], 46, size, (az, el), tag="-today")
     try:
         v.sun(az, el)
         raw = work / "today.png"
@@ -538,6 +579,9 @@ def main():
     ap.add_argument("--chunk", type=int, default=0)
     ap.add_argument("--chunks", type=int, default=1)
     ap.add_argument("--width", type=int, default=1920)
+    ap.add_argument("--source", choices=["usgs", "prep"], default="usgs",
+                    help="where fine terrain windows come from: 1 m 3DEP + NAIP (usgs) or the 5 m prep data")
+    ap.add_argument("--only", nargs="*", help="stills: render just these shots")
     a = ap.parse_args()
     out, work = Path(a.out), Path(a.work)
     out.mkdir(parents=True, exist_ok=True)
@@ -545,9 +589,9 @@ def main():
     size = (a.width, a.width * 9 // 16)
     if a.mode == "encode":
         return encode(Path(a.frames), out / "chaco-flyover.mp4")
-    sc = Scene(Path(a.prep), work)
+    sc = Scene(Path(a.prep), work, a.source)
     if a.mode == "stills":
-        stills(sc, out, work, size)
+        stills(sc, out, work, size, a.only)
     elif a.mode == "flyover":
         flyover(sc, Path(a.frames), a.chunk, a.chunks, size)
     elif a.mode == "today":
