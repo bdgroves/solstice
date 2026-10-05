@@ -1,0 +1,23 @@
+name: Check site coordinates
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  osm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q rasterio numpy requests pystac-client planetary-computer pillow
+      - run: python tools/osm_sites.py
+      - run: |
+          cd osm && git init -q -b prep-osm && git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -q -m osm && git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" prep-osm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
