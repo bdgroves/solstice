@@ -33,7 +33,9 @@ from rasterio.warp import Resampling, reproject, transform_bounds
 
 MAX_VERTS = 2048          # the viewer's cap on vertices across
 NEAR_M, MID_M = 1500.0, 5000.0
-LIDAR_M = 1.0             # finest DEM step worth asking for
+LIDAR_M = 1.0             # finest DEM step worth asking for from 3DEP
+DENSE_M = 0.5             # ... and where the 0.5 m CONMGaps tiles cover (prep_lidar.py)
+FEATHER_M = 40.0          # blend lidar tiles into the 3DEP surface over this distance
 NAIP_M = 0.6              # NAIP's native ground sample
 TEX_MAX = 8192            # overlay texture side
 
@@ -59,6 +61,47 @@ def step_for(bounds, finest):
     x0, y0, x1, y1 = bounds
     s = max(x1 - x0, y1 - y0) / (MAX_VERTS - 2)
     return max(finest, math.ceil(s * 4) / 4)          # quarter-metre steps
+
+
+def finest(scene, source):
+    if getattr(scene, "lidar", None):
+        return DENSE_M
+    return LIDAR_M if source == "usgs" else 5.0
+
+
+def patch_lidar(scene, path, label=""):
+    """Lay the 0.5 m ground tiles over a DEM in place, feathered at their edges."""
+    from scipy.ndimage import distance_transform_edt
+    tiles = getattr(scene, "lidar", None)
+    if not tiles:
+        return
+    with rasterio.open(path) as d:
+        a, T, prof, b, step = d.read(1), d.transform, d.profile, d.bounds, d.res[0]
+    acc = np.full(a.shape, np.nan, dtype="float32")
+    how = Resampling.average if step >= 1.0 else Resampling.bilinear
+    for t in tiles:
+        x0, y0, x1, y1 = t["bounds"]
+        if x1 <= b.left or x0 >= b.right or y1 <= b.bottom or y0 >= b.top:
+            continue
+        tmp = np.full(a.shape, np.nan, dtype="float32")
+        with rasterio.open(t["path"]) as s:
+            reproject(rasterio.band(s, 1), tmp, src_transform=s.transform, src_crs=s.crs, src_nodata=np.nan,
+                      dst_transform=T, dst_crs=prof["crs"], dst_nodata=np.nan, resampling=how)
+        put = np.isnan(acc) & np.isfinite(tmp)
+        acc[put] = tmp[put]
+    have = np.isfinite(acc)
+    if not have.any():
+        return
+    both = have & np.isfinite(a)
+    off = float(np.median(acc[both] - a[both])) if both.any() else float("nan")
+    w = np.clip(distance_transform_edt(have) * step / FEATHER_M, 0, 1).astype("float32")
+    w[np.isnan(a) & have] = 1.0
+    out = np.where(have, np.nan_to_num(a) * (1 - w) + np.nan_to_num(acc) * w, a).astype("float32")
+    prof.update(dtype="float32", nodata=None)
+    with rasterio.open(path, "w", **prof) as d:
+        d.write(out, 1)
+    print(f"  {label or path.name}: 0.5 m lidar over {have.mean():.0%} of it "
+          f"(median {off:+.2f} m from 3DEP)", flush=True)
 
 
 def write_dem(path, a, x0, y1, step, crs):
@@ -87,7 +130,7 @@ def far_layer(scene, work: Path) -> Layer:
     B = scene.B
     step = step_for((B.left, B.bottom, B.right, B.top), 5.0)
     bounds = snap((B.left, B.bottom, B.right, B.top), step)
-    path = work / f"far_dem_{step:g}m.tif"
+    path = work / f"far_dem_{step:g}m{'_lidar' if getattr(scene, 'lidar', None) else ''}.tif"
     if not path.exists():
         a, _ = resample(scene.dem_src, bounds, step, None, scene.crs)
         write_dem(path, a[0], bounds[0], bounds[3], step, scene.crs)
@@ -103,7 +146,7 @@ def far_layer(scene, work: Path) -> Layer:
 
 def window_layer(scene, name: str, bounds, work: Path, source: str) -> Layer:
     from render import grade_texture
-    step = step_for(bounds, LIDAR_M if source == "usgs" else 5.0)
+    step = step_for(bounds, finest(scene, source))
     bounds = snap(bounds, step)
     key = f"{name}_{int(bounds[0])}_{int(bounds[1])}_{int(bounds[2])}_{int(bounds[3])}_{step:g}"
     dem = work / f"{key}_dem.tif"
@@ -117,6 +160,7 @@ def window_layer(scene, name: str, bounds, work: Path, source: str) -> Layer:
         else:
             a, _ = resample(scene.dem_src, bounds, step, None, scene.crs, how=Resampling.bilinear)
             write_dem(dem, a[0], bounds[0], bounds[3], step, scene.crs)
+        patch_lidar(scene, dem, name)
     if not tex.exists():
         if source == "usgs":
             fetch_naip_utm(bounds, tstep, tif, scene.crs)
@@ -212,12 +256,36 @@ def footprint(scene, cams, fov, aspect, dmax, nx=41, ny=23):
     return np.vstack(pts)
 
 
+def shadow_reach(scene, pts, sun_az, sun_el, cap=3000.0):
+    """How far toward the Sun the ground that can shade `pts` reaches: the
+    farthest point along the Sun's bearing that stands above a line climbing
+    from each point at the Sun's elevation. Measured on the 5 m DEM."""
+    dem, inv = scene.dem, ~scene.T
+    if len(pts) > 600:
+        pts = pts[np.random.default_rng(0).choice(len(pts), 600, replace=False)]
+    ux, uy = math.sin(math.radians(sun_az)), math.cos(math.radians(sun_az))
+    d = np.arange(0.0, cap + 1, 20.0)
+    X = pts[:, 0:1] + ux * d[None, :]
+    Y = pts[:, 1:2] + uy * d[None, :]
+    c, r = inv * (X, Y)
+    r, c = np.floor(r).astype(int), np.floor(c).astype(int)
+    ok = (r >= 0) & (r < dem.shape[0]) & (c >= 0) & (c < dem.shape[1])
+    g = np.full(X.shape, -np.inf)
+    g[ok] = dem[r[ok], c[ok]]
+    g = np.nan_to_num(g, nan=-np.inf)
+    h0 = g[:, :1]
+    shades = (g - h0) > d[None, :] * math.tan(math.radians(max(sun_el, 0.5)))
+    shades[:, 0] = False
+    far = np.where(shades.any(axis=0))[0]
+    return float(d[far.max()]) + 100.0 if far.size else 100.0
+
+
 def window(scene, pts, sun_az, sun_el, margin=300.0, shadow_max=3000.0):
-    """Bounding box of `pts`, padded, and stretched toward the Sun far enough to
-    catch the shadows cast into it (~120 m of relief), clipped to the extent."""
+    """Bounding box of `pts`, padded, and stretched toward the Sun as far as the
+    terrain that can actually shade it (see shadow_reach), clipped to the extent."""
     x0, y0 = pts.min(axis=0) - margin
     x1, y1 = pts.max(axis=0) + margin
-    reach = min(shadow_max, 120.0 / math.tan(math.radians(max(sun_el, 1.0))))
+    reach = min(shadow_max, shadow_reach(scene, pts, sun_az, sun_el, shadow_max))
     dx, dy = reach * math.sin(math.radians(sun_az)), reach * math.cos(math.radians(sun_az))
     x0, x1 = min(x0, x0 + dx), max(x1, x1 + dx)
     y0, y1 = min(y0, y0 + dy), max(y1, y1 + dy)
@@ -225,13 +293,17 @@ def window(scene, pts, sun_az, sun_el, margin=300.0, shadow_max=3000.0):
     return (max(x0, B.left), max(y0, B.bottom), min(x1, B.right), min(y1, B.top))
 
 
-def layers_for(scene, cams, fov, aspect, sun, work, source, tag=""):
-    """far + mid + near layers for a set of cameras (one shot or one chunk)."""
+TIERS = (("mid", MID_M), ("near", NEAR_M))
+
+
+def layers_for(scene, cams, fov, aspect, sun, work, source, tag="", tiers=TIERS):
+    """far + finer window layers (by default mid and near) for a set of cameras
+    (one shot or one chunk of the flight)."""
     out = [scene.far]
-    for name, dmax in (("mid", MID_M), ("near", NEAR_M)):
+    for name, dmax in tiers:
         pts = footprint(scene, cams, fov, aspect, dmax)
-        b = window(scene, pts, *sun)
-        step = step_for(b, LIDAR_M if source == "usgs" else 5.0)
+        b = window(scene, pts, *sun, margin=min(300.0, 0.15 * dmax))
+        step = step_for(b, finest(scene, source))
         if step >= out[-1].step * 0.8:      # no finer than the layer below: skip
             continue
         out.append(window_layer(scene, name + tag, b, work, source))

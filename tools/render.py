@@ -81,6 +81,24 @@ class Scene:
             self.T = s.transform
             self.B = s.bounds
         self.min_h = float(np.nanmin(self.dem))
+        # 0.5 m ground tiles from the CONMGaps point clouds (tools/prep_lidar.py)
+        self.lidar = []
+        idx = prep / "lidar" / "index.json"
+        if idx.exists():
+            for t in json.loads(idx.read_text())["tiles"]:
+                t["path"] = prep / "lidar" / t["file"]
+                self.lidar.append(t)
+            # patch them into the 5 m DEM too (it sets heights, floors and the far layer)
+            from layers import patch_lidar
+            patched = work / "chaco_dem_5m_lidar.tif"
+            if not patched.exists():
+                shutil.copy(self.dem_src, patched)
+                patch_lidar(self, patched, "5 m DEM")
+            self.dem_src = patched
+            with rasterio.open(patched) as s:
+                self.dem = s.read(1)
+            self.min_h = float(np.nanmin(self.dem))
+            print(f"lidar: {len(self.lidar)} tiles at 0.5 m", flush=True)
         self.naip_src = prep / "chaco_naip_2p5m.tif"
         with rasterio.open(self.naip_src) as s:
             self.naip_bounds = s.bounds
@@ -247,10 +265,10 @@ class Stack:
             v.close()
 
 
-def stack_for(scene: Scene, cams, fov, size, sun, tag=""):
-    from layers import layers_for
-    return Stack(scene, layers_for(scene, cams, fov, size[0] / size[1], sun, scene.work, scene.source, tag),
-                 size, fov)
+def stack_for(scene: Scene, cams, fov, size, sun, tag="", tiers=None):
+    from layers import TIERS, layers_for
+    return Stack(scene, layers_for(scene, cams, fov, size[0] / size[1], sun, scene.work, scene.source, tag,
+                                   tiers or TIERS), size, fov)
 
 
 # ── look ──────────────────────────────────────────────────────────────────────
@@ -442,6 +460,16 @@ def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080), only=None):
     bon_aim = sc.site_world("casa-rinconada", 0)
     shots.append(("bonito-dawn", ss, 26, bon_eye, bon_aim, 38, DAWN,
                   ["pueblo-bonito", "chetro-ketl", "casa-rinconada", "pueblo-alto"]))
+    # Close in on the great house an hour after the June sunrise, from the canyon
+    # floor to the south, the Sun low on the right so it rakes across the walls.
+    # Its own tighter tiers bring the 0.5 m lidar into the foreground.
+    px, py = sc.utm(sc.sites["pueblo-bonito"]["lon"], sc.sites["pueblo-bonito"]["lat"])
+    close_eye = sc.world(px + 110, py - 470, sc.ground(px, py) + 165)
+    close_aim = sc.world(px - 10, py + 40, sc.ground(px, py) + 4)
+    shots.append(("bonito-close", ss, 60, close_eye, close_aim, 40, DAWN,
+                  ["pueblo-bonito", "pueblo-del-arroyo", "chetro-ketl"]))
+    TIERS = {"bonito-close": (("mid", 3000.0), ("near", 1000.0), ("detail", 450.0))}
+    TITLES = {"bonito-close": "Pueblo Bonito · summer solstice morning"}
     meta = []
     if only:
         shots = [s for s in shots if s[0] in only]
@@ -450,7 +478,7 @@ def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080), only=None):
         az, el = sun_at(when)
         raw = work / f"{name}.png"
         t = time.time()
-        v = stack_for(sc, [(eye, aim)], fov, size, (az, el), tag=f"-{name}")
+        v = stack_for(sc, [(eye, aim)], fov, size, (az, el), tag=f"-{name}", tiers=TIERS.get(name))
         try:
             v.sun(az, el)
             v.shot(eye, aim, fov, raw)
@@ -460,11 +488,11 @@ def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080), only=None):
         items = []
         for sid in labels:
             p = project(sc.site_world(sid), eye, aim, fov, size)
-            if p:
+            if p and 0 < p[0] < size[0] and 0 < p[1] < size[1]:
                 items.append((p[0], p[1], sc.sites[sid]["name"], None, 1.0))
         for x, y, text, sub, a, stem in place_labels(items, size):
             label(im, (x, y), text, sub, a, stem_px=stem)
-        caption(im, f"Chaco Canyon · {'summer' if day == ss else 'winter'} solstice sunrise",
+        caption(im, TITLES.get(name, f"Chaco Canyon · {'summer' if day == ss else 'winter'} solstice sunrise"),
                 f"{when.strftime('%B')} {when.day}, {when.strftime('%I:%M %p').lstrip('0')} MST · sun {el:.0f}° above the horizon at {az:.0f}°"
                 .replace(" MST", " MDT" if when.dst() else " MST"))
         im.save(out / f"{name}.jpg", quality=88)

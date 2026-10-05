@@ -26,7 +26,7 @@ horizon = "python tools/horizon.py --prep prep --sites data/sites.json --out dat
 
 # Renders on your own machine (the same thing the "Render with forge3d" Action does).
 # Fine terrain windows (1 m 3DEP lidar, 0.6 m NAIP) are fetched as needed into work/.
-prep    = "git fetch origin prep-data && mkdir -p prep && git archive FETCH_HEAD -o prep.tar && tar -xf prep.tar -C prep && rm prep.tar"
+prep    = "git fetch origin prep-data && mkdir -p prep && git archive FETCH_HEAD -o prep.tar && tar -xf prep.tar -C prep && rm prep.tar && git fetch origin prep-lidar && mkdir -p prep/lidar && git archive FETCH_HEAD -o lidar.tar && tar -xf lidar.tar -C prep/lidar && rm lidar.tar"
 stills  = "python tools/render.py stills --prep prep --out assets"
 flyover = "python tools/render.py flyover --prep prep --frames frames --all --chunks 30"
 encode  = "python tools/render.py encode --frames frames --out assets"
