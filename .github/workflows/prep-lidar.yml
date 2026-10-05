@@ -1,0 +1,45 @@
+name: Prep lidar (0.5 m)
+
+# Downloads the CO_CONMGaps_D24 point-cloud tiles over Chaco Canyon, grids the
+# ground returns to 0.5 m (tools/prep_lidar.py), and publishes the tiles on the
+# single-commit `prep-lidar` branch, which the renders patch into their
+# terrain windows. Runs by hand, or when prep_lidar.py changes.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [tools/prep_lidar.py]
+
+permissions:
+  contents: write
+
+jobs:
+  lidar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v5
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: lidar
+          create-args: python=3.12 pdal python-pdal rasterio scipy numpy
+          cache-environment: true
+      - name: Point clouds -> 0.5 m ground tiles
+        shell: bash -el {0}
+        run: |
+          set -o pipefail
+          cd tools && python prep_lidar.py 2>&1 | tee ../lidar.log
+          mv prep-lidar ../prep-lidar && cp ../lidar.log ../prep-lidar/
+      - name: Publish to prep-lidar branch
+        if: always()
+        run: |
+          mkdir -p prep-lidar && cp lidar.log prep-lidar/ 2>/dev/null || true
+          cd prep-lidar
+          git init -q -b prep-lidar
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "prep lidar $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" prep-lidar
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
