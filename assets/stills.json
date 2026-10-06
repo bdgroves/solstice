@@ -16,5 +16,11 @@
   "local_time": "2027-06-21T06:20-06:00",
   "sun_azimuth": 63.5,
   "sun_elevation": 3.7
+ },
+ {
+  "file": "bonito-close.jpg",
+  "local_time": "2027-06-21T06:54-06:00",
+  "sun_azimuth": 68.2,
+  "sun_elevation": 10.0
  }
 ]
