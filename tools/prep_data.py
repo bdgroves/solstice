@@ -14,6 +14,7 @@ Writes to prep/:
 from __future__ import annotations
 
 import json
+import time
 import math
 from datetime import datetime, timezone
 from pathlib import Path
@@ -78,14 +79,15 @@ def fetch_dem_utm(bounds, step, path, tile=2000):
             params = dict(bbox=bbox, bboxSR=26913, imageSR=26913, size=f"{tw},{th}",
                           format="tiff", pixelType="F32", noData=-9999,
                           interpolation="RSP_BilinearInterpolation", f="image")
-            for attempt in range(4):
+            for attempt in range(5):
                 try:
                     code, body = http_get(IMAGESERVER, params)
                 except OSError as e:
                     code, body = 0, str(e).encode()
                 if code == 200 and body[:2] in (b"II", b"MM"):
                     break
-                print(f"  retry {name} tile {r0},{c0}: HTTP {code} {body[:120]!r}")
+                print(f"  retry {name} tile {r0},{c0}: HTTP {code} {body[:80]!r}", flush=True)
+                time.sleep(3 * (attempt + 1))
             else:
                 raise RuntimeError(f"3DEP tile failed {r0},{c0}")
             with rasterio.MemoryFile(body) as mf, mf.open() as src:

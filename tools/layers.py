@@ -154,10 +154,20 @@ def window_layer(scene, name: str, bounds, work: Path, source: str) -> Layer:
     tex = work / f"{key}_tex.png"
     tstep = max(NAIP_M if source == "usgs" else 2.5, max(bounds[2] - bounds[0], bounds[3] - bounds[1]) / TEX_MAX)
     if not dem.exists():
+        fetched = False
         if source == "usgs":
             from prep_data import fetch_dem_utm
-            fetch_dem_utm(bounds, step, dem)
-        else:
+            # smaller requests on failure: the ImageServer 502s on some windows
+            for tile in (2000, 1000, 500):
+                try:
+                    fetch_dem_utm(bounds, step, dem, tile=tile)
+                    fetched = True
+                    break
+                except RuntimeError as e:
+                    print(f"  {name}: 3DEP export failed at {tile}-px requests ({e})", flush=True)
+            if not fetched:
+                print(f"  {name}: falling back to the 5 m prep DEM (the 0.5 m lidar patches over it)", flush=True)
+        if not fetched:
             a, _ = resample(scene.dem_src, bounds, step, None, scene.crs, how=Resampling.bilinear)
             write_dem(dem, a[0], bounds[0], bounds[3], step, scene.crs)
         patch_lidar(scene, dem, name)
