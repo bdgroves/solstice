@@ -188,7 +188,8 @@ footer ol{padding-left:1.2rem}
       <figure><img src="assets/winter-dawn.jpg" alt="The same view at winter solstice sunrise, shadows pointing the other way"><figcaption id="cap-winter">Winter solstice</figcaption></figure>
     </div>
     <figure style="margin-top:14px"><img src="assets/bonito-dawn.jpg" alt="Looking south from the north rim over Pueblo Bonito and Chetro Ketl to Casa Rinconada at summer solstice sunrise" loading="lazy"><figcaption id="cap-bonito">From the north rim near Pueblo Alto, over Pueblo Bonito and Chetro Ketl to Casa Rinconada.</figcaption></figure>
-    <p class="small" style="margin-top:10px">Terrain: USGS 3DEP elevation (lidar), 5 m. Colour: USGS NAIP aerial photography, 2022. The Sun is placed for the date and time shown with forge3d's solar calculator.</p>
+    <figure style="margin-top:14px"><img src="assets/bonito-close.jpg" alt="Pueblo Bonito from the air an hour after the June sunrise: the D-shaped great house with its room blocks and round kivas, the north canyon wall behind it and the boulders of Threatening Rock, which fell in 1941" loading="lazy"><figcaption id="cap-bonito-close">Pueblo Bonito from above the canyon floor, an hour after the June sunrise: the D-shaped great house, its rooms and kivas, and the boulders of Threatening Rock, which fell in 1941.</figcaption></figure>
+    <p class="small" style="margin-top:10px">Terrain: USGS 3DEP lidar, drawn in nested layers so the ground near the camera is as sharp as the data allows: 0.5 m around the great houses, from the point clouds of the newer CO_CONMGaps_D24 survey, and 1 m elsewhere. Colour: USDA NAIP aerial photography, 2022, at its native 0.6 m close up. The Sun is placed for the date and time shown with forge3d's solar calculator.</p>
   </div>
 </section>
 
@@ -496,10 +497,10 @@ async function main() {
     fetch("data/sites.json").then(r => r.json()), fetch("assets/stills.json").then(r => r.ok ? r.json() : []).catch(() => [])]);
   SKY = sky; HZ = hz; SITES = sites.sites;
   for (const st of stills) {
-    const id = {"summer-dawn.jpg": "cap-summer", "winter-dawn.jpg": "cap-winter", "bonito-dawn.jpg": "cap-bonito"}[st.file];
+    const id = {"summer-dawn.jpg": "cap-summer", "winter-dawn.jpg": "cap-winter", "bonito-dawn.jpg": "cap-bonito", "bonito-close.jpg": "cap-bonito-close"}[st.file];
     if (!id) continue;
     const d = new Date(st.local_time);
-    const pre = id === "cap-bonito" ? $(id).textContent + " " : "";
+    const pre = id.startsWith("cap-bonito") ? $(id).textContent + " " : "";
     $(id).textContent = `${pre}${fmtDate(d)}, ${fmtTime(d)} ${tzAbbr(d)}: the Sun ${st.sun_elevation.toFixed(0)}° up at azimuth ${st.sun_azimuth.toFixed(0)}°.`;
   }
   live(); fillDaily(); buildTabs(); drawHorizon(); buildSites();

@@ -54,6 +54,7 @@ solstice/
 │   ├── horizon.py           # skylines from the terrain
 │   ├── render.py            # forge3d stills and the flyover
 │   ├── layers.py            # near/mid/far terrain layers under the viewer's 2048-vertex cap
+│   ├── prep_lidar.py        # 0.5 m ground from the CONMGaps point clouds (runs on Actions)
 │   ├── osm_sites.py         # coordinate checks against aerial photos
 │   └── fonts/               # Cinzel, Crimson Text, Courier Prime (OFL)
 ├── assets/                  # renders: stills, flyover video
@@ -61,6 +62,7 @@ solstice/
 └── .github/workflows/
     ├── update-solstice.yml  # daily sky
     ├── prep-data.yml        # terrain + imagery → prep-data branch
+    ├── prep-lidar.yml       # 0.5 m lidar tiles → prep-lidar branch
     └── render.yml           # forge3d renders on GitHub's CPUs
 ```
 
@@ -68,7 +70,7 @@ solstice/
 
 **The daily sky.** `fetch_solstice.py` (PyEphem) finds the moment the Sun's upper limb clears each site's skyline: today, every third day of the year for the calendar, and on the solstices. It also computes the Moon's phase and the position of the Moon's node, which sets the 18.6-year standstill cycle. Its flat-horizon sunrise agrees with PyEphem's standard sunrise and with astronomy-engine to the minute. GitHub Actions runs it once a day at 12:41 UTC.
 
-**The renders.** `tools/render.py` drives forge3d 1.40.1's terrain viewer headless: Mesa's llvmpipe Vulkan driver under Xvfb, so it runs on GitHub's CPUs with no GPU. The viewer meshes at most 2048 vertices across a terrain and point-samples anything bigger to fit, so over the whole 22 km canyon even perfect lidar renders at about 11 m. `tools/layers.py` gets around that by drawing every frame in three layers with the same camera and Sun: the whole canyon at 11 m for the horizon, what the camera sees within 5 km at 3–4.5 m, and what it sees within 1.5 km at 1.5–2.75 m, cut from USGS 3DEP 1 m lidar (NM_NorthWest_2018) with NAIP at its native 0.6 m. The finer layer wins wherever it has terrain. Each window reaches toward the Sun far enough to keep the long dawn shadows that fall into it. The windows are fetched on Actions for each still and each stretch of the flight. The Sun comes from forge3d's solar calculator for the date and minute named on each image. The flyover is split across parallel Actions jobs and stitched with ffmpeg. Two viewer behaviours worth knowing:
+**The renders.** `tools/render.py` drives forge3d 1.40.1's terrain viewer headless: Mesa's llvmpipe Vulkan driver under Xvfb, so it runs on GitHub's CPUs with no GPU. The viewer meshes at most 2048 vertices across a terrain and point-samples anything bigger to fit, so over the whole 22 km canyon even perfect lidar renders at about 11 m. `tools/layers.py` gets around that by drawing every frame in three layers with the same camera and Sun: the whole canyon at 11 m for the horizon, what the camera sees within 5 km at 3–4.5 m, and what it sees within 1.5 km at 1.5–2.75 m, cut from USGS 3DEP 1 m lidar (NM_NorthWest_2018) with NAIP at its native 0.6 m. Around the great houses the near layers use **0.5 m bare earth** that `tools/prep_lidar.py` grids from the raw point clouds of the newer CO_CONMGaps_D24 survey (89 tiles within 1.5 km of a site, 12–16 ground returns per m²), because USGS's finished 1 m DEM has a hole over the canyon core; it is feathered into the 3DEP surface over 40 m. The Pueblo Bonito close-up has a fourth layer at 0.5 m. The finer layer wins wherever it has terrain. Each window reaches toward the Sun far enough to keep the long dawn shadows that fall into it. The windows are fetched on Actions for each still and each stretch of the flight. The Sun comes from forge3d's solar calculator for the date and minute named on each image. The flyover is split across parallel Actions jobs and stitched with ffmpeg. Two viewer behaviours worth knowing:
 - The viewer won't tilt the camera flatter than 5° below horizontal. It raises the camera instead, and `effective_eye()` copies that so labels land where the terrain is.
 - With lighting off, the viewer uses a simpler shader that flattens heights.
 
