@@ -1,0 +1,270 @@
+CONMGaps: 490 tiles over the render extent, 89 within 1.5 km of a site
+89 CONMGaps tiles over the render extent, 4.91 GB
+  USGS_LPC_CO_CONMGaps_D24_12SYE6895.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6995.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6997.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6898.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6897.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6996.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6998.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6896.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6998.laz: 57 MB in 328 s
+  USGS_LPC_CO_CONMGaps_D24_12SYE7095.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6897.laz: 58 MB in 341 s
+  USGS_LPC_CO_CONMGaps_D24_12SYE7096.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6898.laz: 58 MB in 345 s
+  USGS_LPC_CO_CONMGaps_D24_12SYE7097.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6997.laz: 59 MB in 347 s
+  USGS_LPC_CO_CONMGaps_D24_12SYE7098.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6995.laz: 59 MB in 347 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV2995.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6896.laz: 63 MB in 377 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV2996.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6895.laz: 64 MB in 379 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV2997.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE6996.laz: 65 MB in 387 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV2998.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE7098.laz: 8 MB in 54 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3094.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE7097.laz: 11 MB in 71 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3095.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE7095.laz: 15 MB in 98 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3096.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_12SYE7096.laz: 14 MB in 87 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3097.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV2998.laz: 8 MB in 54 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3098.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV2995.laz: 16 MB in 103 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3193.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV2997.laz: 11 MB in 72 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3194.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV2996.laz: 14 MB in 87 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3195.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3094.laz: 58 MB in 350 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3196.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3097.laz: 61 MB in 373 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3197.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3098.laz: 59 MB in 362 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3292.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3194.laz: 58 MB in 357 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3293.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3096.laz: 63 MB in 388 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3294.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3095.laz: 66 MB in 406 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3295.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3193.laz: 60 MB in 374 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3296.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3195.laz: 63 MB in 389 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3297.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3196.laz: 65 MB in 411 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3392.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3294.laz: 54 MB in 351 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3393.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3197.laz: 57 MB in 376 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3394.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3293.laz: 59 MB in 385 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3395.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3297.laz: 52 MB in 343 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3396.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3292.laz: 63 MB in 413 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3397.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3296.laz: 63 MB in 414 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3492.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3295.laz: 66 MB in 431 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3493.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3394.laz: 55 MB in 351 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3494.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3397.laz: 51 MB in 320 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3495.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3393.laz: 60 MB in 382 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3496.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3392.laz: 63 MB in 399 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3497.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3396.laz: 64 MB in 402 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3591.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3493.laz: 56 MB in 352 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3592.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3395.laz: 67 MB in 422 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3593.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3492.laz: 69 MB in 427 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3594.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3497.laz: 50 MB in 317 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3595.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3494.laz: 57 MB in 366 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3596.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3496.laz: 56 MB in 361 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3688.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3495.laz: 64 MB in 405 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3689.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3593.laz: 55 MB in 348 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3690.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3591.laz: 67 MB in 428 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3691.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3594.laz: 58 MB in 365 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3692.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3592.laz: 67 MB in 427 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3693.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3596.laz: 55 MB in 340 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3694.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3690.laz: 48 MB in 288 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3695.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3688.laz: 56 MB in 349 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3788.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3595.laz: 62 MB in 383 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3789.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3689.laz: 54 MB in 334 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3790.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3693.laz: 54 MB in 340 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3791.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3691.laz: 64 MB in 401 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3792.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3692.laz: 65 MB in 402 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3793.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3789.laz: 52 MB in 333 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3794.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3694.laz: 58 MB in 370 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3888.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3790.laz: 52 MB in 335 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3889.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3788.laz: 56 MB in 359 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3890.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3695.laz: 59 MB in 378 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3891.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3791.laz: 63 MB in 405 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3892.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3793.laz: 53 MB in 349 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3893.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3792.laz: 67 MB in 445 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3989.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3890.laz: 53 MB in 346 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3990.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3889.laz: 54 MB in 358 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3991.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3888.laz: 61 MB in 400 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV3992.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3794.laz: 63 MB in 415 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4089.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3891.laz: 68 MB in 455 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4090.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3893.laz: 49 MB in 342 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4091.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3892.laz: 62 MB in 442 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4092.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3989.laz: 58 MB in 422 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4188.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3990.laz: 57 MB in 436 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4189.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3992.laz: 58 MB in 444 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4190.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4089.laz: 58 MB in 445 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4191.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV3991.laz: 67 MB in 511 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4192.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4090.laz: 59 MB in 446 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4289.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4091.laz: 70 MB in 523 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4290.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4092.laz: 59 MB in 436 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4291.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4188.laz: 66 MB in 483 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4292.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4189.laz: 58 MB in 420 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4390.laz: prd-tnm.s3.amazonaws.com failed (HTTP Error 404: Not Found)
+  USGS_LPC_CO_CONMGaps_D24_13SBV4190.laz: 60 MB in 446 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4192.laz: 56 MB in 417 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4191.laz: 64 MB in 475 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4289.laz: 56 MB in 425 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4290.laz: 60 MB in 463 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4291.laz: 60 MB in 467 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4292.laz: 53 MB in 415 s
+  USGS_LPC_CO_CONMGaps_D24_13SBV4390.laz: 61 MB in 469 s
+((PDAL PDAL ErrorError) ) Can't load library Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so: : Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryFailed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory(PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory(PDAL Error() PDALCan't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so:  Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryError) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory(PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory(PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory(PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory((((PDALPDALPDAL   ErrorErrorError) ) ) Can't load library Can't load library Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so: : : Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryFailed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryFailed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryPDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_hdf.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory((PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryPDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory((PDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directoryPDAL Error) Can't load library /home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so: Failed to load "/home/runner/micromamba/envs/lidar/lib/libpdal_plugin_reader_icebridge.so": libhdf5_cpp.so.320: cannot open shared object file: No such file or directory  USGS_LPC_CO_CONMGaps_D24_12SYE6895.tif: 14,512,794 ground returns, 12.92/m², 90.4% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6896.tif: 14,682,274 ground returns, 13.07/m², 90.5% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6897.tif: 13,860,399 ground returns, 12.34/m², 90.4% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6898.tif: 14,503,772 ground returns, 12.91/m², 90.4% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6995.tif: 14,687,143 ground returns, 13.08/m², 90.5% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6996.tif: 14,865,735 ground returns, 13.23/m², 90.4% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6997.tif: 14,004,099 ground returns, 12.47/m², 90.5% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE6998.tif: 14,057,737 ground returns, 12.51/m², 90.4% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE7095.tif: 3,432,834 ground returns, 11.8/m², 86.2% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE7096.tif: 3,105,631 ground returns, 11.99/m², 84.7% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE7097.tif: 2,396,551 ground returns, 10.57/m², 82.8% covered
+  USGS_LPC_CO_CONMGaps_D24_12SYE7098.tif: 1,971,728 ground returns, 10.1/m², 80.2% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV2995.tif: 3,275,086 ground returns, 12.74/m², 95.4% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV2996.tif: 3,088,953 ground returns, 13.7/m², 94.8% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV2997.tif: 2,380,443 ground returns, 12.24/m², 94.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV2998.tif: 2,027,259 ground returns, 12.4/m², 92.9% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3094.tif: 12,802,814 ground returns, 12.8/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3095.tif: 13,930,852 ground returns, 13.93/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3096.tif: 14,441,400 ground returns, 14.43/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3097.tif: 13,956,145 ground returns, 13.95/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3098.tif: 14,115,913 ground returns, 14.11/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3193.tif: 14,280,114 ground returns, 14.27/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3194.tif: 12,865,302 ground returns, 12.87/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3195.tif: 14,376,783 ground returns, 14.38/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3196.tif: 14,934,600 ground returns, 14.93/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3197.tif: 14,169,021 ground returns, 14.17/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3292.tif: 14,705,639 ground returns, 14.7/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3293.tif: 13,825,107 ground returns, 13.82/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3294.tif: 13,153,142 ground returns, 13.15/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3295.tif: 14,734,357 ground returns, 14.73/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3296.tif: 15,411,612 ground returns, 15.41/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3297.tif: 14,085,732 ground returns, 14.09/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3392.tif: 14,990,803 ground returns, 14.98/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3393.tif: 12,919,179 ground returns, 12.91/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3394.tif: 13,026,412 ground returns, 13.03/m², 99.9% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3395.tif: 15,977,086 ground returns, 15.98/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3396.tif: 15,182,230 ground returns, 15.18/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3397.tif: 14,186,929 ground returns, 14.19/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3492.tif: 14,463,316 ground returns, 14.46/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3493.tif: 13,003,035 ground returns, 13.0/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3494.tif: 13,112,192 ground returns, 13.11/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3495.tif: 16,120,655 ground returns, 16.12/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3496.tif: 15,300,249 ground returns, 15.3/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3497.tif: 14,335,771 ground returns, 14.34/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3591.tif: 14,413,328 ground returns, 14.41/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3592.tif: 14,413,075 ground returns, 14.41/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3593.tif: 12,733,599 ground returns, 12.73/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3594.tif: 13,729,960 ground returns, 13.73/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3595.tif: 16,371,734 ground returns, 16.37/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3596.tif: 15,166,134 ground returns, 15.17/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3688.tif: 15,011,503 ground returns, 15.0/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3689.tif: 14,526,960 ground returns, 14.52/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3690.tif: 13,116,433 ground returns, 13.11/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3691.tif: 14,993,997 ground returns, 14.99/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3692.tif: 14,755,622 ground returns, 14.75/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3693.tif: 12,823,888 ground returns, 12.82/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3694.tif: 14,293,283 ground returns, 14.29/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3695.tif: 16,622,495 ground returns, 16.62/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3788.tif: 15,190,923 ground returns, 15.18/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3789.tif: 14,113,908 ground returns, 14.11/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3790.tif: 13,216,523 ground returns, 13.21/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3791.tif: 15,270,851 ground returns, 15.26/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3792.tif: 14,979,351 ground returns, 14.97/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3793.tif: 13,023,136 ground returns, 13.02/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3794.tif: 14,012,334 ground returns, 14.01/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3888.tif: 14,803,955 ground returns, 14.79/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3889.tif: 13,133,581 ground returns, 13.13/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3890.tif: 13,616,928 ground returns, 13.61/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3891.tif: 15,437,777 ground returns, 15.43/m², 99.9% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3892.tif: 15,110,286 ground returns, 15.1/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3893.tif: 13,499,099 ground returns, 13.49/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3989.tif: 12,755,080 ground returns, 12.75/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3990.tif: 13,691,016 ground returns, 13.68/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3991.tif: 15,479,761 ground returns, 15.47/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV3992.tif: 14,740,906 ground returns, 14.73/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4089.tif: 12,312,305 ground returns, 12.31/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4090.tif: 13,673,414 ground returns, 13.67/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4091.tif: 15,338,336 ground returns, 15.33/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4092.tif: 13,580,537 ground returns, 13.58/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4188.tif: 13,612,569 ground returns, 13.6/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4189.tif: 12,169,951 ground returns, 12.16/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4190.tif: 13,695,750 ground returns, 13.69/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4191.tif: 15,335,528 ground returns, 15.34/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4192.tif: 13,629,594 ground returns, 13.63/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4289.tif: 12,273,237 ground returns, 12.27/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4290.tif: 13,852,628 ground returns, 13.85/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4291.tif: 15,722,911 ground returns, 15.72/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4292.tif: 13,629,699 ground returns, 13.63/m², 100.0% covered
+  USGS_LPC_CO_CONMGaps_D24_13SBV4390.tif: 14,155,147 ground returns, 14.15/m², 100.0% covered
+wrote 89 tiles to prep-lidar/

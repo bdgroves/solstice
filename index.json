@@ -1,0 +1,1343 @@
+{
+ "fetched": "2026-10-06T02:48:58+00:00",
+ "project": "CONMGaps",
+ "res_m": 0.5,
+ "crs": "EPSG:26913",
+ "tiles": [
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6895.tif",
+   "bounds": [
+    227586.14910882554,
+    3995074.4858210906,
+    228646.14910882554,
+    3996134.4858210906
+   ],
+   "ground_points": 14512794,
+   "density_per_m2": 12.92,
+   "coverage": 0.9043,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6895.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6896.tif",
+   "bounds": [
+    227647.71480963525,
+    3996072.9149579355,
+    228707.71480963525,
+    3997132.4149579355
+   ],
+   "ground_points": 14682274,
+   "density_per_m2": 13.07,
+   "coverage": 0.9048,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6896.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6897.tif",
+   "bounds": [
+    227709.3543481524,
+    3997070.677975739,
+    228769.3543481524,
+    3998130.677975739
+   ],
+   "ground_points": 13860399,
+   "density_per_m2": 12.34,
+   "coverage": 0.9043,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6897.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6898.tif",
+   "bounds": [
+    227771.2080354616,
+    3998068.8847658527,
+    228831.2080354616,
+    3999128.8847658527
+   ],
+   "ground_points": 14503772,
+   "density_per_m2": 12.91,
+   "coverage": 0.9043,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6898.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6995.tif",
+   "bounds": [
+    228584.15989261237,
+    3995012.8702574642,
+    229644.15989261237,
+    3996072.3702574642
+   ],
+   "ground_points": 14687143,
+   "density_per_m2": 13.08,
+   "coverage": 0.9047,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6995.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6996.tif",
+   "bounds": [
+    228645.82707465603,
+    3996010.998502594,
+    229705.82707465603,
+    3997070.998502594
+   ],
+   "ground_points": 14865735,
+   "density_per_m2": 13.23,
+   "coverage": 0.9043,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6996.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6997.tif",
+   "bounds": [
+    228707.48466191575,
+    3997009.0694767963,
+    229767.48466191575,
+    3998068.5694767963
+   ],
+   "ground_points": 14004099,
+   "density_per_m2": 12.47,
+   "coverage": 0.9047,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6997.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE6998.tif",
+   "bounds": [
+    228769.22289227444,
+    3998007.160305325,
+    229829.22289227444,
+    3999067.160305325
+   ],
+   "ground_points": 14057737,
+   "density_per_m2": 12.51,
+   "coverage": 0.9043,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE6998.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE7095.tif",
+   "bounds": [
+    229582.38055113592,
+    3994997.0058112834,
+    229869.38055113592,
+    3996011.0058112834
+   ],
+   "ground_points": 3432834,
+   "density_per_m2": 11.8,
+   "coverage": 0.8615,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE7095.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE7096.tif",
+   "bounds": [
+    229643.88887433097,
+    3995997.0482040527,
+    229899.88887433097,
+    3997009.0482040527
+   ],
+   "ground_points": 3105631,
+   "density_per_m2": 11.99,
+   "coverage": 0.8465,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE7096.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE7097.tif",
+   "bounds": [
+    229705.579403091,
+    3996997.1412312314,
+    229930.079403091,
+    3998007.1412312314
+   ],
+   "ground_points": 2396551,
+   "density_per_m2": 10.57,
+   "coverage": 0.8283,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE7097.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_12SYE7098.tif",
+   "bounds": [
+    229767.4196757719,
+    3997997.1156035755,
+    229960.9196757719,
+    3999005.6156035755
+   ],
+   "ground_points": 1971728,
+   "density_per_m2": 10.1,
+   "coverage": 0.8015,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-20",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_4_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_12SYE7098.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV2995.tif",
+   "bounds": [
+    229743.23858223663,
+    3994999.915720841,
+    230000.23858223663,
+    3995999.915720841
+   ],
+   "ground_points": 3275086,
+   "density_per_m2": 12.74,
+   "coverage": 0.9544,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV2995.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV2996.tif",
+   "bounds": [
+    229774.46033742494,
+    3995999.913477318,
+    229999.96033742494,
+    3996999.913477318
+   ],
+   "ground_points": 3088953,
+   "density_per_m2": 13.7,
+   "coverage": 0.9484,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV2996.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV2997.tif",
+   "bounds": [
+    229805.56683560612,
+    3996999.917201241,
+    230000.06683560612,
+    3997999.917201241
+   ],
+   "ground_points": 2380443,
+   "density_per_m2": 12.24,
+   "coverage": 0.9398,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV2997.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV2998.tif",
+   "bounds": [
+    229836.76532100613,
+    3997999.9161855998,
+    230000.26532100613,
+    3998999.9161855998
+   ],
+   "ground_points": 2027259,
+   "density_per_m2": 12.4,
+   "coverage": 0.9286,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV2998.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3094.tif",
+   "bounds": [
+    229999.86349899962,
+    3993999.9190175193,
+    231000.36349899962,
+    3994999.9190175193
+   ],
+   "ground_points": 12802814,
+   "density_per_m2": 12.8,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3094.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3095.tif",
+   "bounds": [
+    229999.86873245973,
+    3994999.915364533,
+    230999.86873245973,
+    3995999.915364533
+   ],
+   "ground_points": 13930852,
+   "density_per_m2": 13.93,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3095.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3096.tif",
+   "bounds": [
+    229999.85708812415,
+    3995999.9129153374,
+    231000.35708812415,
+    3996999.9129153374
+   ],
+   "ground_points": 14441400,
+   "density_per_m2": 14.43,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3096.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3097.tif",
+   "bounds": [
+    229999.85548083496,
+    3996999.9162532254,
+    231000.35548083496,
+    3997999.9162532254
+   ],
+   "ground_points": 13956145,
+   "density_per_m2": 13.95,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3097.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3098.tif",
+   "bounds": [
+    229999.8538487826,
+    3997999.914960085,
+    231000.3538487826,
+    3998999.914960085
+   ],
+   "ground_points": 14115913,
+   "density_per_m2": 14.11,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3098.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3193.tif",
+   "bounds": [
+    230999.85135798244,
+    3992999.9242205163,
+    232000.35135798244,
+    3993999.9242205163
+   ],
+   "ground_points": 14280114,
+   "density_per_m2": 14.27,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3193.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3194.tif",
+   "bounds": [
+    230999.86055205978,
+    3993999.9191764947,
+    231999.86055205978,
+    3994999.9191764947
+   ],
+   "ground_points": 12865302,
+   "density_per_m2": 12.87,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3194.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3195.tif",
+   "bounds": [
+    230999.86617107445,
+    3994999.9154166807,
+    231999.86617107445,
+    3995999.9154166807
+   ],
+   "ground_points": 14376783,
+   "density_per_m2": 14.38,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3195.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3196.tif",
+   "bounds": [
+    230999.8562636554,
+    3995999.9129159665,
+    232000.3562636554,
+    3996999.9129159665
+   ],
+   "ground_points": 14934600,
+   "density_per_m2": 14.93,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3196.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3197.tif",
+   "bounds": [
+    230999.85547910648,
+    3996999.916038023,
+    231999.85547910648,
+    3997999.916038023
+   ],
+   "ground_points": 14169021,
+   "density_per_m2": 14.17,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3197.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3292.tif",
+   "bounds": [
+    231999.81513699825,
+    3991999.9384186165,
+    233000.31513699825,
+    3992999.9384186165
+   ],
+   "ground_points": 14705639,
+   "density_per_m2": 14.7,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3292.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3293.tif",
+   "bounds": [
+    231999.8294680862,
+    3992999.9315432804,
+    233000.3294680862,
+    3993999.9315432804
+   ],
+   "ground_points": 13825107,
+   "density_per_m2": 13.82,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3293.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3294.tif",
+   "bounds": [
+    231999.85447549744,
+    3993999.920499089,
+    232999.85447549744,
+    3995000.420499089
+   ],
+   "ground_points": 13153142,
+   "density_per_m2": 13.15,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3294.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3295.tif",
+   "bounds": [
+    231999.86075002636,
+    3994999.9164331984,
+    232999.86075002636,
+    3996000.4164331984
+   ],
+   "ground_points": 14734357,
+   "density_per_m2": 14.73,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3295.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3296.tif",
+   "bounds": [
+    231999.8536567744,
+    3995999.9135594387,
+    232999.8536567744,
+    3996999.9135594387
+   ],
+   "ground_points": 15411612,
+   "density_per_m2": 15.41,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3296.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3297.tif",
+   "bounds": [
+    231999.85390280472,
+    3996999.91606581,
+    232999.85390280472,
+    3997999.91606581
+   ],
+   "ground_points": 14085732,
+   "density_per_m2": 14.09,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3297.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3392.tif",
+   "bounds": [
+    232999.8095351368,
+    3991999.9402050553,
+    234000.3095351368,
+    3992999.9402050553
+   ],
+   "ground_points": 14990803,
+   "density_per_m2": 14.98,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3392.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3393.tif",
+   "bounds": [
+    232999.82574403542,
+    3992999.9332658336,
+    234000.32574403542,
+    3993999.9332658336
+   ],
+   "ground_points": 12919179,
+   "density_per_m2": 12.91,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3393.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3394.tif",
+   "bounds": [
+    232999.8437335117,
+    3993999.9273935747,
+    233999.8437335117,
+    3994999.9273935747
+   ],
+   "ground_points": 13026412,
+   "density_per_m2": 13.03,
+   "coverage": 0.9989,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3394.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3395.tif",
+   "bounds": [
+    232999.85242484044,
+    3994999.9225890795,
+    233999.85242484044,
+    3995999.9225890795
+   ],
+   "ground_points": 15977086,
+   "density_per_m2": 15.98,
+   "coverage": 0.9998,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3395.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3396.tif",
+   "bounds": [
+    232999.85156890983,
+    3995999.9187416816,
+    233999.85156890983,
+    3996999.9187416816
+   ],
+   "ground_points": 15182230,
+   "density_per_m2": 15.18,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3396.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3397.tif",
+   "bounds": [
+    232999.8537695264,
+    3996999.9187022937,
+    233999.8537695264,
+    3997999.9187022937
+   ],
+   "ground_points": 14186929,
+   "density_per_m2": 14.19,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3397.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3492.tif",
+   "bounds": [
+    233999.81299310643,
+    3991999.9405000745,
+    235000.31299310643,
+    3992999.9405000745
+   ],
+   "ground_points": 14463316,
+   "density_per_m2": 14.46,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3492.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3493.tif",
+   "bounds": [
+    233999.82746173494,
+    3992999.9340173267,
+    234999.82746173494,
+    3993999.9340173267
+   ],
+   "ground_points": 13003035,
+   "density_per_m2": 13.0,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3493.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3494.tif",
+   "bounds": [
+    233999.83923328726,
+    3993999.928222024,
+    234999.83923328726,
+    3994999.928222024
+   ],
+   "ground_points": 13112192,
+   "density_per_m2": 13.11,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3494.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3495.tif",
+   "bounds": [
+    233999.84805319837,
+    3994999.923315087,
+    234999.84805319837,
+    3995999.923315087
+   ],
+   "ground_points": 16120655,
+   "density_per_m2": 16.12,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3495.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3496.tif",
+   "bounds": [
+    233999.84887423058,
+    3995999.919287281,
+    234999.84887423058,
+    3996999.919287281
+   ],
+   "ground_points": 15300249,
+   "density_per_m2": 15.3,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3496.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3497.tif",
+   "bounds": [
+    233999.85168622766,
+    3996999.918246522,
+    234999.85168622766,
+    3997999.918246522
+   ],
+   "ground_points": 14335771,
+   "density_per_m2": 14.34,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3497.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3591.tif",
+   "bounds": [
+    234999.7951539004,
+    3990999.945759364,
+    236000.2951539004,
+    3991999.945759364
+   ],
+   "ground_points": 14413328,
+   "density_per_m2": 14.41,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3591.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3592.tif",
+   "bounds": [
+    234999.81127386424,
+    3991999.9390946575,
+    236000.31127386424,
+    3992999.9390946575
+   ],
+   "ground_points": 14413075,
+   "density_per_m2": 14.41,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3592.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3593.tif",
+   "bounds": [
+    234999.8250394215,
+    3992999.933092728,
+    236000.3250394215,
+    3993999.933092728
+   ],
+   "ground_points": 12733599,
+   "density_per_m2": 12.73,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3593.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3594.tif",
+   "bounds": [
+    234999.8363647397,
+    3993999.92776315,
+    235999.8363647397,
+    3994999.92776315
+   ],
+   "ground_points": 13729960,
+   "density_per_m2": 13.73,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3594.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3595.tif",
+   "bounds": [
+    234999.84529574309,
+    3994999.9230967113,
+    235999.84529574309,
+    3995999.9230967113
+   ],
+   "ground_points": 16371734,
+   "density_per_m2": 16.37,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3595.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3596.tif",
+   "bounds": [
+    234999.84734930494,
+    3995999.9191111564,
+    235999.84734930494,
+    3996999.9191111564
+   ],
+   "ground_points": 15166134,
+   "density_per_m2": 15.17,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3596.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3688.tif",
+   "bounds": [
+    235999.73932640866,
+    3987999.9583202726,
+    237000.23932640866,
+    3989000.4583202726
+   ],
+   "ground_points": 15011503,
+   "density_per_m2": 15.0,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3688.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3689.tif",
+   "bounds": [
+    235999.74511727464,
+    3988999.9564819494,
+    237000.24511727464,
+    3989999.9564819494
+   ],
+   "ground_points": 14526960,
+   "density_per_m2": 14.52,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3689.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3690.tif",
+   "bounds": [
+    235999.7558999741,
+    3989999.952948966,
+    237000.2558999741,
+    3990999.952948966
+   ],
+   "ground_points": 13116433,
+   "density_per_m2": 13.11,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3690.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3691.tif",
+   "bounds": [
+    235999.79769292363,
+    3990999.939318158,
+    237000.29769292363,
+    3991999.939318158
+   ],
+   "ground_points": 14993997,
+   "density_per_m2": 14.99,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3691.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3692.tif",
+   "bounds": [
+    235999.81260834506,
+    3991999.934088604,
+    237000.31260834506,
+    3992999.934088604
+   ],
+   "ground_points": 14755622,
+   "density_per_m2": 14.75,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3692.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3693.tif",
+   "bounds": [
+    235999.82505797327,
+    3992999.9292646847,
+    237000.32505797327,
+    3993999.9292646847
+   ],
+   "ground_points": 12823888,
+   "density_per_m2": 12.82,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3693.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3694.tif",
+   "bounds": [
+    235999.84568453656,
+    3993999.9249003944,
+    236999.84568453656,
+    3994999.9249003944
+   ],
+   "ground_points": 14293283,
+   "density_per_m2": 14.29,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3694.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3695.tif",
+   "bounds": [
+    235999.844161588,
+    3994999.92101166,
+    236999.844161588,
+    3995999.92101166
+   ],
+   "ground_points": 16622495,
+   "density_per_m2": 16.62,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3695.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3788.tif",
+   "bounds": [
+    236999.7552100711,
+    3987999.9526273836,
+    238000.2552100711,
+    3989000.4526273836
+   ],
+   "ground_points": 15190923,
+   "density_per_m2": 15.18,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3788.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3789.tif",
+   "bounds": [
+    236999.75929660827,
+    3988999.9510944057,
+    238000.25929660827,
+    3989999.9510944057
+   ],
+   "ground_points": 14113908,
+   "density_per_m2": 14.11,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3789.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3790.tif",
+   "bounds": [
+    236999.770339443,
+    3989999.948047832,
+    238000.270339443,
+    3990999.948047832
+   ],
+   "ground_points": 13216523,
+   "density_per_m2": 13.21,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3790.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3791.tif",
+   "bounds": [
+    236999.80192431202,
+    3990999.9363398035,
+    238000.30192431202,
+    3991999.9363398035
+   ],
+   "ground_points": 15270851,
+   "density_per_m2": 15.26,
+   "coverage": 0.9995,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3791.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3792.tif",
+   "bounds": [
+    236999.81259263813,
+    3991999.931762922,
+    238000.31259263813,
+    3992999.931762922
+   ],
+   "ground_points": 14979351,
+   "density_per_m2": 14.97,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3792.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3793.tif",
+   "bounds": [
+    236999.82429132477,
+    3992999.927552163,
+    238000.32429132477,
+    3993999.927552163
+   ],
+   "ground_points": 13023136,
+   "density_per_m2": 13.02,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3793.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3794.tif",
+   "bounds": [
+    236999.8507794795,
+    3993999.9236167306,
+    237999.8507794795,
+    3994999.9236167306
+   ],
+   "ground_points": 14012334,
+   "density_per_m2": 14.01,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3794.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3888.tif",
+   "bounds": [
+    237999.7665324682,
+    3987999.947356547,
+    239000.2665324682,
+    3989000.447356547
+   ],
+   "ground_points": 14803955,
+   "density_per_m2": 14.79,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3888.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3889.tif",
+   "bounds": [
+    237999.7711002959,
+    3988999.9460955886,
+    239000.2711002959,
+    3989999.9460955886
+   ],
+   "ground_points": 13133581,
+   "density_per_m2": 13.13,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3889.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3890.tif",
+   "bounds": [
+    237999.77820401322,
+    3989999.9435053645,
+    239000.27820401322,
+    3990999.9435053645
+   ],
+   "ground_points": 13616928,
+   "density_per_m2": 13.61,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3890.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3891.tif",
+   "bounds": [
+    237999.8063718023,
+    3990999.9334926833,
+    239000.3063718023,
+    3991999.9334926833
+   ],
+   "ground_points": 15437777,
+   "density_per_m2": 15.43,
+   "coverage": 0.9988,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3891.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3892.tif",
+   "bounds": [
+    237999.8162840929,
+    3991999.929544191,
+    239000.3162840929,
+    3992999.929544191
+   ],
+   "ground_points": 15110286,
+   "density_per_m2": 15.1,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3892.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3893.tif",
+   "bounds": [
+    237999.82551935897,
+    3992999.925823854,
+    239000.32551935897,
+    3993999.925823854
+   ],
+   "ground_points": 13499099,
+   "density_per_m2": 13.49,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3893.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3989.tif",
+   "bounds": [
+    238999.78063107294,
+    3988999.9414350837,
+    240000.28063107294,
+    3989999.9414350837
+   ],
+   "ground_points": 12755080,
+   "density_per_m2": 12.75,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3989.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3990.tif",
+   "bounds": [
+    238999.7884545643,
+    3989999.9392190464,
+    240000.2884545643,
+    3990999.9392190464
+   ],
+   "ground_points": 13691016,
+   "density_per_m2": 13.68,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3990.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3991.tif",
+   "bounds": [
+    238999.8121537416,
+    3990999.930794547,
+    240000.3121537416,
+    3991999.930794547
+   ],
+   "ground_points": 15479761,
+   "density_per_m2": 15.47,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3991.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV3992.tif",
+   "bounds": [
+    238999.82037570386,
+    3991999.927388216,
+    240000.32037570386,
+    3992999.927388216
+   ],
+   "ground_points": 14740906,
+   "density_per_m2": 14.73,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV3992.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4089.tif",
+   "bounds": [
+    239999.80062461284,
+    3988999.9366935687,
+    241000.30062461284,
+    3989999.9366935687
+   ],
+   "ground_points": 12312305,
+   "density_per_m2": 12.31,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4089.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4090.tif",
+   "bounds": [
+    239999.80579420048,
+    3989999.9347674577,
+    241000.30579420048,
+    3990999.9347674577
+   ],
+   "ground_points": 13673414,
+   "density_per_m2": 13.67,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4090.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4091.tif",
+   "bounds": [
+    239999.82672849516,
+    3990999.927812706,
+    241000.32672849516,
+    3991999.927812706
+   ],
+   "ground_points": 15338336,
+   "density_per_m2": 15.33,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4091.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4092.tif",
+   "bounds": [
+    239999.83399596516,
+    3991999.924889541,
+    240999.83399596516,
+    3992999.924889541
+   ],
+   "ground_points": 13580537,
+   "density_per_m2": 13.58,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4092.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4188.tif",
+   "bounds": [
+    240999.80937588293,
+    3987999.9336168473,
+    242000.30937588293,
+    3989000.4336168473
+   ],
+   "ground_points": 13612569,
+   "density_per_m2": 13.6,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4188.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4189.tif",
+   "bounds": [
+    240999.81140189694,
+    3988999.932825195,
+    242000.31140189694,
+    3989999.932825195
+   ],
+   "ground_points": 12169951,
+   "density_per_m2": 12.16,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4189.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4190.tif",
+   "bounds": [
+    240999.81558470405,
+    3989999.9312386564,
+    242000.31558470405,
+    3990999.9312386564
+   ],
+   "ground_points": 13695750,
+   "density_per_m2": 13.69,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4190.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4191.tif",
+   "bounds": [
+    240999.8326303553,
+    3990999.9254421126,
+    241999.8326303553,
+    3991999.9254421126
+   ],
+   "ground_points": 15335528,
+   "density_per_m2": 15.34,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4191.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4192.tif",
+   "bounds": [
+    240999.83853174731,
+    3991999.922933839,
+    241999.83853174731,
+    3992999.922933839
+   ],
+   "ground_points": 13629594,
+   "density_per_m2": 13.63,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4192.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4289.tif",
+   "bounds": [
+    241999.82042758045,
+    3988999.9293932873,
+    243000.32042758045,
+    3989999.9293932873
+   ],
+   "ground_points": 12273237,
+   "density_per_m2": 12.27,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4289.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4290.tif",
+   "bounds": [
+    241999.8239188111,
+    3989999.928074593,
+    243000.3239188111,
+    3990999.928074593
+   ],
+   "ground_points": 13852628,
+   "density_per_m2": 13.85,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4290.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4291.tif",
+   "bounds": [
+    241999.837674235,
+    3990999.9233520622,
+    242999.837674235,
+    3991999.9233520622
+   ],
+   "ground_points": 15722911,
+   "density_per_m2": 15.72,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4291.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4292.tif",
+   "bounds": [
+    241999.8424904741,
+    3991999.9212006335,
+    242999.8424904741,
+    3992999.9212006335
+   ],
+   "ground_points": 13629699,
+   "density_per_m2": 13.63,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4292.laz"
+  },
+  {
+   "file": "USGS_LPC_CO_CONMGaps_D24_13SBV4390.tif",
+   "bounds": [
+    242999.83129087673,
+    3989999.9253672324,
+    244000.33129087673,
+    3990999.9253672324
+   ],
+   "ground_points": 14155147,
+   "density_per_m2": 14.15,
+   "coverage": 1.0,
+   "project": "CO_CONMGaps_D24",
+   "published": "2026-04-04",
+   "source": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CONMGaps_D24/CO_CONMGaps_1_D24/LAZ/USGS_LPC_CO_CONMGaps_D24_13SBV4390.laz"
+  }
+ ]
+}
