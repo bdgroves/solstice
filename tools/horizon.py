@@ -3,8 +3,11 @@ Compute the real skyline seen from each Chaco site.
 
 For every azimuth (0.25 deg steps) march outward along the ground and keep the
 highest elevation angle of the terrain, with Earth curvature and standard
-refraction (k = 0.13). The near field (canyon walls) comes from the 5 m 3DEP
-grid, the far field (mesas, Chacra Mesa, distant mountains) from the 30 m one.
+refraction (k = 0.13). Within 2.5 km of each site the ground comes from the
+0.5 m CONMGaps lidar (prep/lidar, tools/prep_lidar.py) at 1 m where it exists;
+then the 5 m 3DEP grid (canyon walls), then the 30 m one (mesas, Chacra Mesa,
+distant mountains). The 5 m grid has a hole-filled patch over the canyon core,
+so the lidar matters most for the great houses' own skylines.
 
     python tools/horizon.py --prep prep --sites data/sites.json --out data/horizons.json
 """
@@ -45,8 +48,30 @@ class Grid:
         return out
 
 
-def skyline(fine: Grid, coarse: Grid, x, y, eye=EYE, max_km=80):
-    z0 = fine.sample(np.array([x]), np.array([y]))[0]
+class LidarPatch(Grid):
+    """The lidar tiles around one site, mosaicked to 1 m."""
+    def __init__(self, tiles, x, y, half=2500.0, res=1.0):
+        from rasterio.merge import merge
+        from rasterio.warp import Resampling
+        box = (x - half, y - half, x + half, y + half)
+        use = [t for t in tiles if not (t[1][2] <= box[0] or t[1][0] >= box[2] or t[1][3] <= box[1] or t[1][1] >= box[3])]
+        self.ok = bool(use)
+        if not use:
+            return
+        srcs = [rasterio.open(p) for p, _ in use]
+        a, t = merge(srcs, bounds=box, res=res, nodata=np.nan, resampling=Resampling.average)
+        for s_ in srcs:
+            s_.close()
+        self.z = a[0].astype("float64")
+        self.t = t
+        self.h, self.w = self.z.shape
+        self.x0, self.y1, self.dx = t.c, t.f, t.a
+
+
+def skyline(fine: Grid, coarse: Grid, x, y, eye=EYE, max_km=80, lidar=None):
+    z0 = np.nan
+    if not np.isfinite(z0):
+        z0 = fine.sample(np.array([x]), np.array([y]))[0]
     if not np.isfinite(z0):
         z0 = coarse.sample(np.array([x]), np.array([y]))[0]
     z0 += eye
@@ -61,6 +86,12 @@ def skyline(fine: Grid, coarse: Grid, x, y, eye=EYE, max_km=80):
         z = fine.sample(xs, ys)
         zc = coarse.sample(xs, ys)
         z = np.where(np.isfinite(z), z, zc)
+        if lidar is not None and lidar.ok:
+            # beyond the site's own walls and rubble mound, which bare-earth
+            # lidar keeps as ground (it put a 4 m "skyline" 50 m from Penasco Blanco)
+            near = (d >= 80) & (d <= 2400)
+            zl = lidar.sample(xs[near], ys[near])
+            z[near] = np.where(np.isfinite(zl), zl, z[near])
         drop = d * d / (2 * R_EARTH) * (1 - K_REFR)
         ang = np.degrees(np.arctan2(z - z0 - drop, d))
         j = int(np.nanargmax(ang))
@@ -78,12 +109,18 @@ def main():
     fine = Grid(Path(a.prep) / "chaco_dem_5m.tif")
     coarse = Grid(Path(a.prep) / "horizon_dem_30m.tif")
     sites = json.loads(Path(a.sites).read_text())["sites"]
+    tiles = []
+    idx = Path(a.prep) / "lidar" / "index.json"
+    if idx.exists():
+        tiles = [(Path(a.prep) / "lidar" / t["file"], t["bounds"]) for t in json.loads(idx.read_text())["tiles"]]
+        print(f"lidar: {len(tiles)} tiles")
     res = []
     for s in sites:
         if not s.get("horizon"):
             continue
         (x,), (y,) = transform("EPSG:4326", "EPSG:26913", [s["lon"]], [s["lat"]])
-        az, alt, dist, zg = skyline(fine, coarse, x, y, eye=s.get("eye_m", EYE))
+        lid = LidarPatch(tiles, x, y) if tiles else None
+        az, alt, dist, zg = skyline(fine, coarse, x, y, eye=s.get("eye_m", EYE), lidar=lid)
         res.append({
             "id": s["id"], "name": s["name"], "lat": s["lat"], "lon": s["lon"],
             "ground_m": round(float(zg), 1), "eye_m": s.get("eye_m", EYE),
@@ -96,7 +133,7 @@ def main():
         print(f"{s['name']:<22} ground {zg:7.1f} m  east skyline {alt[e].min():5.2f}..{alt[e].max():5.2f} deg"
               f"  (nearest edge {dist[e].min():6.0f} m)")
     Path(a.out).write_text(json.dumps({"step_deg": STEP_DEG, "refraction_k": K_REFR,
-                                       "source": "USGS 3DEP 5 m + 30 m", "sites": res},
+                                       "source": "USGS 3DEP: 0.5 m CONMGaps lidar (at 1 m) near the sites + 5 m + 30 m" if tiles else "USGS 3DEP 5 m + 30 m", "sites": res},
                                       separators=(",", ":")))
     print(f"wrote {a.out}")
 

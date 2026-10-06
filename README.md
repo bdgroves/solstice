@@ -66,7 +66,7 @@ solstice/
     └── render.yml           # forge3d renders on GitHub's CPUs
 ```
 
-**Skylines.** For each site, `tools/horizon.py` marches outward along every azimuth (0.25° steps) over USGS 3DEP elevation: 5 m in the canyon (resampled from the 1 m lidar), 30 m out to 80 km. It keeps the highest elevation angle, allowing for Earth's curvature and standard refraction (k = 0.13). As a check, Fajada Butte's summit comes out at 2,018 m; the published figure is 2,019 m.
+**Skylines.** For each site, `tools/horizon.py` marches outward along every azimuth (0.25° steps) over USGS 3DEP elevation: the 0.5 m CONMGaps lidar (at 1 m) from 80 m to 2.4 km of each site, 5 m in the rest of the canyon, 30 m out to 80 km. The lidar starts 80 m out so a great house's own walls and rubble mound, which bare-earth lidar keeps as ground, can't block its view. Against the old 5 m skylines, the closest canyon walls moved some sunrises and sunsets by up to 10 minutes: Pueblo Bonito's June sunrise is now 5 minutes later, behind the north wall, and Una Vida's 9. It keeps the highest elevation angle, allowing for Earth's curvature and standard refraction (k = 0.13). As a check, Fajada Butte's summit comes out at 2,018 m; the published figure is 2,019 m.
 
 **The daily sky.** `fetch_solstice.py` (PyEphem) finds the moment the Sun's upper limb clears each site's skyline: today, every third day of the year for the calendar, and on the solstices. It also computes the Moon's phase and the position of the Moon's node, which sets the 18.6-year standstill cycle. Its flat-horizon sunrise agrees with PyEphem's standard sunrise and with astronomy-engine to the minute. GitHub Actions runs it once a day at 12:41 UTC.
 
