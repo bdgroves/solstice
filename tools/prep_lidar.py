@@ -17,6 +17,7 @@ Runs on GitHub Actions (prep-lidar.yml) and needs PDAL.
 from __future__ import annotations
 
 import json
+import math
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -35,12 +36,29 @@ S3 = "https://prd-tnm.s3.amazonaws.com/StagedProducts/"
 PROJECT = "CONMGaps"        # the survey we want (newest, densest)
 RES = 0.5                   # metres
 GAP_M = 3.0                 # leave holes wider than this as NaN
+NEAR_KM = 1.5               # keep tiles within this distance of a site: the
+                            # survey covers the whole render extent (hundreds of
+                            # tiles), but the fine layers only look close up
 OUT = Path("prep-lidar")
 CACHE = Path("laz")
 
 
+def near_sites(item, sites):
+    bb = item.get("boundingBox") or {}
+    if not bb:
+        return True
+    lon, lat = (bb["minX"] + bb["maxX"]) / 2, (bb["minY"] + bb["maxY"]) / 2
+    for s in sites:
+        dx = (lon - s["lon"]) * 111.32 * math.cos(math.radians(lat))
+        dy = (lat - s["lat"]) * 110.57
+        if math.hypot(dx, dy) <= NEAR_KM + 0.71:     # + half a 1 km tile's diagonal
+            return True
+    return False
+
+
 def tiles():
-    out, offset = [], 0
+    sites = json.loads((Path(__file__).resolve().parent.parent / "data/sites.json").read_text())["sites"]
+    out, offset, seen = [], 0, 0
     while True:
         code, body = http_get(TNM, {"datasets": "Lidar Point Cloud (LPC)", "prodFormats": "LAZ",
                                     "bbox": ",".join(map(str, RENDER_LL)), "outputFormat": "JSON",
@@ -53,11 +71,15 @@ def tiles():
             url = it.get("downloadURL") or ""
             m = re.search(r"/Projects/([^/]+)/", url)
             if url.lower().endswith(".laz") and m and PROJECT in m.group(1):
+                seen += 1
+                if not near_sites(it, sites):
+                    continue
                 out.append({"url": url, "project": m.group(1), "bytes": it.get("sizeInBytes", 0),
                             "published": it.get("publicationDate", "")})
         offset += len(items)
         if not items or offset >= j.get("total", 0):
             break
+    print(f"{PROJECT}: {seen} tiles over the render extent, {len(out)} within {NEAR_KM} km of a site", flush=True)
     return out
 
 
@@ -116,16 +138,17 @@ def main():
     if not ts:
         raise SystemExit("no tiles")
     dsts = [CACHE / t["url"].rsplit("/", 1)[-1] for t in ts]
-    with ThreadPoolExecutor(6) as pool:
+    with ThreadPoolExecutor(8) as pool:
         list(pool.map(lambda td: download(td[0]["url"], td[1]), zip(ts, dsts)))
+    from concurrent.futures import ProcessPoolExecutor
     index = []
-    for t, laz in zip(ts, dsts):
-        t0 = time.time()
-        rec = grid(laz, OUT / (laz.stem + ".tif"))
-        rec.update(project=t["project"], published=t["published"], source=t["url"])
-        index.append(rec)
-        print(f"  {rec['file']}: {rec['ground_points']:,} ground returns, {rec['density_per_m2']}/m², "
-              f"{rec['coverage']:.1%} covered, {time.time() - t0:.0f} s", flush=True)
+    with ProcessPoolExecutor(4) as pool:
+        for t, rec in zip(ts, pool.map(grid, dsts, [OUT / (laz.stem + ".tif") for laz in dsts])):
+            rec.update(project=t["project"], published=t["published"], source=t["url"])
+            index.append(rec)
+            print(f"  {rec['file']}: {rec['ground_points']:,} ground returns, {rec['density_per_m2']}/m², "
+                  f"{rec['coverage']:.1%} covered", flush=True)
+            (CACHE / (Path(rec["source"]).name)).unlink(missing_ok=True)
     (OUT / "index.json").write_text(json.dumps({
         "fetched": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "project": PROJECT, "res_m": RES, "crs": UTM, "tiles": index}, indent=1))
