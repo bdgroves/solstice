@@ -265,7 +265,7 @@ def compute(now: datetime) -> dict:
         "standstill": standstill_cycle(now),
         "seasons": seasons(now),
         "method": {
-            "skyline": "USGS 3DEP 5 m + 30 m elevation, 0.25 deg azimuth steps, Earth curvature, refraction k=0.13",
+            "skyline": "USGS 3DEP elevation: CONMGaps lidar at 1 m from 80 m to 2.4 km of each site, then 5 m and 30 m; 0.25 deg azimuth steps, Earth curvature, refraction k=0.13",
             "sun": "PyEphem positions; Bennett refraction; sunrise = upper limb clears the skyline",
         },
     }
