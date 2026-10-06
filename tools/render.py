@@ -464,9 +464,9 @@ def stills(sc: Scene, out: Path, work: Path, size=(1920, 1080), only=None):
     # floor to the south, the Sun low on the right so it rakes across the walls.
     # Its own tighter tiers bring the 0.5 m lidar into the foreground.
     px, py = sc.utm(sc.sites["pueblo-bonito"]["lon"], sc.sites["pueblo-bonito"]["lat"])
-    close_eye = sc.world(px + 110, py - 470, sc.ground(px, py) + 165)
-    close_aim = sc.world(px - 10, py + 40, sc.ground(px, py) + 4)
-    shots.append(("bonito-close", ss, 60, close_eye, close_aim, 40, DAWN,
+    close_eye = sc.world(px + 40, py - 250, sc.ground(px, py) + 190)
+    close_aim = sc.world(px - 10, py + 10, sc.ground(px, py) + 4)
+    shots.append(("bonito-close", ss, 60, close_eye, close_aim, 38, DAWN,
                   ["pueblo-bonito", "pueblo-del-arroyo", "chetro-ketl"]))
     TIERS = {"bonito-close": (("mid", 3000.0), ("near", 1000.0), ("detail", 450.0))}
     TITLES = {"bonito-close": "Pueblo Bonito · summer solstice morning"}
