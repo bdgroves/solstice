@@ -601,7 +601,9 @@ def flyover(sc: Scene, out: Path, chunk: int, chunks: int, size=(1920, 1080), fo
     print(f"layers ready {time.time() - t0:.0f}s", flush=True)
     v.sun(*sun)
     try:
-        for f in todo:
+        import os
+        cap = int(os.environ.get("MAX_FRAMES", "0") or 0)
+        for f in (todo[:cap] if cap else todo):
             t = f / FPS
             eye, aim = path[f]
             raw = out / f"raw_{f:05d}.png"
