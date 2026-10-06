@@ -198,17 +198,26 @@ def fetch_naip_utm(bounds, step, path, crs):
     from prep_data import http_get
     pc = "https://planetarycomputer.microsoft.com/api"
     ll = transform_bounds(crs, "EPSG:4326", *bounds, densify_pts=21)
-    code, body = http_get(f"{pc}/stac/v1/search", data=json.dumps(
-        {"collections": ["naip"], "bbox": list(ll), "limit": 200}).encode())
-    if code != 200:
-        raise RuntimeError(f"NAIP search: HTTP {code} {body[:200]!r}")
+    import time
+
+    def get(url, data=None):
+        for attempt in range(6):
+            try:
+                code, body = http_get(url, data=data)
+            except OSError as e:
+                code, body = 0, str(e).encode()
+            if code == 200:
+                return body
+            print(f"  NAIP retry {attempt + 1}: HTTP {code} {body[:80]!r}", flush=True)
+            time.sleep(5 * (attempt + 1))
+        raise RuntimeError(f"NAIP: HTTP {code} {body[:200]!r}")
+
+    body = get(f"{pc}/stac/v1/search", json.dumps({"collections": ["naip"], "bbox": list(ll), "limit": 200}).encode())
     feats = json.loads(body)["features"]
     year = lambda f: int(f["properties"].get("naip:year") or f["properties"]["datetime"][:4])
     best = max(year(f) for f in feats)
     feats = [f for f in feats if year(f) == best]
-    code, body = http_get(f"{pc}/sas/v1/token/naip")
-    if code != 200:
-        raise RuntimeError(f"NAIP token: HTTP {code} {body[:200]!r}")
+    body = get(f"{pc}/sas/v1/token/naip")
     token = json.loads(body)["token"]
     hrefs = [f["assets"]["image"]["href"] + "?" + token for f in feats]
     x0, y0, x1, y1 = bounds
@@ -217,10 +226,18 @@ def fetch_naip_utm(bounds, step, path, crs):
     mosaic = np.zeros((3, h, w), dtype="uint8")
     filled = np.zeros((h, w), dtype=bool)
     for href in hrefs:
-        with rasterio.open(href) as src, \
-                WarpedVRT(src, crs=crs, transform=t, width=w, height=h,
-                          resampling=Resampling.average, nodata=0) as vrt:
-            part = vrt.read(indexes=[1, 2, 3])
+        for attempt in range(4):
+            try:
+                with rasterio.open(href) as src, \
+                        WarpedVRT(src, crs=crs, transform=t, width=w, height=h,
+                                  resampling=Resampling.average, nodata=0) as vrt:
+                    part = vrt.read(indexes=[1, 2, 3])
+                break
+            except rasterio.errors.RasterioIOError as e:
+                print(f"  NAIP read retry {attempt + 1}: {e}", flush=True)
+                time.sleep(10 * (attempt + 1))
+        else:
+            raise RuntimeError("NAIP read failed")
         have = (part.sum(axis=0) > 0) & ~filled
         mosaic[:, have] = part[:, have]
         filled |= have

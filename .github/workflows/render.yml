@@ -13,6 +13,12 @@ on:
       width:
         description: "Frame width (16:9)"
         default: "1920"
+      only:
+        description: "Render just these chunks (comma list); the rest come from reuse_run"
+        default: ""
+      reuse_run:
+        description: "Run ID whose frames-* artifacts fill the chunks not rendered here"
+        default: ""
 
 permissions:
   contents: write
@@ -27,7 +33,10 @@ jobs:
       chunks: ${{ steps.c.outputs.list }}
     steps:
       - id: c
-        run: echo "list=$(python3 -c "import json;print(json.dumps(list(range(int('${{ inputs.chunks }}')))))")" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "list=$(python3 -c "
+          import json; only='${{ inputs.only }}'.strip()
+          print(json.dumps([int(c) for c in only.split(',')] if only else list(range(int('${{ inputs.chunks }}')))))")" >> "$GITHUB_OUTPUT"
 
   frames:
     needs: plan
@@ -54,8 +63,13 @@ jobs:
           XDG_RUNTIME_DIR: /tmp
         run: |
           set -o pipefail
-          xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py flyover \
-            --prep prep --frames frames --chunk ${{ matrix.chunk }} --chunks ${{ inputs.chunks }} --width ${{ inputs.width }} 2>&1 | tee render.log
+          # data services turn some of 20 parallel jobs away; try again (finished frames are kept)
+          for attempt in 1 2 3; do
+            xvfb-run -a -s "-screen 0 1920x1080x24" python tools/render.py flyover \
+              --prep prep --frames frames --chunk ${{ matrix.chunk }} --chunks ${{ inputs.chunks }} --width ${{ inputs.width }} 2>&1 | tee -a render.log && exit 0
+            echo "attempt $attempt failed; retrying in $((attempt * 60)) s"; sleep $((attempt * 60))
+          done
+          exit 1
       - name: Keep the log when a render fails
         if: failure() && matrix.chunk == 0
         run: |
@@ -97,6 +111,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - if: inputs.reuse_run != ''
+        uses: actions/download-artifact@v4
+        with:
+          pattern: frames-*
+          path: frames
+          merge-multiple: true
+          run-id: ${{ inputs.reuse_run }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/download-artifact@v4
         with:
           pattern: frames-*
