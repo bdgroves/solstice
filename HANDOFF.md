@@ -36,6 +36,10 @@ Fetch them with `git fetch origin <branch> && git archive FETCH_HEAD | tar -x -C
 
 `tools/horizon.py` → `data/horizons.json` (8 sites have skylines; 11 have notes). Uses the lidar at 1 m from **80 m** to 2.4 km of each site (closer than 80 m the bare-earth lidar sees the ruin's own rubble mound as a horizon), then 5 m, then 30 m. Then `pixi run fetch` (or `python fetch_solstice.py`) rebuilds `data/sky.json`. The Oct 6 lidar skylines moved Pueblo Bonito's June sunrise 07:06 → 07:11 and Una Vida's 07:34 → 07:43.
 
+## Notebook
+
+`notebooks/solstice.ipynb` walks the pipeline with the repo's own functions (it imports `tools/render.py`, `tools/layers.py` and `fetch_solstice.py`, so keep their names stable or update it). Parameters cell: `WIDTH`, `SOURCE`, `RENDER`. Committed with outputs; **Run notebooks** (`notebooks.yml`) re-executes it with papermill and commits it back. A full run takes 2–3 min on a CPU, most of it the four-layer render.
+
 ## Ideas not done
 
 - A close-up of Casa Rinconada or Chetro Ketl (one more entry in `stills()` with a `TIERS` override).

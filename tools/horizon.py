@@ -3,7 +3,7 @@ Compute the real skyline seen from each Chaco site.
 
 For every azimuth (0.25 deg steps) march outward along the ground and keep the
 highest elevation angle of the terrain, with Earth curvature and standard
-refraction (k = 0.13). Within 2.5 km of each site the ground comes from the
+refraction (k = 0.13). Within 2.4 km of each site the ground comes from the
 0.5 m CONMGaps lidar (prep/lidar, tools/prep_lidar.py) at 1 m where it exists;
 then the 5 m 3DEP grid (canyon walls), then the 30 m one (mesas, Chacra Mesa,
 distant mountains). The 5 m grid has a hole-filled patch over the canyon core,

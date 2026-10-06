@@ -1,0 +1,55 @@
+name: Run notebooks
+
+# Executes the walkthrough notebooks in notebooks/ on GitHub's CPUs (Mesa
+# llvmpipe Vulkan under a virtual display, like the render workflows) and
+# commits them back with their outputs, so they read fully on GitHub.
+on:
+  workflow_dispatch:
+    inputs:
+      width:
+        description: "Render width in the notebook (16:9)"
+        default: "960"
+      source:
+        description: "prep (5 m / 2.5 m prep data) or usgs (fetch 1 m 3DEP + 0.6 m NAIP)"
+        default: "prep"
+
+permissions:
+  contents: write
+
+env:
+  FORGE3D: "forge3d==1.40.1"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - name: Render data (prep-data and prep-lidar branches)
+        run: |
+          git fetch -q --depth 1 origin prep-data && mkdir -p prep && git archive FETCH_HEAD | tar -x -C prep
+          if git fetch -q --depth 1 origin prep-lidar; then mkdir -p prep/lidar && git archive FETCH_HEAD | tar -x -C prep/lidar; fi
+      - name: Software Vulkan + virtual display
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb libx11-xcb1 libxkbcommon-x11-0 libxkbcommon0 libxcursor1 libxi6 libxrandr2 libxcb-xkb1 libxcb-randr0 libxcb-shape0 libxcb-xfixes0 libwayland-client0 libegl1 >/dev/null
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q "$FORGE3D" rasterio numpy pillow scipy ephem requests pystac-client planetary-computer matplotlib ipykernel papermill
+      - name: Execute
+        env:
+          XDG_RUNTIME_DIR: /tmp
+        run: |
+          for nb in notebooks/*.ipynb; do
+            echo "== $nb"
+            xvfb-run -a -s "-screen 0 1920x1080x24" papermill "$nb" "$nb" --cwd notebooks \
+              -p WIDTH ${{ inputs.width }} -p SOURCE ${{ inputs.source }}
+          done
+      - name: Commit the executed notebooks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notebooks/*.ipynb
+          git diff --cached --quiet && { echo "no changes"; exit 0; }
+          git commit -q -m "Run notebooks (width ${{ inputs.width }}, source ${{ inputs.source }})"
+          for i in 1 2 3; do git pull -q --rebase && git push -q && exit 0; sleep 5; done
+          exit 1

@@ -91,6 +91,19 @@ python tools/render.py stills --prep prep --out assets
 
 Or run **Actions → Render with forge3d** to make everything on GitHub.
 
+### The notebook
+
+**[notebooks/solstice.ipynb](notebooks/solstice.ipynb)** walks through the whole pipeline with the same code: the sites and terrain, the Sun on the solstice mornings, the real skyline at Pueblo Bonito and why it moves the June sunrise by over an hour, the layer trick that gets 0.5 m lidar past forge3d's 2048-vertex mesh cap, and one render taken apart layer by layer before it's finished. It's committed with its outputs, so it reads on GitHub without running anything.
+
+To run it yourself, fetch the prep data (above, plus `prep-lidar` into `prep/lidar`, or just `pixi run prep`), then:
+
+```bash
+pip install forge3d==1.40.1 rasterio scipy ephem pillow matplotlib jupyterlab
+jupyter lab notebooks/solstice.ipynb     # on Linux without a GPU: xvfb-run -a jupyter lab ...
+```
+
+Sections 1–4 need no renderer. Section 5 needs Vulkan (a GPU, or Mesa's `mesa-vulkan-drivers` under `xvfb-run`). Or run **Actions → Run notebooks**, which executes it on GitHub and commits it back with the outputs.
+
 ---
 
 ## Sources
